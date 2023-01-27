@@ -11,7 +11,7 @@
 		762CF1E42981DE6100099999 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1E32981DE6100099999 /* Device.swift */; };
 		7645D4BE2982A1B100019227 /* DeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4BD2982A1B100019227 /* DeviceService.swift */; };
 		7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C12982CA9600019227 /* AppDelegate.swift */; };
-		7645D4C42982CB2B00019227 /* StatusBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C32982CB2B00019227 /* StatusBarController.swift */; };
+		7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C32982CB2B00019227 /* MiniSim.swift */; };
 		7645D5012982E6FA00019227 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D5002982E6FA00019227 /* main.swift */; };
 		7645D5032983186100019227 /* NSMenuItem+ImageInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */; };
 		7645D50629831B8200019227 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = 7645D50529831B8200019227 /* HotKey */; };
@@ -24,7 +24,7 @@
 		762CF1E32981DE6100099999 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		7645D4BD2982A1B100019227 /* DeviceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceService.swift; sourceTree = "<group>"; };
 		7645D4C12982CA9600019227 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7645D4C32982CB2B00019227 /* StatusBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarController.swift; sourceTree = "<group>"; };
+		7645D4C32982CB2B00019227 /* MiniSim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniSim.swift; sourceTree = "<group>"; };
 		7645D5002982E6FA00019227 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMenuItem+ImageInit.swift"; sourceTree = "<group>"; };
 		766BD2302981628A0042261B /* MiniSim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiniSim.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,7 +73,7 @@
 		7645D4C02982CA8B00019227 /* MenuBar */ = {
 			isa = PBXGroup;
 			children = (
-				7645D4C32982CB2B00019227 /* StatusBarController.swift */,
+				7645D4C32982CB2B00019227 /* MiniSim.swift */,
 			);
 			path = MenuBar;
 			sourceTree = "<group>";
@@ -195,7 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */,
-				7645D4C42982CB2B00019227 /* StatusBarController.swift in Sources */,
+				7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */,
 				7645D5012982E6FA00019227 /* main.swift in Sources */,
 				762CF1E02981968F00099999 /* String+match.swift in Sources */,
 				762CF1E42981DE6100099999 /* Device.swift in Sources */,

@@ -8,12 +8,11 @@
 import AppKit
 import HotKey
 
-class StatusBarController {
-    private var statusBar: NSStatusBar
-    private var menu: NSMenu
-    private(set) var statusItem: NSStatusItem
+class MiniSim {
+    private var statusBar: NSStatusBar!
+    private var menu: NSMenu!
     
-    let hotKey = HotKey(key: .e, modifiers: [.option, .shift])  // Global hotkey
+    @objc let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     private var devices: [Device] = []
     
@@ -24,21 +23,24 @@ class StatusBarController {
         
         statusBar = NSStatusBar()
         menu = NSMenu()
-        statusItem = statusBar.statusItem(withLength: NSStatusItem.variableLength)
+        
         statusItem.menu = menu
+        statusItem.behavior = .removalAllowed
         
         if let button = statusItem.button {
             button.toolTip = "MiniSim"
-            button.image = NSImage(systemSymbolName: "iphone", accessibilityDescription: "iPhone")
+            let itemImage = NSImage(systemSymbolName: "iphone", accessibilityDescription: "iPhone")
+            itemImage?.isTemplate = true
+            button.image = itemImage
         }
         
         setupSections()
         
         self.getDevices()
-        
-        hotKey.keyUpHandler = {
-            self.statusItem.button?.performClick(self)
-        }
+    }
+    
+    func open() {
+        self.statusItem.button?.performClick(self)
     }
     
     @objc func handleDeviceTap(_ sender: NSMenuItem) {
