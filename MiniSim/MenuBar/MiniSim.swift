@@ -95,8 +95,10 @@ class MiniSim {
                         }
                         menuItem.target = self
                         
-                        self.devices.append(device)
-                        self.menu.insertItem(menuItem, at: 3)
+                        DispatchQueue.main.async {
+                            self.devices.append(device)
+                            self.menu.insertItem(menuItem, at: 3)
+                        }
                     }
                 case .failure(let error):
                     print(error)
@@ -120,8 +122,10 @@ class MiniSim {
                         
                         menuItem.target = self
                         
-                        self.devices.append(device)
-                        self.menu.insertItem(menuItem, at: 1)
+                        DispatchQueue.main.async {
+                            self.devices.append(device)
+                            self.menu.insertItem(menuItem, at: 1)
+                        }
                     }
                 case .failure(let error):
                     print(error)
