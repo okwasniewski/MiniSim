@@ -6,11 +6,14 @@
 //
 
 import AppKit
+import HotKey
 
 class StatusBarController {
     private var statusBar: NSStatusBar
     private var menu: NSMenu
     private(set) var statusItem: NSStatusItem
+    
+    let hotKey = HotKey(key: .e, modifiers: [.option, .shift])  // Global hotkey
     
     private var devices: [Device] = []
     
@@ -21,7 +24,6 @@ class StatusBarController {
         
         statusBar = NSStatusBar()
         menu = NSMenu()
-        menu.autoenablesItems = true
         statusItem = statusBar.statusItem(withLength: NSStatusItem.variableLength)
         statusItem.menu = menu
         
@@ -33,6 +35,10 @@ class StatusBarController {
         setupSections()
         
         self.getDevices()
+        
+        hotKey.keyUpHandler = {
+            self.statusItem.button?.performClick(self)
+        }
     }
     
     @objc func handleDeviceTap(_ sender: NSMenuItem) {
@@ -68,9 +74,7 @@ class StatusBarController {
         menu.addItem(withTitle: "Quit", action: #selector(quitApp), keyEquivalent: "q").target = self
     }
     
-    
     private func getDevices() {
-        
         DispatchQueue.global(qos: .background).async { [self] in
             self.deviceService.getDevices(deviceType: .Android) { result in
                 switch result {
