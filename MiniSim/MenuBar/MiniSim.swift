@@ -6,9 +6,8 @@
 //
 
 import AppKit
-import HotKey
 
-class MiniSim {
+class MiniSim: NSObject {
     private var statusBar: NSStatusBar!
     private var menu: NSMenu!
     
@@ -20,111 +19,116 @@ class MiniSim {
     
     init(deviceService: DeviceServiceProtocol = DeviceService()) {
         self.deviceService = deviceService
-        
         statusBar = NSStatusBar()
         menu = NSMenu()
-        
         statusItem.menu = menu
-        statusItem.behavior = .removalAllowed
         
-        if let button = statusItem.button {
-            button.toolTip = "MiniSim"
-            let itemImage = NSImage(systemSymbolName: "iphone", accessibilityDescription: "iPhone")
-            itemImage?.isTemplate = true
-            button.image = itemImage
-        }
+        super.init()
         
-        setupSections()
-        
-        self.getDevices()
+        updateMenuBarIcon()
+        populateSections()
+        populateiOSDevices()
+        populateAndroidDevices()
     }
     
     func open() {
         self.statusItem.button?.performClick(self)
     }
     
-    @objc func handleDeviceTap(_ sender: NSMenuItem) {
-        let device = devices.first { $0.name == sender.title }
-        
-        guard let device else {
-            return
-        }
-        
-        if device.isAndroid {
-            deviceService.launchDevice(name: device.name)
-            return
-        }
-        
-        if let uuid = device.uuid {
-            deviceService.launchDevice(uuid: uuid)
-        }
-    }
-    
-    @objc func quitApp(_ sender: NSMenuItem) {
-        if sender.title == "Quit" {
-            NSApplication.shared.terminate(nil)
+    @objc func menuItemAction(_ sender: NSMenuItem) {
+        if let tag = MenuItemType(rawValue: sender.tag) {
+            switch tag {
+            case .launchAndroid:
+                if let device = getDeviceByName(name: sender.title) {
+                    deviceService.launchDevice(name: device.name)
+                }
+            case .launchIOS:
+                if let device = getDeviceByName(name: sender.title) {
+                    deviceService.launchDevice(uuid: device.uuid ?? "")
+                }
+            case .quit:
+                NSApp.terminate(sender)
+            }
+            
         }
     }
     
-    private func setupSections() {
+    private func getDeviceByName(name: String) -> Device? {
+        devices.first { $0.name == name }
+    }
+    
+    private func updateMenuBarIcon() {
+        if let button = statusItem.button {
+            button.toolTip = "MiniSim"
+            let itemImage = NSImage(systemSymbolName: "iphone", accessibilityDescription: "iPhone")
+            itemImage?.isTemplate = true
+            button.image = itemImage
+        }
+    }
+    
+    private func populateSections() {
         menu.addItem(withTitle: "iOS Simulators", action: nil, keyEquivalent: "")
         
         menu.addItem(.separator())
         menu.addItem(withTitle: "Android emulators", action: nil, keyEquivalent: "")
         
         menu.addItem(.separator())
-        menu.addItem(withTitle: "Quit", action: #selector(quitApp), keyEquivalent: "q").target = self
+        
+        let quitItem = NSMenuItem(
+            title: "Quit",
+            action: #selector(self.menuItemAction(_:)),
+            keyEquivalent: "q",
+            type: .quit,
+            showImage: false
+        )
+        quitItem.target = self
+        menu.addItem(quitItem)
     }
     
-    private func getDevices() {
+    private func populateAndroidDevices() {
         DispatchQueue.global(qos: .background).async { [self] in
             self.deviceService.getDevices(deviceType: .Android) { result in
                 switch result {
                 case .success(let devices):
                     Array(devices.enumerated()).forEach { index, device in
-                        
                         let menuItem = NSMenuItem(
                             title: device.name,
-                            action: #selector(self.handleDeviceTap),
-                            keyEquivalent: "\(index)",
-                            systemSymbolName: self.getSystemImageFromName(name: device.name)
+                            action: #selector(self.menuItemAction(_:)),
+                            keyEquivalent: index <= 9 ? "\(index)" : "",
+                            type: .launchAndroid
                         )
-                        menuItem.keyEquivalentModifierMask = [.option]
-                        if (index > 9) {
-                            menuItem.keyEquivalentModifierMask = [.option, .control]
-                        }
                         menuItem.target = self
+                        menuItem.keyEquivalentModifierMask = [.option]
                         
                         DispatchQueue.main.async {
                             self.devices.append(device)
-                            self.menu.insertItem(menuItem, at: 3)
+                            self.menu.insertItem(menuItem, at: index + 3)
                         }
                     }
                 case .failure(let error):
                     print(error)
                 }
             }
-            
+        }
+    }
+    
+    private func populateiOSDevices() {
+        DispatchQueue.global(qos: .background).async { [self] in
             deviceService.getDevices(deviceType: .iOS) { result in
                 switch result {
                 case .success(let devices):
                     Array(devices.enumerated()).forEach { index, device in
                         let menuItem = NSMenuItem(
                             title: device.name,
-                            action: #selector(self.handleDeviceTap),
-                            keyEquivalent: "\(index)",
-                            systemSymbolName: self.getSystemImageFromName(name: device.name)
+                            action: #selector(self.menuItemAction(_:)),
+                            keyEquivalent: index <= 9 ? "\(index)" : "",
+                            type: .launchIOS
                         )
-                        
-                        if (index > 9) {
-                            menuItem.keyEquivalentModifierMask = [.command, .option]
-                        }
-                        
                         menuItem.target = self
                         
                         DispatchQueue.main.async {
                             self.devices.append(device)
-                            self.menu.insertItem(menuItem, at: 1)
+                            self.menu.insertItem(menuItem, at: index + 1)
                         }
                     }
                 case .failure(let error):
@@ -132,21 +136,5 @@ class MiniSim {
                 }
             }
         }
-    }
-    
-    private func getSystemImageFromName(name: String) -> String {
-        if name.contains("Apple TV") {
-            return "appletv.fill"
-        }
-        
-        if (name.contains("iPad") || name.contains("Tablet")) {
-            return "ipad.gen2.landscape"
-        }
-        
-        if name.contains("TV") {
-            return "tv"
-        }
-        
-        return "iphone.gen2"
     }
 }
