@@ -124,5 +124,19 @@ class DeviceService: DeviceServiceProtocol {
         }
     }
     
-    
+    static func getSystemImageFromName(name: String) -> String {
+        if name.contains("Apple TV") {
+            return "appletv.fill"
+        }
+        
+        if (name.contains("iPad") || name.contains("Tablet")) {
+            return "ipad.gen2.landscape"
+        }
+        
+        if name.contains("TV") {
+            return "tv"
+        }
+        
+        return "iphone.gen2"
+    }
 }

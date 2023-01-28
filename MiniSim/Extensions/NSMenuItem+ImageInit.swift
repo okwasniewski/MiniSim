@@ -8,9 +8,13 @@
 import AppKit
 
 extension NSMenuItem {
-    convenience init(title: String, action: Selector?, keyEquivalent: String, systemSymbolName: String) {
+    convenience init(title: String, action: Selector?, keyEquivalent: String, type: MenuItemType, showImage: Bool = true) {
         self.init(title: title, action: action, keyEquivalent: keyEquivalent)
-        self.image = NSImage(systemSymbolName: systemSymbolName, accessibilityDescription: title)
+        if (showImage) {
+            let imageName = DeviceService.getSystemImageFromName(name: title)
+            self.image = NSImage(systemSymbolName: imageName, accessibilityDescription: title)
+        }
+        self.tag = type.rawValue
     }
 }
 
