@@ -28,79 +28,96 @@ class DeviceService: DeviceServiceProtocol {
     
     private enum ProcessPaths: String {
         case xcrun = "/usr/bin/xcrun"
+        case xcodeSelect = "/usr/bin/xcode-select"
         case emulator = "/Android/sdk/emulator/emulator"
     }
     
-    private func getStringOutput(_ pipe: Pipe) -> String {
-        let outputData = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output = String(decoding: outputData, as: UTF8.self)
-        return output
-    }
-    
-    private func runProcess(processURL: ProcessPaths, arguments: [String], standardOutput: Pipe? = nil) throws -> Void {
-        var fileURL = processURL.rawValue
+    @discardableResult private func runProcess(processURL: String, arguments: [String], waitUntilExit: Bool = true) throws -> String {
+        var fileURL = processURL
         
-        if processURL == ProcessPaths.emulator {
+        if processURL == ProcessPaths.emulator.rawValue {
             let libraryDirectory = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)
             guard let libraryDirectory = libraryDirectory.first else {
-                return
+                return ""
             }
             fileURL = libraryDirectory + fileURL
         }
-        let executableURL = URL(fileURLWithPath: fileURL)
-        let task = Process()
         
-        task.executableURL = executableURL
-        task.arguments = arguments
-        task.standardOutput = standardOutput
+        let output = try Process.runProcess(fileURL: fileURL, arguments: arguments, waitUntilExit: waitUntilExit)
         
-        try task.run()
+        return output
     }
     
+    // iOS device
     func launchDevice(uuid: String) {
-        do {
-            try runProcess(processURL: ProcessPaths.xcrun, arguments: ["simctl", "boot", uuid])
-        } catch {
-            print(error)
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                let activeDeveloperDir = try self.runProcess(
+                    processURL: ProcessPaths.xcodeSelect.rawValue,
+                    arguments: ["-p"]
+                ).trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                try self.runProcess(
+                    processURL: "\(activeDeveloperDir)/Applications/Simulator.app/Contents/MacOS/Simulator",
+                    arguments: ["--args", "-CurrentDeviceUDID", uuid],
+                    waitUntilExit: false
+                )
+                
+                try self.runProcess(
+                    processURL: ProcessPaths.xcrun.rawValue,
+                    arguments: ["simctl", "boot", uuid],
+                    waitUntilExit: false
+                )
+                
+            } catch {
+                print(error)
+            }
         }
     }
     
+    // Android device
     func launchDevice(name: String) {
-        do {
-            try runProcess(processURL: ProcessPaths.emulator, arguments: ["@\(name)"])
-        } catch {
-            print(error)
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                try self.runProcess(processURL: ProcessPaths.emulator.rawValue, arguments: ["@\(name)"], waitUntilExit: false)
+            } catch {
+                print(error)
+            }
         }
     }
     
     func getDevices(deviceType: DeviceType, _ completion: @escaping (GetDevicesResult) -> Void) {
-        let outputPipe = Pipe()
+        var output = ""
         
         switch deviceType {
         case .iOS:
             do {
-                try runProcess(processURL: ProcessPaths.xcrun, arguments: ["xctrace", "list", "devices"], standardOutput: outputPipe)
+                output = try runProcess(processURL: ProcessPaths.xcrun.rawValue, arguments: ["xctrace", "list", "devices"])
             } catch {
                 completion(.failure(error))
                 return
             }
             
-            let outputString = getStringOutput(outputPipe)
+            let splitted = output.components(separatedBy: "\n")
             
-            let splitted = outputString.components(separatedBy: "\n")
+            var isSimulator = false
             
             var devices: [Device] = []
             splitted.forEach { line in
+                if line == "== Simulators ==" {
+                    isSimulator = true
+                }
+                
                 let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\)")
-                if (!device.isEmpty) {
+                if (!device.isEmpty && isSimulator) {
                     let firstDevice = device[0]
-                    if (!firstDevice[3].isEmpty) {
-                        devices.append(Device(
+                    devices.append(
+                        Device(
                             name: firstDevice[1],
                             version: firstDevice[3],
                             uuid: firstDevice[4]
-                        ))
-                    }
+                        )
+                    )
                 }
             }
             
@@ -108,15 +125,13 @@ class DeviceService: DeviceServiceProtocol {
             
         case .Android:
             do {
-                try runProcess(processURL: ProcessPaths.emulator, arguments: ["-list-avds"], standardOutput: outputPipe)
+                output = try runProcess(processURL: ProcessPaths.emulator.rawValue, arguments: ["-list-avds"])
             } catch {
                 completion(.failure(error))
                 return
             }
             
-            let outputString = getStringOutput(outputPipe)
-            
-            let splitted = outputString.components(separatedBy: "\n")
+            let splitted = output.components(separatedBy: "\n")
             let devices = splitted.filter({ !$0.isEmpty }).map {
                 return Device(name: $0, isAndroid: true)
             }

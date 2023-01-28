@@ -10,6 +10,7 @@
 		762CF1E02981968F00099999 /* String+match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1DF2981968F00099999 /* String+match.swift */; };
 		762CF1E42981DE6100099999 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1E32981DE6100099999 /* Device.swift */; };
 		7630B25E2984339100D8B57D /* MenuItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B25D2984339100D8B57D /* MenuItemType.swift */; };
+		7630B2632985BE8000D8B57D /* Process+runProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2622985BE8000D8B57D /* Process+runProcess.swift */; };
 		7645D4BE2982A1B100019227 /* DeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4BD2982A1B100019227 /* DeviceService.swift */; };
 		7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C12982CA9600019227 /* AppDelegate.swift */; };
 		7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C32982CB2B00019227 /* MiniSim.swift */; };
@@ -24,6 +25,7 @@
 		762CF1DF2981968F00099999 /* String+match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+match.swift"; sourceTree = "<group>"; };
 		762CF1E32981DE6100099999 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		7630B25D2984339100D8B57D /* MenuItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemType.swift; sourceTree = "<group>"; };
+		7630B2622985BE8000D8B57D /* Process+runProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Process+runProcess.swift"; sourceTree = "<group>"; };
 		7645D4BD2982A1B100019227 /* DeviceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceService.swift; sourceTree = "<group>"; };
 		7645D4C12982CA9600019227 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7645D4C32982CB2B00019227 /* MiniSim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniSim.swift; sourceTree = "<group>"; };
@@ -52,6 +54,7 @@
 			children = (
 				762CF1DF2981968F00099999 /* String+match.swift */,
 				7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */,
+				7630B2622985BE8000D8B57D /* Process+runProcess.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -200,6 +203,7 @@
 				7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */,
 				7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */,
 				7630B25E2984339100D8B57D /* MenuItemType.swift in Sources */,
+				7630B2632985BE8000D8B57D /* Process+runProcess.swift in Sources */,
 				7645D5012982E6FA00019227 /* main.swift in Sources */,
 				762CF1E02981968F00099999 /* String+match.swift in Sources */,
 				762CF1E42981DE6100099999 /* Device.swift in Sources */,
