@@ -6,6 +6,10 @@
 //
 
 import AppKit
+import Preferences
+import SwiftUI
+
+
 
 class MiniSim: NSObject {
     private var statusBar: NSStatusBar!
@@ -31,6 +35,28 @@ class MiniSim: NSObject {
         populateAndroidDevices()
     }
     
+    private lazy var settingsController = PreferencesWindowController(
+        panes: [
+            Settings.Pane(
+                identifier: .preferences,
+                title: "Preferences",
+                toolbarIcon: NSImage(systemSymbolName: "gear", accessibilityDescription: "") ?? NSImage()
+            ) {
+                Preferences()
+            },
+            Settings.Pane(
+                identifier: .about,
+                title: "About",
+                toolbarIcon: NSImage(systemSymbolName: "info.circle", accessibilityDescription: "") ?? NSImage()
+            ) {
+                About()
+            }
+        ],
+        style: .toolbarItems,
+        animated: false,
+        hidesToolbarForSingleItem: true
+    )
+    
     func open() {
         self.statusItem.button?.performClick(self)
     }
@@ -46,6 +72,9 @@ class MiniSim: NSObject {
                 if let device = getDeviceByName(name: sender.title) {
                     deviceService.launchDevice(uuid: device.uuid ?? "")
                 }
+                
+            case .preferences:
+                settingsController.show()
             case .quit:
                 NSApp.terminate(sender)
             }
@@ -82,6 +111,16 @@ class MiniSim: NSObject {
             showImage: false
         )
         quitItem.target = self
+        
+        let preferences = NSMenuItem(
+            title: "Preferences",
+            action: #selector(self.menuItemAction(_:)),
+            keyEquivalent: ",",
+            type: .preferences,
+            showImage: false
+        )
+        preferences.target = self
+        menu.addItem(preferences)
         menu.addItem(quitItem)
     }
     

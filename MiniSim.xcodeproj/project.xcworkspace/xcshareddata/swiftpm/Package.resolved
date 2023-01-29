@@ -1,12 +1,30 @@
 {
   "pins" : [
     {
-      "identity" : "hotkey",
+      "identity" : "keyboardshortcuts",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/soffes/HotKey",
+      "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
       "state" : {
-        "branch" : "master",
-        "revision" : "c13662730cb5bc28de4a799854bbb018a90649bf"
+        "branch" : "main",
+        "revision" : "d7b349f6822e24228141e560aa48a32dca23b22c"
+      }
+    },
+    {
+      "identity" : "launchatlogin",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/LaunchAtLogin",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7ad6331f9c38953eb1ce8737758e18f7607e984a"
+      }
+    },
+    {
+      "identity" : "preferences",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/Preferences",
+      "state" : {
+        "branch" : "main",
+        "revision" : "00342137c16b1351408669ca88be60036aa7e343"
       }
     }
   ],
