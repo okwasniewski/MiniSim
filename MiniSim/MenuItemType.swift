@@ -10,6 +10,7 @@ import Cocoa
 enum MenuItemType: Int {
     // Global
     case quit = 100
+    case preferences = 101
     
     // Android
     case launchAndroid = 200

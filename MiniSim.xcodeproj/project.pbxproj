@@ -10,7 +10,10 @@
 		762CF1E02981968F00099999 /* String+match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1DF2981968F00099999 /* String+match.swift */; };
 		762CF1E42981DE6100099999 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1E32981DE6100099999 /* Device.swift */; };
 		7630B25E2984339100D8B57D /* MenuItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B25D2984339100D8B57D /* MenuItemType.swift */; };
+		7630B26129853EF400D8B57D /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = 7630B26029853EF400D8B57D /* Preferences */; };
 		7630B2632985BE8000D8B57D /* Process+runProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2622985BE8000D8B57D /* Process+runProcess.swift */; };
+		7630B2662985C44A00D8B57D /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2652985C44A00D8B57D /* Preferences.swift */; };
+		7630B2682985C4CF00D8B57D /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2672985C4CF00D8B57D /* About.swift */; };
 		7645D4BE2982A1B100019227 /* DeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4BD2982A1B100019227 /* DeviceService.swift */; };
 		7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C12982CA9600019227 /* AppDelegate.swift */; };
 		7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C32982CB2B00019227 /* MiniSim.swift */; };
@@ -26,6 +29,8 @@
 		762CF1E32981DE6100099999 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		7630B25D2984339100D8B57D /* MenuItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemType.swift; sourceTree = "<group>"; };
 		7630B2622985BE8000D8B57D /* Process+runProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Process+runProcess.swift"; sourceTree = "<group>"; };
+		7630B2652985C44A00D8B57D /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		7630B2672985C4CF00D8B57D /* About.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = About.swift; sourceTree = "<group>"; };
 		7645D4BD2982A1B100019227 /* DeviceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceService.swift; sourceTree = "<group>"; };
 		7645D4C12982CA9600019227 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7645D4C32982CB2B00019227 /* MiniSim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniSim.swift; sourceTree = "<group>"; };
@@ -43,6 +48,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7645D50629831B8200019227 /* HotKey in Frameworks */,
+				7630B26129853EF400D8B57D /* Preferences in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,20 +73,21 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		7630B2642985C43300D8B57D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7630B2652985C44A00D8B57D /* Preferences.swift */,
+				7630B2672985C4CF00D8B57D /* About.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		7645D4BC2982800D00019227 /* Service */ = {
 			isa = PBXGroup;
 			children = (
 				7645D4BD2982A1B100019227 /* DeviceService.swift */,
 			);
 			path = Service;
-			sourceTree = "<group>";
-		};
-		7645D4C02982CA8B00019227 /* MenuBar */ = {
-			isa = PBXGroup;
-			children = (
-				7645D4C32982CB2B00019227 /* MiniSim.swift */,
-			);
-			path = MenuBar;
 			sourceTree = "<group>";
 		};
 		766BD2272981628A0042261B = {
@@ -102,11 +109,12 @@
 		766BD2322981628A0042261B /* MiniSim */ = {
 			isa = PBXGroup;
 			children = (
-				7645D4C02982CA8B00019227 /* MenuBar */,
+				7630B2642985C43300D8B57D /* Views */,
 				762CF1E12981DDD400099999 /* Extensions */,
 				7645D4BC2982800D00019227 /* Service */,
 				762CF1E22981DE5400099999 /* Model */,
 				7645D4C12982CA9600019227 /* AppDelegate.swift */,
+				7645D4C32982CB2B00019227 /* MiniSim.swift */,
 				7645D5002982E6FA00019227 /* main.swift */,
 				766BD2372981628C0042261B /* Assets.xcassets */,
 				766BD23C2981628C0042261B /* MiniSim.entitlements */,
@@ -142,6 +150,7 @@
 			name = MiniSim;
 			packageProductDependencies = (
 				7645D50529831B8200019227 /* HotKey */,
+				7630B26029853EF400D8B57D /* Preferences */,
 			);
 			productName = MiniSim;
 			productReference = 766BD2302981628A0042261B /* MiniSim.app */;
@@ -173,6 +182,7 @@
 			mainGroup = 766BD2272981628A0042261B;
 			packageReferences = (
 				7645D50429831B8200019227 /* XCRemoteSwiftPackageReference "HotKey" */,
+				7630B25F29853EF400D8B57D /* XCRemoteSwiftPackageReference "Preferences" */,
 			);
 			productRefGroup = 766BD2312981628A0042261B /* Products */;
 			projectDirPath = "";
@@ -202,6 +212,8 @@
 			files = (
 				7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */,
 				7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */,
+				7630B2682985C4CF00D8B57D /* About.swift in Sources */,
+				7630B2662985C44A00D8B57D /* Preferences.swift in Sources */,
 				7630B25E2984339100D8B57D /* MenuItemType.swift in Sources */,
 				7630B2632985BE8000D8B57D /* Process+runProcess.swift in Sources */,
 				7645D5012982E6FA00019227 /* main.swift in Sources */,
@@ -420,6 +432,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7630B25F29853EF400D8B57D /* XCRemoteSwiftPackageReference "Preferences" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/Preferences";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		7645D50429831B8200019227 /* XCRemoteSwiftPackageReference "HotKey" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/soffes/HotKey";
@@ -431,6 +451,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7630B26029853EF400D8B57D /* Preferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7630B25F29853EF400D8B57D /* XCRemoteSwiftPackageReference "Preferences" */;
+			productName = Preferences;
+		};
 		7645D50529831B8200019227 /* HotKey */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7645D50429831B8200019227 /* XCRemoteSwiftPackageReference "HotKey" */;
