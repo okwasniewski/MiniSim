@@ -6,17 +6,15 @@
 //
 
 import Cocoa
-import HotKey
+import KeyboardShortcuts
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var miniSim: MiniSim!
-    private var hotkey: HotKey!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         miniSim = MiniSim()
-        hotkey = HotKey(key: .e, modifiers: [.option, .shift])
         
-        self.hotkey.keyUpHandler = {
+        KeyboardShortcuts.onKeyUp(for: .toggleMiniSim) {
             self.miniSim.open()
         }
     }

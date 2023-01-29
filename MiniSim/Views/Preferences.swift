@@ -7,12 +7,17 @@
 
 import SwiftUI
 import Preferences
+import KeyboardShortcuts
 
 struct Preferences: View {
     var body: some View {
-        Settings.Container(contentWidth: 450) {
-            Settings.Section(title: "Section Title") {
-                Text("1")
+        Settings.Container(contentWidth: 350) {
+            Settings.Section(title: "Hotkey:") {
+                KeyboardShortcuts.Recorder("", name: .toggleMiniSim)
+                Text("Global shortcut to open the application \nDefault: ⌥⇧E")
+                    .padding(.leading, 15)
+                    .font(.caption)
+                    .opacity(0.3)
             }
         }
     }

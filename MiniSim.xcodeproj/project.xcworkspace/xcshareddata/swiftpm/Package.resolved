@@ -1,12 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "hotkey",
+      "identity" : "keyboardshortcuts",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/soffes/HotKey",
+      "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
       "state" : {
-        "branch" : "master",
-        "revision" : "c13662730cb5bc28de4a799854bbb018a90649bf"
+        "branch" : "main",
+        "revision" : "d7b349f6822e24228141e560aa48a32dca23b22c"
       }
     },
     {
