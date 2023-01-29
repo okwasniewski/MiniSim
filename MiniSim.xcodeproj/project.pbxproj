@@ -20,6 +20,7 @@
 		7630B2732986C68000D8B57D /* PaneIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2722986C68000D8B57D /* PaneIdentifier.swift */; };
 		7630B2752986D52900D8B57D /* NSAlert+showError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2742986D52900D8B57D /* NSAlert+showError.swift */; };
 		7630B2772986D65800D8B57D /* Bundle+appName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2762986D65800D8B57D /* Bundle+appName.swift */; };
+		7630B27C2987207200D8B57D /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B27B2987207200D8B57D /* Menu.swift */; };
 		7645D4BE2982A1B100019227 /* DeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4BD2982A1B100019227 /* DeviceService.swift */; };
 		7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C12982CA9600019227 /* AppDelegate.swift */; };
 		7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C32982CB2B00019227 /* MiniSim.swift */; };
@@ -40,6 +41,7 @@
 		7630B2722986C68000D8B57D /* PaneIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaneIdentifier.swift; sourceTree = "<group>"; };
 		7630B2742986D52900D8B57D /* NSAlert+showError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAlert+showError.swift"; sourceTree = "<group>"; };
 		7630B2762986D65800D8B57D /* Bundle+appName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+appName.swift"; sourceTree = "<group>"; };
+		7630B27B2987207200D8B57D /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		7645D4BD2982A1B100019227 /* DeviceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceService.swift; sourceTree = "<group>"; };
 		7645D4C12982CA9600019227 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7645D4C32982CB2B00019227 /* MiniSim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniSim.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				7645D4BC2982800D00019227 /* Service */,
 				762CF1E22981DE5400099999 /* Model */,
 				7645D4C12982CA9600019227 /* AppDelegate.swift */,
+				7630B27B2987207200D8B57D /* Menu.swift */,
 				7645D4C32982CB2B00019227 /* MiniSim.swift */,
 				7645D5002982E6FA00019227 /* main.swift */,
 				766BD2372981628C0042261B /* Assets.xcassets */,
@@ -259,6 +262,7 @@
 				7630B2632985BE8000D8B57D /* Process+runProcess.swift in Sources */,
 				7645D5012982E6FA00019227 /* main.swift in Sources */,
 				7630B2772986D65800D8B57D /* Bundle+appName.swift in Sources */,
+				7630B27C2987207200D8B57D /* Menu.swift in Sources */,
 				762CF1E02981968F00099999 /* String+match.swift in Sources */,
 				762CF1E42981DE6100099999 /* Device.swift in Sources */,
 				7645D5032983186100019227 /* NSMenuItem+ImageInit.swift in Sources */,
