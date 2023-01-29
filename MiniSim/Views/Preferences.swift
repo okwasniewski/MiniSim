@@ -8,6 +8,7 @@
 import SwiftUI
 import Preferences
 import KeyboardShortcuts
+import LaunchAtLogin
 
 struct Preferences: View {
     var body: some View {
@@ -18,6 +19,8 @@ struct Preferences: View {
                     .padding(.leading, 15)
                     .font(.caption)
                     .opacity(0.3)
+                Divider()
+                LaunchAtLogin.Toggle("Launch at login")
             }
         }
     }
