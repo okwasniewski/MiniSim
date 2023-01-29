@@ -35,25 +35,27 @@ class MiniSim: NSObject {
         populateAndroidDevices()
     }
     
-    
-    private lazy var settingsController = SettingsWindowController(panes: [
-        Settings.Pane(
-            identifier: .init("Preferences"),
-            title: "Preferences",
-            toolbarIcon: NSImage(systemSymbolName: "gear", accessibilityDescription: "") ?? NSImage()
-        ) {
-            Preferences()
-                .frame(minHeight: 300)
-        },
-        Settings.Pane(
-            identifier: .init("About"),
-            title: "About",
-            toolbarIcon: NSImage(systemSymbolName: "info.circle", accessibilityDescription: "") ?? NSImage()
-        ) {
-            About()
-                .frame(minWidth: 450, minHeight: 300)
-        }
-    ])
+    private lazy var settingsController = PreferencesWindowController(
+        panes: [
+            Settings.Pane(
+                identifier: .preferences,
+                title: "Preferences",
+                toolbarIcon: NSImage(systemSymbolName: "gear", accessibilityDescription: "") ?? NSImage()
+            ) {
+                Preferences()
+            },
+            Settings.Pane(
+                identifier: .about,
+                title: "About",
+                toolbarIcon: NSImage(systemSymbolName: "info.circle", accessibilityDescription: "") ?? NSImage()
+            ) {
+                About()
+            }
+        ],
+        style: .toolbarItems,
+        animated: false,
+        hidesToolbarForSingleItem: true
+    )
     
     func open() {
         self.statusItem.button?.performClick(self)

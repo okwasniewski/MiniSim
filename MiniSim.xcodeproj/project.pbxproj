@@ -17,6 +17,7 @@
 		7630B26B2986B4D500D8B57D /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 7630B26A2986B4D500D8B57D /* KeyboardShortcuts */; };
 		7630B26D2986B4FD00D8B57D /* KeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B26C2986B4FD00D8B57D /* KeyboardShortcuts.swift */; };
 		7630B2702986C0F200D8B57D /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 7630B26F2986C0F200D8B57D /* LaunchAtLogin */; };
+		7630B2732986C68000D8B57D /* PaneIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2722986C68000D8B57D /* PaneIdentifier.swift */; };
 		7645D4BE2982A1B100019227 /* DeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4BD2982A1B100019227 /* DeviceService.swift */; };
 		7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C12982CA9600019227 /* AppDelegate.swift */; };
 		7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C32982CB2B00019227 /* MiniSim.swift */; };
@@ -34,6 +35,7 @@
 		7630B2652985C44A00D8B57D /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		7630B2672985C4CF00D8B57D /* About.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = About.swift; sourceTree = "<group>"; };
 		7630B26C2986B4FD00D8B57D /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
+		7630B2722986C68000D8B57D /* PaneIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaneIdentifier.swift; sourceTree = "<group>"; };
 		7645D4BD2982A1B100019227 /* DeviceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceService.swift; sourceTree = "<group>"; };
 		7645D4C12982CA9600019227 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7645D4C32982CB2B00019227 /* MiniSim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniSim.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */,
 				7630B2622985BE8000D8B57D /* Process+runProcess.swift */,
 				7630B26C2986B4FD00D8B57D /* KeyboardShortcuts.swift */,
+				7630B2722986C68000D8B57D /* PaneIdentifier.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -243,6 +246,7 @@
 				7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */,
 				7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */,
 				7630B2682985C4CF00D8B57D /* About.swift in Sources */,
+				7630B2732986C68000D8B57D /* PaneIdentifier.swift in Sources */,
 				7630B2662985C44A00D8B57D /* Preferences.swift in Sources */,
 				7630B25E2984339100D8B57D /* MenuItemType.swift in Sources */,
 				7630B2632985BE8000D8B57D /* Process+runProcess.swift in Sources */,
@@ -398,7 +402,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.oskarkwasniewski.MiniSim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -431,7 +435,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.oskarkwasniewski.MiniSim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

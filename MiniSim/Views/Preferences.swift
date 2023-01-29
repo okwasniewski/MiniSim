@@ -12,7 +12,7 @@ import LaunchAtLogin
 
 struct Preferences: View {
     var body: some View {
-        Settings.Container(contentWidth: 350) {
+        Settings.Container(contentWidth: 400) {
             Settings.Section(title: "Hotkey:") {
                 KeyboardShortcuts.Recorder("", name: .toggleMiniSim)
                 Text("Global shortcut to open the application \nDefault: ⌥⇧E")

@@ -32,5 +32,6 @@ struct About: View {
             Link("Created by Oskar Kwaśniewski", destination: URL(string: "https://github.com/okwasniewski")!)
                 .font(.caption)
         }
+        .frame(minWidth: 450, minHeight: 300)
     }
 }
