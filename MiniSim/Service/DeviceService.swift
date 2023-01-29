@@ -14,14 +14,15 @@ enum DeviceType: String {
 
 protocol DeviceServiceProtocol {
     // iOS Device
-    func launchDevice(uuid: String) -> Void
+    func launchDevice(uuid: String, _ completion: @escaping (LaunchDeviceResult) -> Void)
     
     //Android Device
-    func launchDevice(name: String) -> Void
+    func launchDevice(name: String, _ completion: @escaping (LaunchDeviceResult) -> Void)
     
     func getDevices(deviceType: DeviceType, _ completion: @escaping (GetDevicesResult) -> Void)
     
     typealias GetDevicesResult = Result<[Device], Error>
+    typealias LaunchDeviceResult = Result<Void, Error>
 }
 
 class DeviceService: DeviceServiceProtocol {
@@ -49,7 +50,7 @@ class DeviceService: DeviceServiceProtocol {
     }
     
     // iOS device
-    func launchDevice(uuid: String) {
+    func launchDevice(uuid: String, _ completion: @escaping (LaunchDeviceResult) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let activeDeveloperDir = try self.runProcess(
@@ -68,20 +69,21 @@ class DeviceService: DeviceServiceProtocol {
                     arguments: ["simctl", "boot", uuid],
                     waitUntilExit: false
                 )
-                
+                completion(.success(()))
             } catch {
-                print(error)
+                completion(.failure(error))
             }
         }
     }
     
     // Android device
-    func launchDevice(name: String) {
+    func launchDevice(name: String, _ completion: @escaping (LaunchDeviceResult) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 try self.runProcess(processURL: ProcessPaths.emulator.rawValue, arguments: ["@\(name)"], waitUntilExit: false)
+                completion(.success(()))
             } catch {
-                print(error)
+                completion(.failure(error))
             }
         }
     }

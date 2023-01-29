@@ -66,11 +66,23 @@ class MiniSim: NSObject {
             switch tag {
             case .launchAndroid:
                 if let device = getDeviceByName(name: sender.title) {
-                    deviceService.launchDevice(name: device.name)
+                    deviceService.launchDevice(name: device.name) { result in
+                        if case .failure(let error) = result {
+                            DispatchQueue.main.async {
+                                NSAlert.showError(error: error)
+                            }
+                        }
+                    }
                 }
             case .launchIOS:
                 if let device = getDeviceByName(name: sender.title) {
-                    deviceService.launchDevice(uuid: device.uuid ?? "")
+                    deviceService.launchDevice(uuid: device.uuid ?? "") { result in
+                        if case .failure(let error) = result {
+                            DispatchQueue.main.async {
+                                NSAlert.showError(error: error)
+                            }
+                        }
+                    }
                 }
                 
             case .preferences:
@@ -145,7 +157,9 @@ class MiniSim: NSObject {
                         }
                     }
                 case .failure(let error):
-                    print(error)
+                    DispatchQueue.main.async {
+                        NSAlert.showError(error: error)
+                    }
                 }
             }
         }
@@ -171,7 +185,9 @@ class MiniSim: NSObject {
                         }
                     }
                 case .failure(let error):
-                    print(error)
+                    DispatchQueue.main.async {
+                        NSAlert.showError(error: error)
+                    }
                 }
             }
         }
