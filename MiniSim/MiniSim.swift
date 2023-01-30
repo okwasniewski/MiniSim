@@ -10,10 +10,9 @@ import Preferences
 import SwiftUI
 
 
-
 class MiniSim: NSObject {
     private var statusBar: NSStatusBar!
-    private var menu: NSMenu!
+    private var menu: Menu!
     
     @objc let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
@@ -24,7 +23,7 @@ class MiniSim: NSObject {
     init(deviceService: DeviceServiceProtocol = DeviceService()) {
         self.deviceService = deviceService
         statusBar = NSStatusBar()
-        menu = NSMenu()
+        menu = Menu()
         statusItem.menu = menu
         
         super.init()
