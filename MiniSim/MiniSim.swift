@@ -94,6 +94,17 @@ class MiniSim: NSObject {
                     }
                 }
                 
+            case .androidNoAudio:
+                if let device = getDeviceByName(name: sender.parent?.title ?? "") {
+                    deviceService.launchDevice(name: device.name, additionalArguments: ["-no-audio"]) { result in
+                        if case .failure(let error) = result {
+                            DispatchQueue.main.async {
+                                NSAlert.showError(error: error)
+                            }
+                        }
+                    }
+                }
+                
             case .preferences:
                 settingsController.show()
             case .quit:
@@ -129,7 +140,7 @@ class MiniSim: NSObject {
             action: #selector(self.menuItemAction(_:)),
             keyEquivalent: "q",
             type: .quit,
-            showImage: false
+            image: NSImage()
         )
         quitItem.target = self
         
@@ -138,7 +149,7 @@ class MiniSim: NSObject {
             action: #selector(self.menuItemAction(_:)),
             keyEquivalent: ",",
             type: .preferences,
-            showImage: false
+            image: NSImage()
         )
         preferences.target = self
         menu.addItem(preferences)
@@ -178,16 +189,28 @@ class MiniSim: NSObject {
     
     private func populateAndroidSubMenu() -> NSMenu {
         let subMenu = NSMenu()
-        let subMenuItem = NSMenuItem(
+        let coldBoot = NSMenuItem(
             title: "Cold boot",
             action: #selector(self.menuItemAction(_:)),
             keyEquivalent: "",
             type: .coldBootAndroid,
-            showImage: false
+            image: NSImage(systemSymbolName: "sunrise.fill", accessibilityDescription: "Cold boot")
         )
-        subMenuItem.target = self
+        coldBoot.target = self
         
-        subMenu.addItem(subMenuItem)
+        let noAudio = NSMenuItem(
+            title: "Run without audio",
+            action: #selector(self.menuItemAction(_:)),
+            keyEquivalent: "",
+            type: .androidNoAudio,
+            image: NSImage(systemSymbolName: "speaker.slash.fill", accessibilityDescription: "No audio")
+        )
+        
+        coldBoot.target = self
+        noAudio.target = self
+        
+        subMenu.addItem(coldBoot)
+        subMenu.addItem(noAudio)
         
         return subMenu
     }
