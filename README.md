@@ -8,10 +8,23 @@ MiniSim is a small utility menu bar app for lauching Android 🤖 and iOS  em
 
 Written in Swift and AppKit. 
 
+## Features
+
+- Lightweight
+- Fast, 100% native
+- Open Source
+- Launch iOS emulators
+- Launch Android emulators
+- Cold boot android emulators 
+- Run android emulators without audio
+    - Your bluetooth headphones will thank you 🎧
+- Bring up menu bar with shortcut `⌥ + ⇧ + e` (option + shift + e)
 
 ## Screenshots 
 
-<img width="512" src="https://media.cleanshot.cloud/media/21298/KYIuI4DX6AytalE3HmB5lvkV8Xzw7Y3XTqVRtJwC.jpeg?Expires=1674922576&Signature=KjhMbBOJYOY~oCLpulUvH9ZBNO4sWabr92lWGizaj0uJ1G0iHEuauaLiF3qpG2wPX0rZGT-lINhQ4lBXByXiobiVGmdUlWEDjaXLAyeOVdiuWvlre5iJxBbSMChUC0sD5sFMRx2t25o5tMmEP745en4K6CF6X3WmkiwQ5n1R6Y2iu6ltiPz5xvYJaYlcGt9BCQ2Okwut0OjIu7VHPV7QObeke6O46sTZjVKLzGh52xcnune~cq7FgRYwEQlMlEsKxVYO4k9gADYiR0tEKJemxh6FFkbcKhOnDZzkccXPSXV3Tu33dpFyc1JyW42XxqoT6YYabwRq1YyUczrYZ335gQ__&Key-Pair-Id=K269JMAT9ZF4GZ">
+<img width="512" src="https://user-images.githubusercontent.com/52801365/215720502-bc27dd65-8e5f-47d8-871e-b273f622f909.png">
+
+https://user-images.githubusercontent.com/52801365/215720684-d21deafe-356e-4e5a-9afd-5107bd1c4b2f.mp4
 
 ## Usage 
 
