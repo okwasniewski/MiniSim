@@ -150,13 +150,17 @@ class DeviceService: DeviceServiceProtocol {
         }
         
         if (name.contains("iPad") || name.contains("Tablet")) {
-            return "ipad.gen2.landscape"
+            return "ipad.landscape"
+        }
+        
+        if name.contains("Watch") {
+            return "applewatch"
         }
         
         if name.contains("TV") {
             return "tv"
         }
         
-        return "iphone.gen2"
+        return "iphone"
     }
 }
