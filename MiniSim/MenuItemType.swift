@@ -15,6 +15,7 @@ enum MenuItemType: Int {
     // Android
     case launchAndroid = 200
     case coldBootAndroid = 201
+    case androidNoAudio = 202
     
     // iOS
     case launchIOS = 300
