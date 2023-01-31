@@ -17,7 +17,7 @@ protocol DeviceServiceProtocol {
     func launchDevice(uuid: String, _ completion: @escaping (LaunchDeviceResult) -> Void)
     
     //Android Device
-    func launchDevice(name: String, _ completion: @escaping (LaunchDeviceResult) -> Void)
+    func launchDevice(name: String, additionalArguments: [String], _ completion: @escaping (LaunchDeviceResult) -> Void)
     
     func getDevices(deviceType: DeviceType, _ completion: @escaping (GetDevicesResult) -> Void)
     
@@ -77,10 +77,13 @@ class DeviceService: DeviceServiceProtocol {
     }
     
     // Android device
-    func launchDevice(name: String, _ completion: @escaping (LaunchDeviceResult) -> Void) {
+    func launchDevice(name: String, additionalArguments: [String] = [], _ completion: @escaping (LaunchDeviceResult) -> Void) {
+        
+        var arguments = ["@\(name)"]
+        arguments.append(contentsOf: additionalArguments)
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                try self.runProcess(processURL: ProcessPaths.emulator.rawValue, arguments: ["@\(name)"], waitUntilExit: false)
+                try self.runProcess(processURL: ProcessPaths.emulator.rawValue, arguments: arguments, waitUntilExit: false)
                 completion(.success(()))
             } catch {
                 completion(.failure(error))

@@ -65,7 +65,7 @@ class MiniSim: NSObject {
             switch tag {
             case .launchAndroid:
                 if let device = getDeviceByName(name: sender.title) {
-                    deviceService.launchDevice(name: device.name) { result in
+                    deviceService.launchDevice(name: device.name, additionalArguments: []) { result in
                         if case .failure(let error) = result {
                             DispatchQueue.main.async {
                                 NSAlert.showError(error: error)
@@ -76,6 +76,16 @@ class MiniSim: NSObject {
             case .launchIOS:
                 if let device = getDeviceByName(name: sender.title) {
                     deviceService.launchDevice(uuid: device.uuid ?? "") { result in
+                        if case .failure(let error) = result {
+                            DispatchQueue.main.async {
+                                NSAlert.showError(error: error)
+                            }
+                        }
+                    }
+                }
+            case .coldBootAndroid:
+                if let device = getDeviceByName(name: sender.parent?.title ?? "") {
+                    deviceService.launchDevice(name: device.name, additionalArguments: ["-no-snapshot"]) { result in
                         if case .failure(let error) = result {
                             DispatchQueue.main.async {
                                 NSAlert.showError(error: error)
@@ -150,6 +160,8 @@ class MiniSim: NSObject {
                         menuItem.target = self
                         menuItem.keyEquivalentModifierMask = [.option]
                         
+                        menuItem.submenu = self.populateAndroidSubMenu()
+                        
                         DispatchQueue.main.async {
                             self.devices.append(device)
                             self.menu.insertItem(menuItem, at: index + 3)
@@ -162,6 +174,22 @@ class MiniSim: NSObject {
                 }
             }
         }
+    }
+    
+    private func populateAndroidSubMenu() -> NSMenu {
+        let subMenu = NSMenu()
+        let subMenuItem = NSMenuItem(
+            title: "Cold boot",
+            action: #selector(self.menuItemAction(_:)),
+            keyEquivalent: "",
+            type: .coldBootAndroid,
+            showImage: false
+        )
+        subMenuItem.target = self
+        
+        subMenu.addItem(subMenuItem)
+        
+        return subMenu
     }
     
     private func populateiOSDevices() {
