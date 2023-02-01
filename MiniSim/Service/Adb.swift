@@ -10,10 +10,6 @@ import ShellOut
 
 final class Adb: NSObject {
     
-    enum Paths: String {
-        case emulator = "/Android/sdk/emulator/emulator"
-    }
-    
     // Constants
     private static let defaultPort = 5552
     private static let maxPort = 5682
@@ -60,7 +56,7 @@ final class Adb: NSObject {
                 }
                 
             } catch {
-                // ignore error
+                // Ignore errors, since they are thrown if we can't find emulator
             }
         }
         return nil

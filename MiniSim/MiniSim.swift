@@ -28,7 +28,6 @@ class MiniSim: NSObject {
         statusItem.menu = menu
         
         super.init()
-        //
         
         updateMenuBarIcon()
         populateSections()
