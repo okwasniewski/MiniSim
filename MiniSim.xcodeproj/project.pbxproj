@@ -28,6 +28,8 @@
 		7645D5032983186100019227 /* NSMenuItem+ImageInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */; };
 		766BD2382981628C0042261B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD2372981628C0042261B /* Assets.xcassets */; };
 		766BD23B2981628C0042261B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD23A2981628C0042261B /* Preview Assets.xcassets */; };
+		76F04A11298A5AE000BF9CA3 /* Adb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F04A10298A5AE000BF9CA3 /* Adb.swift */; };
+		76F04A14298A62CF00BF9CA3 /* ShellOut in Frameworks */ = {isa = PBXBuildFile; productRef = 76F04A13298A62CF00BF9CA3 /* ShellOut */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +53,7 @@
 		766BD2372981628C0042261B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		766BD23A2981628C0042261B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		766BD23C2981628C0042261B /* MiniSim.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MiniSim.entitlements; sourceTree = "<group>"; };
+		76F04A10298A5AE000BF9CA3 /* Adb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Adb.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76F04A14298A62CF00BF9CA3 /* ShellOut in Frameworks */,
 				7630B2702986C0F200D8B57D /* LaunchAtLogin in Frameworks */,
 				7630B26129853EF400D8B57D /* Preferences in Frameworks */,
 				7630B26B2986B4D500D8B57D /* KeyboardShortcuts in Frameworks */,
@@ -102,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				7645D4BD2982A1B100019227 /* DeviceService.swift */,
+				76F04A10298A5AE000BF9CA3 /* Adb.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -170,6 +175,7 @@
 				7630B26029853EF400D8B57D /* Preferences */,
 				7630B26A2986B4D500D8B57D /* KeyboardShortcuts */,
 				7630B26F2986C0F200D8B57D /* LaunchAtLogin */,
+				76F04A13298A62CF00BF9CA3 /* ShellOut */,
 			);
 			productName = MiniSim;
 			productReference = 766BD2302981628A0042261B /* MiniSim.app */;
@@ -203,6 +209,7 @@
 				7630B25F29853EF400D8B57D /* XCRemoteSwiftPackageReference "Preferences" */,
 				7630B2692986B4D500D8B57D /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				7630B26E2986C0F200D8B57D /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
+				76F04A12298A62CF00BF9CA3 /* XCRemoteSwiftPackageReference "ShellOut" */,
 			);
 			productRefGroup = 766BD2312981628A0042261B /* Products */;
 			projectDirPath = "";
@@ -253,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */,
+				76F04A11298A5AE000BF9CA3 /* Adb.swift in Sources */,
 				7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */,
 				7630B2682985C4CF00D8B57D /* About.swift in Sources */,
 				7630B2732986C68000D8B57D /* PaneIdentifier.swift in Sources */,
@@ -503,6 +511,14 @@
 				kind = branch;
 			};
 		};
+		76F04A12298A62CF00BF9CA3 /* XCRemoteSwiftPackageReference "ShellOut" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JohnSundell/ShellOut.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -520,6 +536,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7630B26E2986C0F200D8B57D /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
 			productName = LaunchAtLogin;
+		};
+		76F04A13298A62CF00BF9CA3 /* ShellOut */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76F04A12298A62CF00BF9CA3 /* XCRemoteSwiftPackageReference "ShellOut" */;
+			productName = ShellOut;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

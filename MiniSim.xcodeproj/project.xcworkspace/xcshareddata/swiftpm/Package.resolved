@@ -26,6 +26,15 @@
         "branch" : "main",
         "revision" : "00342137c16b1351408669ca88be60036aa7e343"
       }
+    },
+    {
+      "identity" : "shellout",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JohnSundell/ShellOut.git",
+      "state" : {
+        "revision" : "e1577acf2b6e90086d01a6d5e2b8efdaae033568",
+        "version" : "2.3.0"
+      }
     }
   ],
   "version" : 2

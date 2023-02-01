@@ -8,6 +8,7 @@
 import AppKit
 import Preferences
 import SwiftUI
+import ShellOut
 
 
 class MiniSim: NSObject {
@@ -27,6 +28,7 @@ class MiniSim: NSObject {
         statusItem.menu = menu
         
         super.init()
+        //
         
         updateMenuBarIcon()
         populateSections()
@@ -92,6 +94,11 @@ class MiniSim: NSObject {
                             }
                         }
                     }
+                }
+                
+            case .toggleA11yAndroid:
+                if let device = getDeviceByName(name: sender.parent?.title ?? "") {
+                    deviceService.toggleA11y(device: device)
                 }
                 
             case .androidNoAudio:
@@ -206,11 +213,22 @@ class MiniSim: NSObject {
             image: NSImage(systemSymbolName: "speaker.slash.fill", accessibilityDescription: "No audio")
         )
         
+        let toggleA11 = NSMenuItem(
+            title: "Toggle accessibility",
+            action: #selector(self.menuItemAction(_:)),
+            keyEquivalent: "",
+            type: .toggleA11yAndroid,
+            image: NSImage(systemSymbolName: "figure.walk.circle.fill", accessibilityDescription: "No audio")
+        )
+        
         coldBoot.target = self
         noAudio.target = self
+        toggleA11.target = self
         
         subMenu.addItem(coldBoot)
         subMenu.addItem(noAudio)
+        subMenu.addItem(.separator())
+        subMenu.addItem(toggleA11)
         
         return subMenu
     }
