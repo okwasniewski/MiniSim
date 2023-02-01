@@ -69,8 +69,12 @@ class MiniSim: NSObject {
                 if let device = getDeviceByName(name: sender.title) {
                     deviceService.launchDevice(name: device.name, additionalArguments: []) { result in
                         if case .failure(let error) = result {
+                            guard let shellOutError = error as? ShellOutError else {
+                                return
+                            }
+                            
                             DispatchQueue.main.async {
-                                NSAlert.showError(error: error)
+                                NSAlert.showError(message: shellOutError.message)
                             }
                         }
                     }
@@ -79,8 +83,12 @@ class MiniSim: NSObject {
                 if let device = getDeviceByName(name: sender.title) {
                     deviceService.launchDevice(uuid: device.uuid ?? "") { result in
                         if case .failure(let error) = result {
+                            guard let shellOutError = error as? ShellOutError else {
+                                return
+                            }
+                            
                             DispatchQueue.main.async {
-                                NSAlert.showError(error: error)
+                                NSAlert.showError(message: shellOutError.message)
                             }
                         }
                     }
@@ -90,7 +98,10 @@ class MiniSim: NSObject {
                     deviceService.launchDevice(name: device.name, additionalArguments: ["-no-snapshot"]) { result in
                         if case .failure(let error) = result {
                             DispatchQueue.main.async {
-                                NSAlert.showError(error: error)
+                                guard let shellOutError = error as? ShellOutError else {
+                                    return
+                                }
+                                NSAlert.showError(message: shellOutError.message)
                             }
                         }
                     }
@@ -106,7 +117,10 @@ class MiniSim: NSObject {
                     deviceService.launchDevice(name: device.name, additionalArguments: ["-no-audio"]) { result in
                         if case .failure(let error) = result {
                             DispatchQueue.main.async {
-                                NSAlert.showError(error: error)
+                                guard let shellOutError = error as? ShellOutError else {
+                                    return
+                                }
+                                NSAlert.showError(message: shellOutError.message)
                             }
                         }
                     }
@@ -187,7 +201,10 @@ class MiniSim: NSObject {
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
-                        NSAlert.showError(error: error)
+                        guard let shellOutError = error as? ShellOutError else {
+                            return
+                        }
+                        NSAlert.showError(message: shellOutError.message)
                     }
                 }
             }
@@ -254,7 +271,10 @@ class MiniSim: NSObject {
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
-                        NSAlert.showError(error: error)
+                        guard let shellOutError = error as? ShellOutError else {
+                            return
+                        }
+                        NSAlert.showError(message: shellOutError.message)
                     }
                 }
             }

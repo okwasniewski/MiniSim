@@ -9,13 +9,13 @@ import AppKit
 
 
 extension NSAlert {
-    static func showError(error: Error) {
+    static func showError(message: String) {
         let alert = self.init()
         alert.alertStyle = .warning
-        var messageText = error.localizedDescription
+        var messageText = message
         
         if let appName = Bundle.main.appName {
-            messageText = "\(appName) - " + messageText
+            messageText = "\(appName) - " + message
         }
         
         alert.messageText = messageText

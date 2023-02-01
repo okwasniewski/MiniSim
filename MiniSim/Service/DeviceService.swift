@@ -32,45 +32,18 @@ class DeviceService: DeviceServiceProtocol {
     private enum ProcessPaths: String {
         case xcrun = "/usr/bin/xcrun"
         case xcodeSelect = "/usr/bin/xcode-select"
-        case emulator = "/Android/sdk/emulator/emulator"
-    }
-    
-    @discardableResult private func runProcess(processURL: String, arguments: [String], waitUntilExit: Bool = true) throws -> String {
-        var fileURL = processURL
-        
-        if processURL == ProcessPaths.emulator.rawValue {
-            let libraryDirectory = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)
-            guard let libraryDirectory = libraryDirectory.first else {
-                return ""
-            }
-            fileURL = libraryDirectory + fileURL
-        }
-        
-        let output = try Process.runProcess(fileURL: fileURL, arguments: arguments, waitUntilExit: waitUntilExit)
-        
-        return output
     }
     
     // iOS device
     func launchDevice(uuid: String, _ completion: @escaping (LaunchDeviceResult) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                let activeDeveloperDir = try self.runProcess(
-                    processURL: ProcessPaths.xcodeSelect.rawValue,
-                    arguments: ["-p"]
-                ).trimmingCharacters(in: .whitespacesAndNewlines)
+                let activeDeveloperDir = try shellOut(to: ProcessPaths.xcodeSelect.rawValue, arguments: ["-p"]).trimmingCharacters(in: .whitespacesAndNewlines)
                 
-                try self.runProcess(
-                    processURL: "\(activeDeveloperDir)/Applications/Simulator.app/Contents/MacOS/Simulator",
-                    arguments: ["--args", "-CurrentDeviceUDID", uuid],
-                    waitUntilExit: false
-                )
+                try shellOut(to: "\(activeDeveloperDir)/Applications/Simulator.app/Contents/MacOS/Simulator", arguments: ["--args", "-CurrentDeviceUDID", uuid])
                 
-                try self.runProcess(
-                    processURL: ProcessPaths.xcrun.rawValue,
-                    arguments: ["simctl", "boot", uuid],
-                    waitUntilExit: false
-                )
+                try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "boot", uuid])
+                
                 completion(.success(()))
             } catch {
                 completion(.failure(error))
@@ -85,7 +58,8 @@ class DeviceService: DeviceServiceProtocol {
         arguments.append(contentsOf: additionalArguments)
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                try self.runProcess(processURL: ProcessPaths.emulator.rawValue, arguments: arguments, waitUntilExit: false)
+                let emulatorPath = try Adb.getEmulatorPath()
+                try shellOut(to: emulatorPath, arguments: arguments)
                 completion(.success(()))
             } catch {
                 completion(.failure(error))
@@ -99,7 +73,7 @@ class DeviceService: DeviceServiceProtocol {
         switch deviceType {
         case .iOS:
             do {
-                output = try runProcess(processURL: ProcessPaths.xcrun.rawValue, arguments: ["xctrace", "list", "devices"])
+                output = try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["xctrace", "list", "devices"])
             } catch {
                 completion(.failure(error))
                 return
@@ -132,7 +106,8 @@ class DeviceService: DeviceServiceProtocol {
             
         case .Android:
             do {
-                output = try runProcess(processURL: ProcessPaths.emulator.rawValue, arguments: ["-list-avds"])
+                let emulatorPath = try Adb.getEmulatorPath()
+                output = try shellOut(to: emulatorPath, arguments: ["-list-avds"])
             } catch {
                 completion(.failure(error))
                 return

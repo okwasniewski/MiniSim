@@ -30,12 +30,20 @@ final class Adb: NSObject {
                 fi
                 """
     }
-
+    
     static func getAdbPath() throws -> String {
         return try shellOut(to: [
             self.getSourceFileScript(file: "~/.zshrc"),
             self.getSourceFileScript(file: "~/.bashrc"),
             "which adb"
+        ])
+    }
+    
+    static func getEmulatorPath() throws -> String {
+        return try shellOut(to: [
+            self.getSourceFileScript(file: "~/.zshrc"),
+            self.getSourceFileScript(file: "~/.bashrc"),
+            "which emulator"
         ])
     }
     
@@ -45,9 +53,7 @@ final class Adb: NSObject {
                 let output = try shellOut(to: "\(adbPath) -s emulator-\(port) emu avd name")
                 let splitted = output.components(separatedBy: "\n")
                 
-                guard let name = splitted.first else {
-                    continue
-                }
+                guard let name = splitted.first else { continue }
                 
                 if deviceName == name.trimmingCharacters(in: .whitespacesAndNewlines) {
                     return "emulator-\(port)"
