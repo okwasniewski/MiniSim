@@ -8,7 +8,14 @@
 import Foundation
 import ShellOut
 
-final class Adb: NSObject {
+protocol ADBProtocol {
+    static func getAdbPath() throws -> String
+    static func getEmulatorPath() throws -> String
+    static func getAdbId(for deviceName: String, adbPath: String) -> String?
+    static func isAccesibilityOn(deviceId: String, adbPath: String) -> Bool
+}
+
+final class ADB: NSObject, ADBProtocol {
     
     // Constants
     private static let defaultPort = 5552

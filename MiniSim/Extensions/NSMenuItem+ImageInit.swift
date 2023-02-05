@@ -8,17 +8,37 @@
 import AppKit
 
 extension NSMenuItem {
-    convenience init(title: String, action: Selector?, keyEquivalent: String, type: MenuItemType, image: NSImage? = nil) {
+    convenience init(title: String, action: Selector?, keyEquivalent: String, type: DeviceMenuItem, image: NSImage? = nil) {
         self.init(title: title, action: action, keyEquivalent: keyEquivalent)
         
         if let image {
             self.image = image
         } else {
-            let imageName = DeviceService.getSystemImageFromName(name: title)
+            let imageName = self.getSystemImageFromName(name: title)
             self.image = NSImage(systemSymbolName: imageName, accessibilityDescription: title)
         }
         
         self.tag = type.rawValue
+    }
+
+    private func getSystemImageFromName(name: String) -> String {
+        if name.contains("Apple TV") {
+            return "appletv.fill"
+        }
+        
+        if (name.contains("iPad") || name.contains("Tablet")) {
+            return "ipad.landscape"
+        }
+        
+        if name.contains("Watch") {
+            return "applewatch"
+        }
+        
+        if name.contains("TV") {
+            return "tv"
+        }
+        
+        return "iphone"
     }
 }
 

@@ -1,17 +1,14 @@
 //
-//  MenuItemType.swift
+//  DeviceMenuItem.swift
 //  MiniSim
 //
-//  Created by Oskar Kwaśniewski on 27/01/2023.
+//  Created by Oskar Kwaśniewski on 02/02/2023.
 //
 
-import Cocoa
+import Foundation
 
-enum MenuItemType: Int {
-    // Global
-    case quit = 100
-    case preferences = 101
-    
+
+enum DeviceMenuItem: Int {
     // Android
     case launchAndroid = 200
     case coldBootAndroid = 201

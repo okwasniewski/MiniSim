@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		762CF1E02981968F00099999 /* String+match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1DF2981968F00099999 /* String+match.swift */; };
 		762CF1E42981DE6100099999 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1E32981DE6100099999 /* Device.swift */; };
-		7630B25E2984339100D8B57D /* MenuItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B25D2984339100D8B57D /* MenuItemType.swift */; };
+		7630B25E2984339100D8B57D /* MenuSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B25D2984339100D8B57D /* MenuSections.swift */; };
 		7630B26129853EF400D8B57D /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = 7630B26029853EF400D8B57D /* Preferences */; };
 		7630B2662985C44A00D8B57D /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2652985C44A00D8B57D /* Preferences.swift */; };
 		7630B2682985C4CF00D8B57D /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2672985C4CF00D8B57D /* About.swift */; };
@@ -27,14 +27,15 @@
 		7645D5032983186100019227 /* NSMenuItem+ImageInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */; };
 		766BD2382981628C0042261B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD2372981628C0042261B /* Assets.xcassets */; };
 		766BD23B2981628C0042261B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD23A2981628C0042261B /* Preview Assets.xcassets */; };
-		76F04A11298A5AE000BF9CA3 /* Adb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F04A10298A5AE000BF9CA3 /* Adb.swift */; };
+		76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */; };
+		76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F04A10298A5AE000BF9CA3 /* ADB.swift */; };
 		76F04A14298A62CF00BF9CA3 /* ShellOut in Frameworks */ = {isa = PBXBuildFile; productRef = 76F04A13298A62CF00BF9CA3 /* ShellOut */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		762CF1DF2981968F00099999 /* String+match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+match.swift"; sourceTree = "<group>"; };
 		762CF1E32981DE6100099999 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
-		7630B25D2984339100D8B57D /* MenuItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemType.swift; sourceTree = "<group>"; };
+		7630B25D2984339100D8B57D /* MenuSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSections.swift; sourceTree = "<group>"; };
 		7630B2652985C44A00D8B57D /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		7630B2672985C4CF00D8B57D /* About.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = About.swift; sourceTree = "<group>"; };
 		7630B26C2986B4FD00D8B57D /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
@@ -51,7 +52,8 @@
 		766BD2372981628C0042261B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		766BD23A2981628C0042261B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		766BD23C2981628C0042261B /* MiniSim.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MiniSim.entitlements; sourceTree = "<group>"; };
-		76F04A10298A5AE000BF9CA3 /* Adb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Adb.swift; sourceTree = "<group>"; };
+		76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceMenuItem.swift; sourceTree = "<group>"; };
+		76F04A10298A5AE000BF9CA3 /* ADB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADB.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,7 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				7645D4BD2982A1B100019227 /* DeviceService.swift */,
-				76F04A10298A5AE000BF9CA3 /* Adb.swift */,
+				76F04A10298A5AE000BF9CA3 /* ADB.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -132,13 +134,14 @@
 				7645D4BC2982800D00019227 /* Service */,
 				762CF1E22981DE5400099999 /* Model */,
 				7645D4C12982CA9600019227 /* AppDelegate.swift */,
+				7630B25D2984339100D8B57D /* MenuSections.swift */,
+				76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */,
 				7630B27B2987207200D8B57D /* Menu.swift */,
 				7645D4C32982CB2B00019227 /* MiniSim.swift */,
 				7645D5002982E6FA00019227 /* main.swift */,
 				766BD2372981628C0042261B /* Assets.xcassets */,
 				766BD23C2981628C0042261B /* MiniSim.entitlements */,
 				766BD2392981628C0042261B /* Preview Content */,
-				7630B25D2984339100D8B57D /* MenuItemType.swift */,
 			);
 			path = MiniSim;
 			sourceTree = "<group>";
@@ -257,13 +260,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */,
-				76F04A11298A5AE000BF9CA3 /* Adb.swift in Sources */,
+				76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */,
+				76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */,
 				7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */,
 				7630B2682985C4CF00D8B57D /* About.swift in Sources */,
 				7630B2732986C68000D8B57D /* PaneIdentifier.swift in Sources */,
 				7630B2662985C44A00D8B57D /* Preferences.swift in Sources */,
 				7630B2752986D52900D8B57D /* NSAlert+showError.swift in Sources */,
-				7630B25E2984339100D8B57D /* MenuItemType.swift in Sources */,
+				7630B25E2984339100D8B57D /* MenuSections.swift in Sources */,
 				7645D5012982E6FA00019227 /* main.swift in Sources */,
 				7630B2772986D65800D8B57D /* Bundle+appName.swift in Sources */,
 				7630B27C2987207200D8B57D /* Menu.swift in Sources */,

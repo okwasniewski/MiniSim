@@ -8,20 +8,15 @@
 import Foundation
 import ShellOut
 
-enum DeviceType: String {
-    case iOS = "iOS"
-    case Android = "Android"
-}
-
 protocol DeviceServiceProtocol {
     // iOS Device
     func launchDevice(uuid: String, _ completion: @escaping (LaunchDeviceResult) -> Void)
+    func getIOSDevices(_ completion: @escaping (GetDevicesResult) -> Void)
     
     //Android Device
     func launchDevice(name: String, additionalArguments: [String], _ completion: @escaping (LaunchDeviceResult) -> Void)
     func toggleA11y(device: Device)
-    
-    func getDevices(deviceType: DeviceType, _ completion: @escaping (GetDevicesResult) -> Void)
+    func getAndroidDevices(_ completion: @escaping (GetDevicesResult) -> Void)
     
     typealias GetDevicesResult = Result<[Device], Error>
     typealias LaunchDeviceResult = Result<Void, Error>
@@ -33,8 +28,42 @@ class DeviceService: DeviceServiceProtocol {
         case xcrun = "/usr/bin/xcrun"
         case xcodeSelect = "/usr/bin/xcode-select"
     }
+}
+
+// iOS Methods
+extension DeviceService {
     
-    // iOS device
+    func getIOSDevices(_ completion: @escaping (GetDevicesResult) -> Void) {
+        DispatchQueue.global(qos: .background).async {
+            var output = ""
+            do {
+                output = try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "list", "devices", "available"])
+            } catch {
+                completion(.failure(error))
+                return
+            }
+            
+            let splitted = output.components(separatedBy: "\n")
+            
+            var devices: [Device] = []
+            splitted.forEach { line in
+                let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\)")
+                if (!device.isEmpty) {
+                    let firstDevice = device[0]
+                    devices.append(
+                        Device(
+                            name: firstDevice[1].trimmingCharacters(in: .whitespacesAndNewlines),
+                            version: firstDevice[3],
+                            uuid: firstDevice[4]
+                        )
+                    )
+                }
+            }
+            
+            completion(.success(devices))
+        }
+    }
+    
     func launchDevice(uuid: String, _ completion: @escaping (LaunchDeviceResult) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
@@ -51,14 +80,19 @@ class DeviceService: DeviceServiceProtocol {
         }
     }
     
-    // Android device
+    
+}
+
+
+// Android methods
+extension DeviceService {
     func launchDevice(name: String, additionalArguments: [String] = [], _ completion: @escaping (LaunchDeviceResult) -> Void) {
         
         var arguments = ["@\(name)"]
         arguments.append(contentsOf: additionalArguments)
         DispatchQueue.global(qos: .userInitiated).async {
             do {
-                let emulatorPath = try Adb.getEmulatorPath()
+                let emulatorPath = try ADB.getEmulatorPath()
                 try shellOut(to: emulatorPath, arguments: arguments)
                 completion(.success(()))
             } catch {
@@ -67,46 +101,11 @@ class DeviceService: DeviceServiceProtocol {
         }
     }
     
-    func getDevices(deviceType: DeviceType, _ completion: @escaping (GetDevicesResult) -> Void) {
-        var output = ""
-        
-        switch deviceType {
-        case .iOS:
+    func getAndroidDevices(_ completion: @escaping (GetDevicesResult) -> Void) {
+        DispatchQueue.global(qos: .background).async {
+            var output = ""
             do {
-                output = try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["xctrace", "list", "devices"])
-            } catch {
-                completion(.failure(error))
-                return
-            }
-            
-            let splitted = output.components(separatedBy: "\n")
-            
-            var isSimulator = false
-            
-            var devices: [Device] = []
-            splitted.forEach { line in
-                if line == "== Simulators ==" {
-                    isSimulator = true
-                }
-                
-                let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\)")
-                if (!device.isEmpty && isSimulator) {
-                    let firstDevice = device[0]
-                    devices.append(
-                        Device(
-                            name: firstDevice[1],
-                            version: firstDevice[3],
-                            uuid: firstDevice[4]
-                        )
-                    )
-                }
-            }
-            
-            completion(.success(devices))
-            
-        case .Android:
-            do {
-                let emulatorPath = try Adb.getEmulatorPath()
+                let emulatorPath = try ADB.getEmulatorPath()
                 output = try shellOut(to: emulatorPath, arguments: ["-list-avds"])
             } catch {
                 completion(.failure(error))
@@ -123,35 +122,15 @@ class DeviceService: DeviceServiceProtocol {
     
     func toggleA11y(device: Device) {
         DispatchQueue.global(qos: .userInitiated).async {
-            guard let adbPath = try? Adb.getAdbPath() else { return }
+            guard let adbPath = try? ADB.getAdbPath() else { return }
             
-            guard let deviceId = Adb.getAdbId(for: device.name, adbPath: adbPath) else { return }
+            guard let deviceId = ADB.getAdbId(for: device.name, adbPath: adbPath) else { return }
             
-            if Adb.isAccesibilityOn(deviceId: deviceId, adbPath: adbPath) {
-                _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(Adb.talkbackOff)")
+            if ADB.isAccesibilityOn(deviceId: deviceId, adbPath: adbPath) {
+                _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOff)")
             } else {
-                _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(Adb.talkbackOn)")
+                _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOn)")
             }
         }
-    }
-    
-    static func getSystemImageFromName(name: String) -> String {
-        if name.contains("Apple TV") {
-            return "appletv.fill"
-        }
-        
-        if (name.contains("iPad") || name.contains("Tablet")) {
-            return "ipad.landscape"
-        }
-        
-        if name.contains("Watch") {
-            return "applewatch"
-        }
-        
-        if name.contains("TV") {
-            return "tv"
-        }
-        
-        return "iphone"
     }
 }
