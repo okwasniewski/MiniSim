@@ -10,20 +10,19 @@ import ShellOut
 
 protocol DeviceServiceProtocol {
     // iOS Device
-    func launchDevice(uuid: String, _ completion: @escaping (LaunchDeviceResult) -> Void)
+    func launchDevice(uuid: String, _ completion: @escaping (DeviceServiceResult) -> Void)
     func getIOSDevices(_ completion: @escaping (GetDevicesResult) -> Void)
     
     //Android Device
-    func launchDevice(name: String, additionalArguments: [String], _ completion: @escaping (LaunchDeviceResult) -> Void)
-    func toggleA11y(device: Device)
+    func launchDevice(name: String, additionalArguments: [String], _ completion: @escaping (DeviceServiceResult) -> Void)
+    func toggleA11y(device: Device,  _ completion: @escaping (DeviceServiceResult) -> Void)
     func getAndroidDevices(_ completion: @escaping (GetDevicesResult) -> Void)
     
     typealias GetDevicesResult = Result<[Device], Error>
-    typealias LaunchDeviceResult = Result<Void, Error>
+    typealias DeviceServiceResult = Result<Void, Error>
 }
 
 class DeviceService: DeviceServiceProtocol {
-    
     private enum ProcessPaths: String {
         case xcrun = "/usr/bin/xcrun"
         case xcodeSelect = "/usr/bin/xcode-select"
@@ -39,7 +38,7 @@ extension DeviceService {
             do {
                 output = try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "list", "devices", "available"])
             } catch {
-                completion(.failure(error))
+                completion(.failure(DeviceError.XCodeError))
                 return
             }
             
@@ -64,7 +63,7 @@ extension DeviceService {
         }
     }
     
-    func launchDevice(uuid: String, _ completion: @escaping (LaunchDeviceResult) -> Void) {
+    func launchDevice(uuid: String, _ completion: @escaping (DeviceServiceResult) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let activeDeveloperDir = try shellOut(to: ProcessPaths.xcodeSelect.rawValue, arguments: ["-p"]).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -75,7 +74,7 @@ extension DeviceService {
                 
                 completion(.success(()))
             } catch {
-                completion(.failure(error))
+                completion(.failure(DeviceError.XCodeError))
             }
         }
     }
@@ -86,7 +85,7 @@ extension DeviceService {
 
 // Android methods
 extension DeviceService {
-    func launchDevice(name: String, additionalArguments: [String] = [], _ completion: @escaping (LaunchDeviceResult) -> Void) {
+    func launchDevice(name: String, additionalArguments: [String] = [], _ completion: @escaping (DeviceServiceResult) -> Void) {
         
         var arguments = ["@\(name)"]
         arguments.append(contentsOf: additionalArguments)
@@ -120,16 +119,20 @@ extension DeviceService {
         }
     }
     
-    func toggleA11y(device: Device) {
+    func toggleA11y(device: Device, _ completion: @escaping (DeviceServiceResult) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            guard let adbPath = try? ADB.getAdbPath() else { return }
-            
-            guard let deviceId = ADB.getAdbId(for: device.name, adbPath: adbPath) else { return }
-            
-            if ADB.isAccesibilityOn(deviceId: deviceId, adbPath: adbPath) {
-                _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOff)")
-            } else {
-                _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOn)")
+            do {
+                let adbPath = try ADB.getAdbPath()
+                
+               let deviceId = try ADB.getAdbId(for: device.name, adbPath: adbPath)
+                
+                if ADB.isAccesibilityOn(deviceId: deviceId, adbPath: adbPath) {
+                    _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOff)")
+                } else {
+                    _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOn)")
+                }
+            } catch  {
+                completion(.failure(error))
             }
         }
     }

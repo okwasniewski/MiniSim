@@ -8,7 +8,6 @@
 import AppKit
 import Preferences
 import SwiftUI
-import ShellOut
 
 
 class MiniSim: NSObject {
@@ -97,12 +96,7 @@ class MiniSim: NSObject {
             case .success(let devices):
                 self.menu.devices.append(contentsOf: devices)
             case .failure(let error):
-                DispatchQueue.main.async {
-                    guard let shellOutError = error as? ShellOutError else {
-                        return
-                    }
-                    NSAlert.showError(message: shellOutError.message)
-                }
+                NSAlert.showError(message: error.localizedDescription)
             }
         }
     }
@@ -113,12 +107,7 @@ class MiniSim: NSObject {
             case .success(let devices):
                 self.menu.devices.append(contentsOf: devices)
             case .failure(let error):
-                DispatchQueue.main.async {
-                    guard let shellOutError = error as? ShellOutError else {
-                        return
-                    }
-                    NSAlert.showError(message: shellOutError.message)
-                }
+                NSAlert.showError(message: error.localizedDescription)
             }
         }
     }

@@ -19,9 +19,27 @@ struct Preferences: View {
                     .padding(.leading, 15)
                     .font(.caption)
                     .opacity(0.3)
+                
+                Button("Clear cache") {
+                    resetDefaults()
+                }
+                Text("This clears data saved in cache.")
+                    .padding(.leading, 15)
+                    .font(.caption)
+                    .opacity(0.3)
+                
                 Divider()
                 LaunchAtLogin.Toggle("Launch at login")
+                
             }
+        }
+    }
+    
+    func resetDefaults() {
+        let defaults = UserDefaults.standard
+        let dictionary = defaults.dictionaryRepresentation()
+        dictionary.keys.forEach { key in
+            defaults.removeObject(forKey: key)
         }
     }
 }

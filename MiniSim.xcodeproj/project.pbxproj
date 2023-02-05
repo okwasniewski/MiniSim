@@ -30,6 +30,8 @@
 		76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */; };
 		76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F04A10298A5AE000BF9CA3 /* ADB.swift */; };
 		76F04A14298A62CF00BF9CA3 /* ShellOut in Frameworks */ = {isa = PBXBuildFile; productRef = 76F04A13298A62CF00BF9CA3 /* ShellOut */; };
+		76F2A912299033EA002D4EF6 /* DeviceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A911299033EA002D4EF6 /* DeviceError.swift */; };
+		76F2A914299050F9002D4EF6 /* UserDefaults+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +56,8 @@
 		766BD23C2981628C0042261B /* MiniSim.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MiniSim.entitlements; sourceTree = "<group>"; };
 		76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceMenuItem.swift; sourceTree = "<group>"; };
 		76F04A10298A5AE000BF9CA3 /* ADB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADB.swift; sourceTree = "<group>"; };
+		76F2A911299033EA002D4EF6 /* DeviceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceError.swift; sourceTree = "<group>"; };
+		76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Configuration.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +84,7 @@
 				7630B2722986C68000D8B57D /* PaneIdentifier.swift */,
 				7630B2742986D52900D8B57D /* NSAlert+showError.swift */,
 				7630B2762986D65800D8B57D /* Bundle+appName.swift */,
+				76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -106,6 +111,7 @@
 			children = (
 				7645D4BD2982A1B100019227 /* DeviceService.swift */,
 				76F04A10298A5AE000BF9CA3 /* ADB.swift */,
+				76F2A911299033EA002D4EF6 /* DeviceError.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -263,12 +269,14 @@
 				76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */,
 				76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */,
 				7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */,
+				76F2A912299033EA002D4EF6 /* DeviceError.swift in Sources */,
 				7630B2682985C4CF00D8B57D /* About.swift in Sources */,
 				7630B2732986C68000D8B57D /* PaneIdentifier.swift in Sources */,
 				7630B2662985C44A00D8B57D /* Preferences.swift in Sources */,
 				7630B2752986D52900D8B57D /* NSAlert+showError.swift in Sources */,
 				7630B25E2984339100D8B57D /* MenuSections.swift in Sources */,
 				7645D5012982E6FA00019227 /* main.swift in Sources */,
+				76F2A914299050F9002D4EF6 /* UserDefaults+Configuration.swift in Sources */,
 				7630B2772986D65800D8B57D /* Bundle+appName.swift in Sources */,
 				7630B27C2987207200D8B57D /* Menu.swift in Sources */,
 				762CF1E02981968F00099999 /* String+match.swift in Sources */,

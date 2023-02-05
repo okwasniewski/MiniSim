@@ -11,7 +11,7 @@ import ShellOut
 protocol ADBProtocol {
     static func getAdbPath() throws -> String
     static func getEmulatorPath() throws -> String
-    static func getAdbId(for deviceName: String, adbPath: String) -> String?
+    static func getAdbId(for deviceName: String, adbPath: String) throws -> String
     static func isAccesibilityOn(deviceId: String, adbPath: String) -> Bool
 }
 
@@ -35,22 +35,50 @@ final class ADB: NSObject, ADBProtocol {
     }
     
     static func getAdbPath() throws -> String {
-        return try shellOut(to: [
-            self.getSourceFileScript(file: "~/.zshrc"),
-            self.getSourceFileScript(file: "~/.bashrc"),
-            "which adb"
-        ])
+        if let savedAdbPath = UserDefaults.standard.adbPath, !savedAdbPath.isEmpty {
+            return savedAdbPath
+        }
+        
+        do {
+            let adbPath = try shellOut(to: [
+                self.getSourceFileScript(file: "~/.zshrc"),
+                self.getSourceFileScript(file: "~/.bashrc"),
+                "which adb"
+            ])
+            if adbPath.isEmpty {
+                throw DeviceError.AndroidStudioError
+            }
+            UserDefaults.standard.adbPath = adbPath
+            return adbPath
+        }
+        catch {
+            throw DeviceError.AndroidStudioError
+        }
     }
     
     static func getEmulatorPath() throws -> String {
-        return try shellOut(to: [
-            self.getSourceFileScript(file: "~/.zshrc"),
-            self.getSourceFileScript(file: "~/.bashrc"),
-            "which emulator"
-        ])
+        if let savedEmulatorPath = UserDefaults.standard.emulatorPath, !savedEmulatorPath.isEmpty {
+            return savedEmulatorPath
+        }
+        
+        do {
+            let emulatorPath = try shellOut(to: [
+                self.getSourceFileScript(file: "~/.zshrc"),
+                self.getSourceFileScript(file: "~/.bashrc"),
+                "which emulator"
+            ])
+            if emulatorPath.isEmpty {
+                throw DeviceError.AndroidStudioError
+            }
+            UserDefaults.standard.emulatorPath = emulatorPath
+            return emulatorPath
+        }
+        catch {
+            throw DeviceError.AndroidStudioError
+        }
     }
     
-    static func getAdbId(for deviceName: String, adbPath: String) -> String? {
+    static func getAdbId(for deviceName: String, adbPath: String) throws -> String {
         for port in stride(from: defaultPort, through: maxPort, by: portIncrement) {
             do  {
                 let output = try shellOut(to: "\(adbPath) -s emulator-\(port) emu avd name")
@@ -66,7 +94,7 @@ final class ADB: NSObject, ADBProtocol {
                 // Ignore errors, since they are thrown if we can't find emulator
             }
         }
-        return nil
+        throw DeviceError.deviceNotFound
     }
     
     static func isAccesibilityOn(deviceId: String, adbPath: String) -> Bool {

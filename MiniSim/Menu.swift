@@ -7,7 +7,6 @@
 
 import AppKit
 import KeyboardShortcuts
-import ShellOut
 
 class Menu: NSMenu {
     var deviceService: DeviceServiceProtocol!
@@ -38,13 +37,7 @@ class Menu: NSMenu {
                 if let device = getDeviceByName(name: sender.title) {
                     deviceService.launchDevice(name: device.name, additionalArguments: []) { result in
                         if case .failure(let error) = result {
-                            guard let shellOutError = error as? ShellOutError else {
-                                return
-                            }
-                            
-                            DispatchQueue.main.async {
-                                NSAlert.showError(message: shellOutError.message)
-                            }
+                            NSAlert.showError(message: error.localizedDescription)
                         }
                     }
                 }
@@ -52,13 +45,7 @@ class Menu: NSMenu {
                 if let device = getDeviceByName(name: sender.title) {
                     deviceService.launchDevice(uuid: device.uuid ?? "") { result in
                         if case .failure(let error) = result {
-                            guard let shellOutError = error as? ShellOutError else {
-                                return
-                            }
-                            
-                            DispatchQueue.main.async {
-                                NSAlert.showError(message: shellOutError.message)
-                            }
+                            NSAlert.showError(message: error.localizedDescription)
                         }
                     }
                 }
@@ -66,31 +53,25 @@ class Menu: NSMenu {
                 if let device = getDeviceByName(name: sender.parent?.title ?? "") {
                     deviceService.launchDevice(name: device.name, additionalArguments: ["-no-snapshot"]) { result in
                         if case .failure(let error) = result {
-                            DispatchQueue.main.async {
-                                guard let shellOutError = error as? ShellOutError else {
-                                    return
-                                }
-                                NSAlert.showError(message: shellOutError.message)
-                            }
+                            NSAlert.showError(message: error.localizedDescription)
                         }
                     }
                 }
                 
             case .toggleA11yAndroid:
                 if let device = getDeviceByName(name: sender.parent?.title ?? "") {
-                    deviceService.toggleA11y(device: device)
+                    deviceService.toggleA11y(device: device) { result in
+                        if case .failure(let error) = result {
+                            NSAlert.showError(message: error.localizedDescription)
+                        }
+                    }
                 }
                 
             case .androidNoAudio:
                 if let device = getDeviceByName(name: sender.parent?.title ?? "") {
                     deviceService.launchDevice(name: device.name, additionalArguments: ["-no-audio"]) { result in
                         if case .failure(let error) = result {
-                            DispatchQueue.main.async {
-                                guard let shellOutError = error as? ShellOutError else {
-                                    return
-                                }
-                                NSAlert.showError(message: shellOutError.message)
-                            }
+                                NSAlert.showError(message: error.localizedDescription)
                         }
                     }
                 }
@@ -103,25 +84,41 @@ class Menu: NSMenu {
     }
     
     private func buildMenu() {
-        var androidIndex = 0
-        Array(devices.enumerated()).forEach { index, device in
+        if (self.items.count == devices.count) {
+            return
+        }
+        
+        let androidDevices = devices.filter({ $0.isAndroid })
+        let iOSDevices = devices.filter({ !$0.isAndroid })
+        
+        Array(androidDevices.enumerated()).forEach { index, device in
             let menuItem = NSMenuItem(
                 title: device.name,
                 action: #selector(deviceItemClick),
-                keyEquivalent: getKeyKequivalent(index: device.isAndroid ? androidIndex : index),
+                keyEquivalent: getKeyKequivalent(index: index),
+                type: .launchAndroid
+            )
+            menuItem.target = self
+            menuItem.keyEquivalentModifierMask = [.option]
+            menuItem.submenu = populateAndroidSubMenu()
+            
+            if !items.contains(where: { $0.title == device.name }) {
+                self.insertItem(menuItem, at: 3)
+            }
+        }
+        
+        Array(iOSDevices.enumerated()).forEach { index, device in
+            let menuItem = NSMenuItem(
+                title: device.name,
+                action: #selector(deviceItemClick),
+                keyEquivalent: getKeyKequivalent(index: index),
                 type: device.isAndroid ? .launchAndroid : .launchIOS
             )
             menuItem.target = self
             menuItem.keyEquivalentModifierMask = [.command]
             
-            
             if !items.contains(where: { $0.title == device.name }) {
-                if device.isAndroid {
-                    menuItem.submenu = populateAndroidSubMenu()
-                    menuItem.keyEquivalentModifierMask = [.option]
-                    androidIndex += 1
-                }
-                self.insertItem(menuItem, at: device.isAndroid ? index + 3 : index + 1)
+                self.insertItem(menuItem, at: 1)
             }
         }
     }
@@ -149,7 +146,7 @@ class Menu: NSMenu {
             action: #selector(deviceItemClick),
             keyEquivalent: "",
             type: .toggleA11yAndroid,
-            image: NSImage(systemSymbolName: "figure.walk.circle.fill", accessibilityDescription: "No audio")
+            image: NSImage(systemSymbolName: "figure.walk.circle.fill", accessibilityDescription: "Toggle accessibility")
         )
         
         coldBoot.target = self
