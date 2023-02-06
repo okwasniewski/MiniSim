@@ -34,7 +34,7 @@ extension DeviceService {
     
     func getIOSDevices(_ completion: @escaping (GetDevicesResult) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            var output = ""x
+            var output = ""
             do {
                 output = try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "list", "devices", "available"])
             } catch {
