@@ -16,17 +16,13 @@ struct Preferences: View {
             Settings.Section(title: "Hotkey:") {
                 KeyboardShortcuts.Recorder("", name: .toggleMiniSim)
                 Text("Global shortcut to open the application \nDefault: ⌥⇧E")
-                    .padding(.leading, 15)
-                    .font(.caption)
-                    .opacity(0.3)
+                    .descriptionText()
                 
                 Button("Clear cache") {
                     resetDefaults()
                 }
-                Text("This clears data saved in cache.")
-                    .padding(.leading, 15)
-                    .font(.caption)
-                    .opacity(0.3)
+                Text("This clears data saved in cache. \nFor example: developer tool paths.")
+                    .descriptionText()
                 
                 Divider()
                 LaunchAtLogin.Toggle("Launch at login")
