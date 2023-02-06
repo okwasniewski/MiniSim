@@ -33,8 +33,8 @@ class DeviceService: DeviceServiceProtocol {
 extension DeviceService {
     
     func getIOSDevices(_ completion: @escaping (GetDevicesResult) -> Void) {
-        DispatchQueue.global(qos: .background).async {
-            var output = ""
+        DispatchQueue.global(qos: .userInitiated).async {
+            var output = ""x
             do {
                 output = try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "list", "devices", "available"])
             } catch {
@@ -101,7 +101,7 @@ extension DeviceService {
     }
     
     func getAndroidDevices(_ completion: @escaping (GetDevicesResult) -> Void) {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .userInitiated).async {
             var output = ""
             do {
                 let emulatorPath = try ADB.getEmulatorPath()
@@ -123,14 +123,14 @@ extension DeviceService {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let adbPath = try ADB.getAdbPath()
-                
-               let deviceId = try ADB.getAdbId(for: device.name, adbPath: adbPath)
+                let deviceId = try ADB.getAdbId(for: device.name, adbPath: adbPath)
                 
                 if ADB.isAccesibilityOn(deviceId: deviceId, adbPath: adbPath) {
                     _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOff)")
                 } else {
                     _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOn)")
                 }
+                completion(.success(()))
             } catch  {
                 completion(.failure(error))
             }

@@ -34,20 +34,25 @@ final class ADB: NSObject, ADBProtocol {
                 """
     }
     
+    private static func getAndroidHome() throws -> String {
+        let androidHome = try shellOut(to: [
+            self.getSourceFileScript(file: "~/.zshrc"),
+            self.getSourceFileScript(file: "~/.bashrc"),
+            "echo $ANDROID_HOME"
+        ])
+        if androidHome.isEmpty {
+            throw DeviceError.AndroidStudioError
+        }
+        return androidHome
+    }
+    
     static func getAdbPath() throws -> String {
         if let savedAdbPath = UserDefaults.standard.adbPath, !savedAdbPath.isEmpty {
             return savedAdbPath
         }
         
         do {
-            let adbPath = try shellOut(to: [
-                self.getSourceFileScript(file: "~/.zshrc"),
-                self.getSourceFileScript(file: "~/.bashrc"),
-                "which adb"
-            ])
-            if adbPath.isEmpty {
-                throw DeviceError.AndroidStudioError
-            }
+            let adbPath = try getAndroidHome() + "/platform-tools/adb"
             UserDefaults.standard.adbPath = adbPath
             return adbPath
         }
@@ -57,19 +62,8 @@ final class ADB: NSObject, ADBProtocol {
     }
     
     static func getEmulatorPath() throws -> String {
-        if let savedEmulatorPath = UserDefaults.standard.emulatorPath, !savedEmulatorPath.isEmpty {
-            return savedEmulatorPath
-        }
-        
         do {
-            let emulatorPath = try shellOut(to: [
-                self.getSourceFileScript(file: "~/.zshrc"),
-                self.getSourceFileScript(file: "~/.bashrc"),
-                "which emulator"
-            ])
-            if emulatorPath.isEmpty {
-                throw DeviceError.AndroidStudioError
-            }
+            let emulatorPath = try getAndroidHome() + "/emulator/emulator"
             UserDefaults.standard.emulatorPath = emulatorPath
             return emulatorPath
         }

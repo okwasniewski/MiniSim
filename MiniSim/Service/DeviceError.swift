@@ -35,7 +35,7 @@ extension DeviceError: LocalizedError {
                     comment: "XCode error"
                 )
             case .AndroidStudioError:
-                return NSLocalizedString("There was an error with your Android Studio configuration, make sure you have everything set up properly.", comment: "Android Studio error")
+                return NSLocalizedString("There was an error with your Android Studio configuration, make sure you have everything set up properly. Make sure ANDROID_HOME environment variable is in PATH.", comment: "Android Studio error")
             case .unexpected(_):
                 return NSLocalizedString(
                     "An unexpected error occurred.",

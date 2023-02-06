@@ -103,7 +103,9 @@ class Menu: NSMenu {
             menuItem.submenu = populateAndroidSubMenu()
             
             if !items.contains(where: { $0.title == device.name }) {
-                self.insertItem(menuItem, at: 3)
+                DispatchQueue.main.async {
+                    self.insertItem(menuItem, at: iOSDevices.count + 3)
+                }
             }
         }
         
@@ -118,7 +120,9 @@ class Menu: NSMenu {
             menuItem.keyEquivalentModifierMask = [.command]
             
             if !items.contains(where: { $0.title == device.name }) {
-                self.insertItem(menuItem, at: 1)
+                DispatchQueue.main.async {
+                    self.insertItem(menuItem, at: 1)
+                }
             }
         }
     }
