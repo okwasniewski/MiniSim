@@ -9,17 +9,19 @@ import AppKit
 
 
 extension NSAlert {
-    static func showError(error: Error) {
-        let alert = self.init()
-        alert.alertStyle = .warning
-        var messageText = error.localizedDescription
-        
-        if let appName = Bundle.main.appName {
-            messageText = "\(appName) - " + messageText
+    static func showError(message: String) {
+        DispatchQueue.main.async {
+            let alert = self.init()
+            alert.alertStyle = .warning
+            var messageText = message
+            
+            if let appName = Bundle.main.appName {
+                messageText = "\(appName) - " + message
+            }
+            
+            alert.messageText = messageText
+            alert.icon = NSImage(named: NSImage.cautionName)
+            alert.runModal()
         }
-        
-        alert.messageText = messageText
-        alert.icon = NSImage(named: NSImage.cautionName)
-        alert.runModal()
     }
 }

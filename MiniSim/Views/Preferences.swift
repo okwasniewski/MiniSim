@@ -16,12 +16,26 @@ struct Preferences: View {
             Settings.Section(title: "Hotkey:") {
                 KeyboardShortcuts.Recorder("", name: .toggleMiniSim)
                 Text("Global shortcut to open the application \nDefault: ⌥⇧E")
-                    .padding(.leading, 15)
-                    .font(.caption)
-                    .opacity(0.3)
+                    .descriptionText()
+                
+                Button("Clear cache") {
+                    resetDefaults()
+                }
+                Text("This clears data saved in cache. \nFor example: developer tool paths.")
+                    .descriptionText()
+                
                 Divider()
                 LaunchAtLogin.Toggle("Launch at login")
+                
             }
+        }
+    }
+    
+    func resetDefaults() {
+        let defaults = UserDefaults.standard
+        let dictionary = defaults.dictionaryRepresentation()
+        dictionary.keys.forEach { key in
+            defaults.removeObject(forKey: key)
         }
     }
 }

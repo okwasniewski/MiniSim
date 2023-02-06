@@ -9,9 +9,8 @@
 /* Begin PBXBuildFile section */
 		762CF1E02981968F00099999 /* String+match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1DF2981968F00099999 /* String+match.swift */; };
 		762CF1E42981DE6100099999 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1E32981DE6100099999 /* Device.swift */; };
-		7630B25E2984339100D8B57D /* MenuItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B25D2984339100D8B57D /* MenuItemType.swift */; };
+		7630B25E2984339100D8B57D /* MenuSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B25D2984339100D8B57D /* MenuSections.swift */; };
 		7630B26129853EF400D8B57D /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = 7630B26029853EF400D8B57D /* Preferences */; };
-		7630B2632985BE8000D8B57D /* Process+runProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2622985BE8000D8B57D /* Process+runProcess.swift */; };
 		7630B2662985C44A00D8B57D /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2652985C44A00D8B57D /* Preferences.swift */; };
 		7630B2682985C4CF00D8B57D /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2672985C4CF00D8B57D /* About.swift */; };
 		7630B26B2986B4D500D8B57D /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 7630B26A2986B4D500D8B57D /* KeyboardShortcuts */; };
@@ -28,13 +27,18 @@
 		7645D5032983186100019227 /* NSMenuItem+ImageInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */; };
 		766BD2382981628C0042261B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD2372981628C0042261B /* Assets.xcassets */; };
 		766BD23B2981628C0042261B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD23A2981628C0042261B /* Preview Assets.xcassets */; };
+		76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */; };
+		76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F04A10298A5AE000BF9CA3 /* ADB.swift */; };
+		76F04A14298A62CF00BF9CA3 /* ShellOut in Frameworks */ = {isa = PBXBuildFile; productRef = 76F04A13298A62CF00BF9CA3 /* ShellOut */; };
+		76F2A912299033EA002D4EF6 /* DeviceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A911299033EA002D4EF6 /* DeviceError.swift */; };
+		76F2A914299050F9002D4EF6 /* UserDefaults+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */; };
+		76F2A9172991B7B6002D4EF6 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		762CF1DF2981968F00099999 /* String+match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+match.swift"; sourceTree = "<group>"; };
 		762CF1E32981DE6100099999 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
-		7630B25D2984339100D8B57D /* MenuItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemType.swift; sourceTree = "<group>"; };
-		7630B2622985BE8000D8B57D /* Process+runProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Process+runProcess.swift"; sourceTree = "<group>"; };
+		7630B25D2984339100D8B57D /* MenuSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSections.swift; sourceTree = "<group>"; };
 		7630B2652985C44A00D8B57D /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		7630B2672985C4CF00D8B57D /* About.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = About.swift; sourceTree = "<group>"; };
 		7630B26C2986B4FD00D8B57D /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
@@ -51,6 +55,11 @@
 		766BD2372981628C0042261B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		766BD23A2981628C0042261B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		766BD23C2981628C0042261B /* MiniSim.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MiniSim.entitlements; sourceTree = "<group>"; };
+		76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceMenuItem.swift; sourceTree = "<group>"; };
+		76F04A10298A5AE000BF9CA3 /* ADB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADB.swift; sourceTree = "<group>"; };
+		76F2A911299033EA002D4EF6 /* DeviceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceError.swift; sourceTree = "<group>"; };
+		76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Configuration.swift"; sourceTree = "<group>"; };
+		76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76F04A14298A62CF00BF9CA3 /* ShellOut in Frameworks */,
 				7630B2702986C0F200D8B57D /* LaunchAtLogin in Frameworks */,
 				7630B26129853EF400D8B57D /* Preferences in Frameworks */,
 				7630B26B2986B4D500D8B57D /* KeyboardShortcuts in Frameworks */,
@@ -72,11 +82,11 @@
 			children = (
 				762CF1DF2981968F00099999 /* String+match.swift */,
 				7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */,
-				7630B2622985BE8000D8B57D /* Process+runProcess.swift */,
 				7630B26C2986B4FD00D8B57D /* KeyboardShortcuts.swift */,
 				7630B2722986C68000D8B57D /* PaneIdentifier.swift */,
 				7630B2742986D52900D8B57D /* NSAlert+showError.swift */,
 				7630B2762986D65800D8B57D /* Bundle+appName.swift */,
+				76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -92,6 +102,7 @@
 		7630B2642985C43300D8B57D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */,
 				7630B2652985C44A00D8B57D /* Preferences.swift */,
 				7630B2672985C4CF00D8B57D /* About.swift */,
 			);
@@ -102,6 +113,8 @@
 			isa = PBXGroup;
 			children = (
 				7645D4BD2982A1B100019227 /* DeviceService.swift */,
+				76F04A10298A5AE000BF9CA3 /* ADB.swift */,
+				76F2A911299033EA002D4EF6 /* DeviceError.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -130,13 +143,14 @@
 				7645D4BC2982800D00019227 /* Service */,
 				762CF1E22981DE5400099999 /* Model */,
 				7645D4C12982CA9600019227 /* AppDelegate.swift */,
+				7630B25D2984339100D8B57D /* MenuSections.swift */,
+				76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */,
 				7630B27B2987207200D8B57D /* Menu.swift */,
 				7645D4C32982CB2B00019227 /* MiniSim.swift */,
 				7645D5002982E6FA00019227 /* main.swift */,
 				766BD2372981628C0042261B /* Assets.xcassets */,
 				766BD23C2981628C0042261B /* MiniSim.entitlements */,
 				766BD2392981628C0042261B /* Preview Content */,
-				7630B25D2984339100D8B57D /* MenuItemType.swift */,
 			);
 			path = MiniSim;
 			sourceTree = "<group>";
@@ -170,6 +184,7 @@
 				7630B26029853EF400D8B57D /* Preferences */,
 				7630B26A2986B4D500D8B57D /* KeyboardShortcuts */,
 				7630B26F2986C0F200D8B57D /* LaunchAtLogin */,
+				76F04A13298A62CF00BF9CA3 /* ShellOut */,
 			);
 			productName = MiniSim;
 			productReference = 766BD2302981628A0042261B /* MiniSim.app */;
@@ -203,6 +218,7 @@
 				7630B25F29853EF400D8B57D /* XCRemoteSwiftPackageReference "Preferences" */,
 				7630B2692986B4D500D8B57D /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				7630B26E2986C0F200D8B57D /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
+				76F04A12298A62CF00BF9CA3 /* XCRemoteSwiftPackageReference "ShellOut" */,
 			);
 			productRefGroup = 766BD2312981628A0042261B /* Products */;
 			projectDirPath = "";
@@ -253,17 +269,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */,
+				76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */,
+				76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */,
 				7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */,
+				76F2A912299033EA002D4EF6 /* DeviceError.swift in Sources */,
 				7630B2682985C4CF00D8B57D /* About.swift in Sources */,
 				7630B2732986C68000D8B57D /* PaneIdentifier.swift in Sources */,
 				7630B2662985C44A00D8B57D /* Preferences.swift in Sources */,
 				7630B2752986D52900D8B57D /* NSAlert+showError.swift in Sources */,
-				7630B25E2984339100D8B57D /* MenuItemType.swift in Sources */,
-				7630B2632985BE8000D8B57D /* Process+runProcess.swift in Sources */,
+				7630B25E2984339100D8B57D /* MenuSections.swift in Sources */,
 				7645D5012982E6FA00019227 /* main.swift in Sources */,
+				76F2A914299050F9002D4EF6 /* UserDefaults+Configuration.swift in Sources */,
 				7630B2772986D65800D8B57D /* Bundle+appName.swift in Sources */,
 				7630B27C2987207200D8B57D /* Menu.swift in Sources */,
 				762CF1E02981968F00099999 /* String+match.swift in Sources */,
+				76F2A9172991B7B6002D4EF6 /* ViewModifiers.swift in Sources */,
 				762CF1E42981DE6100099999 /* Device.swift in Sources */,
 				7645D5032983186100019227 /* NSMenuItem+ImageInit.swift in Sources */,
 				7630B26D2986B4FD00D8B57D /* KeyboardShortcuts.swift in Sources */,
@@ -503,6 +523,14 @@
 				kind = branch;
 			};
 		};
+		76F04A12298A62CF00BF9CA3 /* XCRemoteSwiftPackageReference "ShellOut" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JohnSundell/ShellOut.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -520,6 +548,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7630B26E2986C0F200D8B57D /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
 			productName = LaunchAtLogin;
+		};
+		76F04A13298A62CF00BF9CA3 /* ShellOut */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76F04A12298A62CF00BF9CA3 /* XCRemoteSwiftPackageReference "ShellOut" */;
+			productName = ShellOut;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
