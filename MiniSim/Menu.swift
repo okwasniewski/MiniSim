@@ -30,49 +30,63 @@ class Menu: NSMenu {
         devices.first { $0.name == name }
     }
     
-    @objc private func deviceItemClick(_ sender: NSMenuItem) {
-        if let tag = DeviceMenuItem(rawValue: sender.tag) {
+    @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
+        guard let device = getDeviceByName(name: sender.parent?.title ?? "") else {
+            return
+        }
+        if let tag = AndroidSubMenuItem(rawValue: sender.tag) {
             switch tag {
-            case .launchAndroid:
-                if let device = getDeviceByName(name: sender.title) {
-                    deviceService.launchDevice(name: device.name, additionalArguments: []) { result in
-                        if case .failure(let error) = result {
-                            NSAlert.showError(message: error.localizedDescription)
-                        }
-                    }
-                }
-            case .launchIOS:
-                if let device = getDeviceByName(name: sender.title) {
-                    deviceService.launchDevice(uuid: device.uuid ?? "") { result in
-                        if case .failure(let error) = result {
-                            NSAlert.showError(message: error.localizedDescription)
-                        }
-                    }
-                }
             case .coldBootAndroid:
-                if let device = getDeviceByName(name: sender.parent?.title ?? "") {
-                    deviceService.launchDevice(name: device.name, additionalArguments: ["-no-snapshot"]) { result in
-                        if case .failure(let error) = result {
-                            NSAlert.showError(message: error.localizedDescription)
-                        }
+                deviceService.launchDevice(name: device.name, additionalArguments: ["-no-snapshot"]) { result in
+                    if case .failure(let error) = result {
+                        NSAlert.showError(message: error.localizedDescription)
                     }
                 }
                 
             case .toggleA11yAndroid:
-                if let device = getDeviceByName(name: sender.parent?.title ?? "") {
-                    deviceService.toggleA11y(device: device) { result in
-                        if case .failure(let error) = result {
-                            NSAlert.showError(message: error.localizedDescription)
-                        }
+                deviceService.toggleA11y(device: device) { result in
+                    if case .failure(let error) = result {
+                        NSAlert.showError(message: error.localizedDescription)
                     }
                 }
                 
             case .androidNoAudio:
-                if let device = getDeviceByName(name: sender.parent?.title ?? "") {
-                    deviceService.launchDevice(name: device.name, additionalArguments: ["-no-audio"]) { result in
-                        if case .failure(let error) = result {
-                                NSAlert.showError(message: error.localizedDescription)
-                        }
+                deviceService.launchDevice(name: device.name, additionalArguments: ["-no-audio"]) { result in
+                    if case .failure(let error) = result {
+                        NSAlert.showError(message: error.localizedDescription)
+                    }
+                }
+                
+            case .copyAdbId:
+                deviceService.copyAdbId(device: device) { result in
+                    if case .failure(let error) = result {
+                        NSAlert.showError(message: error.localizedDescription)
+                    }
+                }
+            case .copyName:
+                NSPasteboard.general.copyToPasteboard(text: device.name)
+            default:
+                break
+            }
+        }
+    }
+    
+    @objc private func deviceItemClick(_ sender: NSMenuItem) {
+        guard let device = getDeviceByName(name: sender.title) else {
+            return
+        }
+        if let tag = DeviceMenuItem(rawValue: sender.tag) {
+            switch tag {
+            case .launchAndroid:
+                deviceService.launchDevice(name: device.name, additionalArguments: []) { result in
+                    if case .failure(let error) = result {
+                        NSAlert.showError(message: error.localizedDescription)
+                    }
+                }
+            case .launchIOS:
+                deviceService.launchDevice(uuid: device.uuid ?? "") { result in
+                    if case .failure(let error) = result {
+                        NSAlert.showError(message: error.localizedDescription)
                     }
                 }
             }
@@ -129,38 +143,11 @@ class Menu: NSMenu {
     
     private func populateAndroidSubMenu() -> NSMenu {
         let subMenu = NSMenu()
-        let coldBoot = NSMenuItem(
-            title: "Cold boot",
-            action: #selector(deviceItemClick),
-            keyEquivalent: "",
-            type: .coldBootAndroid,
-            image: NSImage(systemSymbolName: "sunrise.fill", accessibilityDescription: "Cold boot")
-        )
-        
-        let noAudio = NSMenuItem(
-            title: "Run without audio",
-            action: #selector(deviceItemClick),
-            keyEquivalent: "",
-            type: .androidNoAudio,
-            image: NSImage(systemSymbolName: "speaker.slash.fill", accessibilityDescription: "No audio")
-        )
-        
-        let toggleA11 = NSMenuItem(
-            title: "Toggle accessibility",
-            action: #selector(deviceItemClick),
-            keyEquivalent: "",
-            type: .toggleA11yAndroid,
-            image: NSImage(systemSymbolName: "figure.walk.circle.fill", accessibilityDescription: "Toggle accessibility")
-        )
-        
-        coldBoot.target = self
-        noAudio.target = self
-        toggleA11.target = self
-        
-        subMenu.addItem(coldBoot)
-        subMenu.addItem(noAudio)
-        subMenu.addItem(toggleA11)
-        
+        AndroidSubMenuItem.allCases.map({$0.menuItem}).forEach { item in
+            item.target = self
+            item.action = #selector(androidSubMenuClick)
+            subMenu.addItem(item)
+        }
         return subMenu
     }
 }

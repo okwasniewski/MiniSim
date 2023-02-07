@@ -17,13 +17,15 @@ protocol ADBProtocol {
 
 final class ADB: NSObject, ADBProtocol {
     
-    // Constants
-    private static let defaultPort = 5552
-    private static let maxPort = 5682
-    private static let portIncrement = 2
-    
     static let talkbackOn = "com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService"
     static let talkbackOff = "com.android.talkback/com.google.android.marvin.talkback.TalkBackService"
+    
+    private enum ConfigLocation: String, CaseIterable {
+        case zshrc = "~/.zshrc"
+        case zprofile = "~/.zprofile"
+        case bashrc = "~/.bashrc"
+        case bash_profile = "~/.bash_profile"
+    }
     
     private static func getSourceFileScript(file: String) -> String {
         return """
@@ -35,11 +37,20 @@ final class ADB: NSObject, ADBProtocol {
     }
     
     private static func getAndroidHome() throws -> String {
-        let androidHome = try shellOut(to: [
-            self.getSourceFileScript(file: "~/.zshrc"),
-            self.getSourceFileScript(file: "~/.bashrc"),
-            "echo $ANDROID_HOME"
-        ])
+        var androidHome = ""
+        do {
+            for config in ConfigLocation.allCases {
+                androidHome = try shellOut(to: [
+                    self.getSourceFileScript(file: config.rawValue),
+                    "echo $ANDROID_HOME"
+                ])
+                if !androidHome.isEmpty {
+                    break
+                }
+            }
+        } catch {
+            // Ignore errors they can be thrown if user has incorrect setup
+        }
         if androidHome.isEmpty {
             throw DeviceError.AndroidStudioError
         }
@@ -62,6 +73,10 @@ final class ADB: NSObject, ADBProtocol {
     }
     
     static func getEmulatorPath() throws -> String {
+        if let savedEmulatorPath = UserDefaults.standard.emulatorPath, !savedEmulatorPath.isEmpty {
+            return savedEmulatorPath
+        }
+        
         do {
             let emulatorPath = try getAndroidHome() + "/emulator/emulator"
             UserDefaults.standard.emulatorPath = emulatorPath
@@ -73,19 +88,19 @@ final class ADB: NSObject, ADBProtocol {
     }
     
     static func getAdbId(for deviceName: String, adbPath: String) throws -> String {
-        for port in stride(from: defaultPort, through: maxPort, by: portIncrement) {
-            do  {
-                let output = try shellOut(to: "\(adbPath) -s emulator-\(port) emu avd name")
-                let splitted = output.components(separatedBy: "\n")
-                
-                guard let name = splitted.first else { continue }
-                
-                if deviceName == name.trimmingCharacters(in: .whitespacesAndNewlines) {
-                    return "emulator-\(port)"
+        let onlineDevices = try shellOut(to: "\(adbPath) devices")
+        let splitted = onlineDevices.components(separatedBy: "\n")
+        
+        for line in splitted {
+            let device = line.match("^emulator-[0-9]+")
+            guard let deviceId = device.first?.first else {
+                continue
+            }
+            let output = try? shellOut(to: "\(adbPath) -s \(deviceId) emu avd name").components(separatedBy: "\n")
+            if let name = output?.first {
+                if name.trimmingCharacters(in: .whitespacesAndNewlines) == deviceName.trimmingCharacters(in: .whitespacesAndNewlines) {
+                    return deviceId
                 }
-                
-            } catch {
-                // Ignore errors, since they are thrown if we can't find emulator
             }
         }
         throw DeviceError.deviceNotFound
