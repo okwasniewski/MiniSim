@@ -71,6 +71,20 @@ class Menu: NSMenu {
         }
     }
     
+    @objc private func IOSSubMenuClick(_ sender: NSMenuItem) {
+        guard let device = getDeviceByName(name: sender.parent?.title ?? "") else {
+            return
+        }
+        if let tag = IOSSubMenuItem(rawValue: sender.tag) {
+            switch tag {
+            case .copyName:
+                NSPasteboard.general.copyToPasteboard(text: device.name)
+            case .copyUDID:
+                NSPasteboard.general.copyToPasteboard(text: device.uuid ?? "")
+            }
+        }
+    }
+    
     @objc private func deviceItemClick(_ sender: NSMenuItem) {
         guard let device = getDeviceByName(name: sender.title) else {
             return
@@ -132,6 +146,7 @@ class Menu: NSMenu {
             )
             menuItem.target = self
             menuItem.keyEquivalentModifierMask = [.command]
+            menuItem.submenu = populateIOSSubMenu()
             
             if !items.contains(where: { $0.title == device.name }) {
                 DispatchQueue.main.async {
@@ -146,6 +161,16 @@ class Menu: NSMenu {
         AndroidSubMenuItem.allCases.map({$0.menuItem}).forEach { item in
             item.target = self
             item.action = #selector(androidSubMenuClick)
+            subMenu.addItem(item)
+        }
+        return subMenu
+    }
+    
+    private func populateIOSSubMenu() -> NSMenu {
+        let subMenu = NSMenu()
+        IOSSubMenuItem.allCases.map({$0.menuItem}).forEach { item in
+            item.target = self
+            item.action = #selector(IOSSubMenuClick)
             subMenu.addItem(item)
         }
         return subMenu
