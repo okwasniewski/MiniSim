@@ -7,6 +7,7 @@
 
 import Foundation
 import ShellOut
+import AppKit
 
 protocol DeviceServiceProtocol {
     // iOS Device
@@ -17,6 +18,7 @@ protocol DeviceServiceProtocol {
     func launchDevice(name: String, additionalArguments: [String], _ completion: @escaping (DeviceServiceResult) -> Void)
     func toggleA11y(device: Device,  _ completion: @escaping (DeviceServiceResult) -> Void)
     func getAndroidDevices(_ completion: @escaping (GetDevicesResult) -> Void)
+    func copyAdbId(device: Device, _ completion: @escaping (DeviceServiceResult) -> Void)
     
     typealias GetDevicesResult = Result<[Device], Error>
     typealias DeviceServiceResult = Result<Void, Error>
@@ -134,6 +136,19 @@ extension DeviceService {
             } catch  {
                 completion(.failure(error))
             }
+        }
+    }
+    
+    func copyAdbId(device: Device, _ completion: @escaping (DeviceServiceResult) -> Void) {
+        do {
+            let adbPath = try ADB.getAdbPath()
+            let deviceId = try ADB.getAdbId(for: device.name, adbPath: adbPath)
+            
+            NSPasteboard.general.copyToPasteboard(text: deviceId)
+            
+            completion(.success(()))
+        } catch  {
+            completion(.failure(error))
         }
     }
 }

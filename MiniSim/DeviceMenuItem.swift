@@ -11,9 +11,6 @@ import Foundation
 enum DeviceMenuItem: Int {
     // Android
     case launchAndroid = 200
-    case coldBootAndroid = 201
-    case androidNoAudio = 202
-    case toggleA11yAndroid = 203
     
     // iOS
     case launchIOS = 300
