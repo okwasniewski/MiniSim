@@ -4,21 +4,24 @@
 
 ## About
 
-MiniSim is a small utility menu bar app for lauching Android 🤖 and iOS  emulators.
+MiniSim is a small utility menu bar app for lauching Android 🤖 and iOS  emulators (and more!).
 
 Written in Swift and AppKit. 
 
 ## Features
-
 - Lightweight
 - Fast, 100% native
 - Open Source
+- Open with shortcut `⌥ + ⇧ + e` (option + shift + e)
 - Launch iOS emulators
+    - Copy device UDID
+    - Copy device name
 - Launch Android emulators
-- Cold boot android emulators 
-- Run android emulators without audio
-    - Your bluetooth headphones will thank you 🎧
-- Bring up menu bar with shortcut `⌥ + ⇧ + e` (option + shift + e)
+    - Cold boot android emulators 
+    - Run android emulators without audio (Your bluetooth headphones will thank you 🎧)
+    - Toggle a11y on selected emulator
+    - Copy device name
+    - Copy device ADB id
 
 ## Screenshots 
 
