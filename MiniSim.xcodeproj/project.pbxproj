@@ -29,6 +29,7 @@
 		766BD2382981628C0042261B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD2372981628C0042261B /* Assets.xcassets */; };
 		766BD23B2981628C0042261B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD23A2981628C0042261B /* Preview Assets.xcassets */; };
 		76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */; };
+		768F8EC829954C8A00DFBCDB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 768F8EC729954C8A00DFBCDB /* Sparkle */; };
 		76D305722994155C005C373B /* IOSSubMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D305712994155C005C373B /* IOSSubMenuItem.swift */; };
 		76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F04A10298A5AE000BF9CA3 /* ADB.swift */; };
 		76F04A14298A62CF00BF9CA3 /* ShellOut in Frameworks */ = {isa = PBXBuildFile; productRef = 76F04A13298A62CF00BF9CA3 /* ShellOut */; };
@@ -60,6 +61,7 @@
 		766BD23A2981628C0042261B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		766BD23C2981628C0042261B /* MiniSim.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MiniSim.entitlements; sourceTree = "<group>"; };
 		76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceMenuItem.swift; sourceTree = "<group>"; };
+		768F8ECC2995575B00DFBCDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		76D305712994155C005C373B /* IOSSubMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSSubMenuItem.swift; sourceTree = "<group>"; };
 		76F04A10298A5AE000BF9CA3 /* ADB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADB.swift; sourceTree = "<group>"; };
 		76F2A911299033EA002D4EF6 /* DeviceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceError.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				768F8EC829954C8A00DFBCDB /* Sparkle in Frameworks */,
 				76F04A14298A62CF00BF9CA3 /* ShellOut in Frameworks */,
 				7630B2702986C0F200D8B57D /* LaunchAtLogin in Frameworks */,
 				7630B26129853EF400D8B57D /* Preferences in Frameworks */,
@@ -145,6 +148,7 @@
 		766BD2322981628A0042261B /* MiniSim */ = {
 			isa = PBXGroup;
 			children = (
+				768F8ECC2995575B00DFBCDB /* Info.plist */,
 				7630B2642985C43300D8B57D /* Views */,
 				762CF1E12981DDD400099999 /* Extensions */,
 				7645D4BC2982800D00019227 /* Service */,
@@ -194,6 +198,7 @@
 				7630B26A2986B4D500D8B57D /* KeyboardShortcuts */,
 				7630B26F2986C0F200D8B57D /* LaunchAtLogin */,
 				76F04A13298A62CF00BF9CA3 /* ShellOut */,
+				768F8EC729954C8A00DFBCDB /* Sparkle */,
 			);
 			productName = MiniSim;
 			productReference = 766BD2302981628A0042261B /* MiniSim.app */;
@@ -228,6 +233,7 @@
 				7630B2692986B4D500D8B57D /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				7630B26E2986C0F200D8B57D /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
 				76F04A12298A62CF00BF9CA3 /* XCRemoteSwiftPackageReference "ShellOut" */,
+				768F8EC629954C8A00DFBCDB /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			productRefGroup = 766BD2312981628A0042261B /* Products */;
 			projectDirPath = "";
@@ -357,6 +363,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -412,6 +419,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -428,15 +436,17 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MiniSim/MiniSim.entitlements;
 				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MiniSim/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = Z3M9P6G4WY;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MiniSim/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MiniSim;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -444,9 +454,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.oskarkwasniewski.MiniSim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -459,17 +470,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MiniSim/MiniSim.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_ENTITLEMENTS = MiniSim/MiniSimRelease.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MiniSim/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = Z3M9P6G4WY;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MiniSim/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MiniSim;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -477,11 +490,13 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.oskarkwasniewski.MiniSim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -535,6 +550,14 @@
 				kind = branch;
 			};
 		};
+		768F8EC629954C8A00DFBCDB /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		76F04A12298A62CF00BF9CA3 /* XCRemoteSwiftPackageReference "ShellOut" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JohnSundell/ShellOut.git";
@@ -560,6 +583,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7630B26E2986C0F200D8B57D /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
 			productName = LaunchAtLogin;
+		};
+		768F8EC729954C8A00DFBCDB /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 768F8EC629954C8A00DFBCDB /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
 		};
 		76F04A13298A62CF00BF9CA3 /* ShellOut */ = {
 			isa = XCSwiftPackageProductDependency;
