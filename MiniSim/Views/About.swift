@@ -6,9 +6,16 @@
 //
 
 import SwiftUI
+import Sparkle
+
 
 struct About: View {
+    private let updaterController: SPUStandardUpdaterController
     @Environment (\.openURL) private var openURL
+    
+    init() {
+        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+    }
     
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     
@@ -21,6 +28,13 @@ struct About: View {
                 Text("Version: \(appVersion)")
                     .padding(.bottom, 10)
             }
+            Button {
+                updaterController.updater.checkForUpdates()
+            } label: {
+                Label("Check for updates", systemImage: "gear")
+            }
+            .padding(.bottom, 10)
+            
             HStack {
                 Button("Github") {
                     openURL(URL(string: "https://github.com/okwasniewski/MiniSim")!)
