@@ -10,10 +10,11 @@ import KeyboardShortcuts
 
 class Menu: NSMenu {
     var deviceService: DeviceServiceProtocol!
-    var devices: [Device] = [] {
-        didSet {
-            buildMenu()
-        }
+    var iosDevices: [Device] = [] {
+        didSet { populateIOSDevices() }
+    }
+    var androidDevices: [Device] = [] {
+        didSet { populateAndroidDevices() }
     }
     
     required init(coder: NSCoder) {
@@ -27,7 +28,14 @@ class Menu: NSMenu {
     }
     
     private func getDeviceByName(name: String) -> Device? {
-        devices.first { $0.name == name }
+        var device: Device?
+        
+        device = iosDevices.first { $0.name == name }
+        
+        if device == nil {
+            device = androidDevices.first { $0.name == name }
+        }
+        return device
     }
     
     @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
@@ -111,14 +119,7 @@ class Menu: NSMenu {
         return Character(UnicodeScalar(0x0030+index)!).lowercased()
     }
     
-    private func buildMenu() {
-        if (self.items.count == devices.count) {
-            return
-        }
-        
-        let androidDevices = devices.filter({ $0.isAndroid })
-        let iOSDevices = devices.filter({ !$0.isAndroid })
-        
+    private func populateAndroidDevices() {
         Array(androidDevices.enumerated()).forEach { index, device in
             let menuItem = NSMenuItem(
                 title: device.name,
@@ -132,12 +133,14 @@ class Menu: NSMenu {
             
             if !items.contains(where: { $0.title == device.name }) {
                 DispatchQueue.main.async {
-                    self.insertItem(menuItem, at: iOSDevices.count + 3)
+                    self.insertItem(menuItem, at: self.iosDevices.count + 3)
                 }
             }
         }
-        
-        Array(iOSDevices.enumerated()).forEach { index, device in
+    }
+    
+    private func populateIOSDevices() {
+        Array(iosDevices.enumerated()).forEach { index, device in
             let menuItem = NSMenuItem(
                 title: device.name,
                 action: #selector(deviceItemClick),

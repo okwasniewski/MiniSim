@@ -94,7 +94,7 @@ class MiniSim: NSObject {
         self.deviceService.getAndroidDevices { result in
             switch result {
             case .success(let devices):
-                self.menu.devices.append(contentsOf: devices)
+                self.menu.androidDevices.append(contentsOf: devices)
             case .failure(let error):
                 NSAlert.showError(message: error.localizedDescription)
             }
@@ -105,7 +105,7 @@ class MiniSim: NSObject {
         deviceService.getIOSDevices { result in
             switch result {
             case .success(let devices):
-                self.menu.devices.append(contentsOf: devices)
+                self.menu.iosDevices.append(contentsOf: devices)
             case .failure(let error):
                 NSAlert.showError(message: error.localizedDescription)
             }
