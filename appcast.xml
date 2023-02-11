@@ -6,23 +6,19 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>0.2.0</title>
+      <title>0.2.1</title>
       <description>
       <![CDATA[ <ul>
-        <li>Added support for copying device name and UDID for iOS.</li>
-        <li>Added support for copying device name and adb id for Android.</li>
-        <li>Added support for toggling a11y on Android devices.</li>
-        <li>Changed way of getting developer tools paths to sourcing config files.</li>
-        <li>Added auto update experience</li>
+        <li>Added default fallback for users having problems with ANDROID_HOME variable not being set.</li>
       </ul> ]]>
       </description>
-      <pubDate>2023-02-09</pubDate>
-      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/0.2.0</releaseNotesLink>
+      <pubDate>2023-02-11</pubDate>
+      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.2.1</releaseNotesLink>
       <sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
       <enclosure
-        url="https://github.com/okwasniewski/MiniSim/releases/download/0.2.0/MiniSim.app.zip"
-        sparkle:version="1"
-        sparkle:shortVersionString="0.2.0"
+        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.2.1/MiniSim.app.zip"
+        sparkle:version="2"
+        sparkle:shortVersionString="0.2.1"
         length="0"
         type="application/octet-stream"
       />

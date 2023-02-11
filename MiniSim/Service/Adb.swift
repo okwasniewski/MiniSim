@@ -27,6 +27,12 @@ final class ADB: NSObject, ADBProtocol {
         case bash_profile = "~/.bash_profile"
     }
     
+    private enum Paths: String {
+        case home = "/Android/sdk"
+        case emulator = "/emulator/emulator"
+        case adb = "/platform-tools/adb"
+    }
+    
     private static func getSourceFileScript(file: String) -> String {
         return """
                 file=\(file)
@@ -51,7 +57,13 @@ final class ADB: NSObject, ADBProtocol {
         } catch {
             // Ignore errors they can be thrown if user has incorrect setup
         }
+        
         if androidHome.isEmpty {
+            let libraryDirectory = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)
+            if let path = libraryDirectory.first {
+                return path + Paths.home.rawValue
+            }
+            
             throw DeviceError.AndroidStudioError
         }
         return androidHome
@@ -63,7 +75,7 @@ final class ADB: NSObject, ADBProtocol {
         }
         
         do {
-            let adbPath = try getAndroidHome() + "/platform-tools/adb"
+            let adbPath = try getAndroidHome() + Paths.adb.rawValue
             UserDefaults.standard.adbPath = adbPath
             return adbPath
         }
@@ -78,7 +90,7 @@ final class ADB: NSObject, ADBProtocol {
         }
         
         do {
-            let emulatorPath = try getAndroidHome() + "/emulator/emulator"
+            let emulatorPath = try getAndroidHome() + Paths.emulator.rawValue
             UserDefaults.standard.emulatorPath = emulatorPath
             return emulatorPath
         }
