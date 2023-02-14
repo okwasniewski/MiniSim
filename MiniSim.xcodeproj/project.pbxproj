@@ -149,15 +149,12 @@
 			isa = PBXGroup;
 			children = (
 				768F8ECC2995575B00DFBCDB /* Info.plist */,
+				76E5FAD1299BEBD2007987E0 /* MenuItems */,
 				7630B2642985C43300D8B57D /* Views */,
 				762CF1E12981DDD400099999 /* Extensions */,
 				7645D4BC2982800D00019227 /* Service */,
 				762CF1E22981DE5400099999 /* Model */,
 				7645D4C12982CA9600019227 /* AppDelegate.swift */,
-				76F2A91829924242002D4EF6 /* AndroidSubMenuItem.swift */,
-				76D305712994155C005C373B /* IOSSubMenuItem.swift */,
-				7630B25D2984339100D8B57D /* MenuSections.swift */,
-				76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */,
 				7630B27B2987207200D8B57D /* Menu.swift */,
 				7645D4C32982CB2B00019227 /* MiniSim.swift */,
 				7645D5002982E6FA00019227 /* main.swift */,
@@ -174,6 +171,17 @@
 				766BD23A2981628C0042261B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		76E5FAD1299BEBD2007987E0 /* MenuItems */ = {
+			isa = PBXGroup;
+			children = (
+				76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */,
+				7630B25D2984339100D8B57D /* MenuSections.swift */,
+				76D305712994155C005C373B /* IOSSubMenuItem.swift */,
+				76F2A91829924242002D4EF6 /* AndroidSubMenuItem.swift */,
+			);
+			path = MenuItems;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
