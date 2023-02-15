@@ -49,9 +49,9 @@ enum AndroidSubMenuItem: Int, CaseIterable {
         case .copyAdbId:
             return NSImage(systemSymbolName: "doc.on.doc", accessibilityDescription: "Copy ID")
         case .androidNoAudio:
-            return NSImage(systemSymbolName: "sunrise.fill", accessibilityDescription: "Run without audio")
+            return NSImage(systemSymbolName: "speaker.slash.fill", accessibilityDescription: "Run without audio")
         case .coldBootAndroid:
-            return NSImage(systemSymbolName: "speaker.slash.fill", accessibilityDescription: "Cold boot")
+            return NSImage(systemSymbolName: "sunrise.fill", accessibilityDescription: "Cold boot")
         case .toggleA11yAndroid:
             return NSImage(systemSymbolName: "figure.walk.circle.fill", accessibilityDescription: "Toggle accessibility")
         default:
