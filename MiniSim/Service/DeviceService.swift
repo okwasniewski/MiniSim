@@ -19,6 +19,7 @@ protocol DeviceServiceProtocol {
     func toggleA11y(device: Device,  _ completion: @escaping (DeviceServiceResult) -> Void)
     func getAndroidDevices(_ completion: @escaping (GetDevicesResult) -> Void)
     func copyAdbId(device: Device, _ completion: @escaping (DeviceServiceResult) -> Void)
+    func sendText(device: Device, text: String, _ completion: @escaping (DeviceServiceResult) -> Void)
     
     typealias GetDevicesResult = Result<[Device], Error>
     typealias DeviceServiceResult = Result<Void, Error>
@@ -148,6 +149,20 @@ extension DeviceService {
             
             completion(.success(()))
         } catch  {
+            completion(.failure(error))
+        }
+    }
+    
+    func sendText(device: Device, text: String, _ completion: @escaping (DeviceServiceResult) -> Void) {
+        do {
+            let adbPath = try ADB.getAdbPath()
+            let deviceId = try ADB.getAdbId(for: device.name, adbPath: adbPath)
+            let formattedText = text.replacingOccurrences(of: " ", with: "%s").replacingOccurrences(of: "'", with: "''")
+            
+            try shellOut(to: "\(adbPath) -s \(deviceId) shell input text \"\(formattedText)\"")
+            
+            completion(.success(()))
+        } catch {
             completion(.failure(error))
         }
     }

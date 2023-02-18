@@ -73,6 +73,20 @@ class Menu: NSMenu {
                 }
             case .copyName:
                 NSPasteboard.general.copyToPasteboard(text: device.name)
+                
+            case .pasteToEmulator:
+                let pasteboard = NSPasteboard.general
+                let clipboard = pasteboard.pasteboardItems?.first?.string(forType: .string)
+                guard let clipboard else {
+                    break
+                }
+                deviceService.sendText(device: device, text: clipboard) { result in
+                    if case .failure(let error) = result {
+                        NSAlert.showError(message: error.localizedDescription)
+                    }
+                }
+               
+                
             default:
                 break
             }
