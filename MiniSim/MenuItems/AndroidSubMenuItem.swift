@@ -15,6 +15,7 @@ enum AndroidSubMenuItem: Int, CaseIterable {
     case coldBootAndroid = 103
     case androidNoAudio = 104
     case toggleA11yAndroid = 105
+    case pasteToEmulator = 106
     
     var menuItem: NSMenuItem {
         let item = self == .separator ? NSMenuItem.separator() : NSMenuItem()
@@ -37,6 +38,8 @@ enum AndroidSubMenuItem: Int, CaseIterable {
             return NSLocalizedString("Cold boot", comment: "")
         case .toggleA11yAndroid:
             return NSLocalizedString("Toggle accessibility", comment: "")
+        case .pasteToEmulator:
+            return NSLocalizedString("Paste clipboard to emulator", comment: "")
         default:
             return ""
         }
@@ -54,6 +57,8 @@ enum AndroidSubMenuItem: Int, CaseIterable {
             return NSImage(systemSymbolName: "sunrise.fill", accessibilityDescription: "Cold boot")
         case .toggleA11yAndroid:
             return NSImage(systemSymbolName: "figure.walk.circle.fill", accessibilityDescription: "Toggle accessibility")
+        case .pasteToEmulator:
+            return NSImage(systemSymbolName: "keyboard", accessibilityDescription: "Keyboard")
         default:
             return NSImage()
         }
