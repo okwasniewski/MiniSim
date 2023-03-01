@@ -10,160 +10,110 @@ import ShellOut
 import AppKit
 
 protocol DeviceServiceProtocol {
-    // iOS Device
-    func launchDevice(uuid: String, _ completion: @escaping (DeviceServiceResult) -> Void)
-    func getIOSDevices(_ completion: @escaping (GetDevicesResult) -> Void)
+    func launchDevice(uuid: String) throws
+    func getIOSDevices() throws -> [Device]
     
-    //Android Device
-    func launchDevice(name: String, additionalArguments: [String], _ completion: @escaping (DeviceServiceResult) -> Void)
-    func toggleA11y(device: Device,  _ completion: @escaping (DeviceServiceResult) -> Void)
-    func getAndroidDevices(_ completion: @escaping (GetDevicesResult) -> Void)
-    func copyAdbId(device: Device, _ completion: @escaping (DeviceServiceResult) -> Void)
-    func sendText(device: Device, text: String, _ completion: @escaping (DeviceServiceResult) -> Void)
-    
-    typealias GetDevicesResult = Result<[Device], Error>
-    typealias DeviceServiceResult = Result<Void, Error>
+    func launchDevice(name: String, additionalArguments: [String]) throws
+    func toggleA11y(device: Device) throws
+    func getAndroidDevices() throws -> [Device]
+    func getAdbId(device: Device) throws -> String
+    func sendText(device: Device, text: String) throws
 }
 
 class DeviceService: DeviceServiceProtocol {
+    private let deviceBootedError = "Unable to boot device in current state: Booted"
+    
     private enum ProcessPaths: String {
         case xcrun = "/usr/bin/xcrun"
         case xcodeSelect = "/usr/bin/xcode-select"
     }
 }
 
-// iOS Methods
+// MARK: iOS Methods
 extension DeviceService {
     
-    func getIOSDevices(_ completion: @escaping (GetDevicesResult) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            var output = ""
-            do {
-                output = try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "list", "devices", "available"])
-            } catch {
-                completion(.failure(DeviceError.XCodeError))
-                return
-            }
-            
-            let splitted = output.components(separatedBy: "\n")
-            
-            var devices: [Device] = []
-            splitted.forEach { line in
-                let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\)")
-                if (!device.isEmpty) {
-                    let firstDevice = device[0]
-                    devices.append(
-                        Device(
-                            name: firstDevice[1].trimmingCharacters(in: .whitespacesAndNewlines),
-                            version: firstDevice[3],
-                            uuid: firstDevice[4]
-                        )
+    private func parseIOSDevices(result: [String]) -> [Device] {
+        var devices: [Device] = []
+        result.forEach { line in
+            let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\)")
+            if (!device.isEmpty) {
+                let firstDevice = device[0]
+                devices.append(
+                    Device(
+                        name: firstDevice[1].trimmingCharacters(in: .whitespacesAndNewlines),
+                        version: firstDevice[3],
+                        uuid: firstDevice[4]
                     )
-                }
-            }
-            
-            completion(.success(devices))
-        }
-    }
-    
-    func launchDevice(uuid: String, _ completion: @escaping (DeviceServiceResult) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                let activeDeveloperDir = try shellOut(to: ProcessPaths.xcodeSelect.rawValue, arguments: ["-p"]).trimmingCharacters(in: .whitespacesAndNewlines)
-                
-                try shellOut(to: "\(activeDeveloperDir)/Applications/Simulator.app/Contents/MacOS/Simulator", arguments: ["--args", "-CurrentDeviceUDID", uuid])
-                
-                try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "boot", uuid])
-                
-                completion(.success(()))
-            } catch {
-                completion(.failure(DeviceError.XCodeError))
+                )
             }
         }
+        return devices
     }
     
+    func getIOSDevices() throws -> [Device] {
+        let output = try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "list", "devices", "available"])
+        let splitted = output.components(separatedBy: "\n")
+        
+        return parseIOSDevices(result: splitted)
+    }
+    
+    func launchDevice(uuid: String) throws {
+        guard let activeDeveloperDir = try? shellOut(to: ProcessPaths.xcodeSelect.rawValue, arguments: ["-p"]).trimmingCharacters(in: .whitespacesAndNewlines) else {
+            throw DeviceError.XCodeError
+        }
+        try shellOut(to: "open \(activeDeveloperDir)/Applications/Simulator.app")
+        do {
+            try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "boot", uuid])
+        } catch {
+            if !error.localizedDescription.contains(deviceBootedError) {
+                throw error
+            }
+        }
+    }
     
 }
 
 
-// Android methods
+// MARK: Android Methods
 extension DeviceService {
-    func launchDevice(name: String, additionalArguments: [String] = [], _ completion: @escaping (DeviceServiceResult) -> Void) {
-        
+    func launchDevice(name: String, additionalArguments: [String]) throws {
+        let emulatorPath = try ADB.getEmulatorPath()
         var arguments = ["@\(name)"]
         arguments.append(contentsOf: additionalArguments)
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                let emulatorPath = try ADB.getEmulatorPath()
-                try shellOut(to: emulatorPath, arguments: arguments)
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
-            }
+        try shellOut(to: emulatorPath, arguments: arguments)
+    }
+    
+    func getAndroidDevices() throws -> [Device] {
+        let emulatorPath = try ADB.getEmulatorPath()
+        let output = try shellOut(to: emulatorPath, arguments: ["-list-avds"])
+        let splitted = output.components(separatedBy: "\n")
+        
+        return splitted.filter({ !$0.isEmpty }).map {
+            Device(name: $0, isAndroid: true)
         }
     }
     
-    func getAndroidDevices(_ completion: @escaping (GetDevicesResult) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            var output = ""
-            do {
-                let emulatorPath = try ADB.getEmulatorPath()
-                output = try shellOut(to: emulatorPath, arguments: ["-list-avds"])
-            } catch {
-                completion(.failure(error))
-                return
-            }
-            
-            let splitted = output.components(separatedBy: "\n")
-            let devices = splitted.filter({ !$0.isEmpty }).map {
-                return Device(name: $0, isAndroid: true)
-            }
-            completion(.success(devices))
+    func toggleA11y(device: Device) throws {
+        let adbPath = try ADB.getAdbPath()
+        let deviceId = try ADB.getAdbId(for: device.name, adbPath: adbPath)
+        
+        if ADB.isAccesibilityOn(deviceId: deviceId, adbPath: adbPath) {
+            _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOff)")
+        } else {
+            _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOn)")
         }
     }
     
-    func toggleA11y(device: Device, _ completion: @escaping (DeviceServiceResult) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                let adbPath = try ADB.getAdbPath()
-                let deviceId = try ADB.getAdbId(for: device.name, adbPath: adbPath)
-                
-                if ADB.isAccesibilityOn(deviceId: deviceId, adbPath: adbPath) {
-                    _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOff)")
-                } else {
-                    _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOn)")
-                }
-                completion(.success(()))
-            } catch  {
-                completion(.failure(error))
-            }
-        }
+    func getAdbId(device: Device) throws -> String {
+        let adbPath = try ADB.getAdbPath()
+        return try ADB.getAdbId(for: device.name, adbPath: adbPath)
     }
     
-    func copyAdbId(device: Device, _ completion: @escaping (DeviceServiceResult) -> Void) {
-        do {
-            let adbPath = try ADB.getAdbPath()
-            let deviceId = try ADB.getAdbId(for: device.name, adbPath: adbPath)
-            
-            NSPasteboard.general.copyToPasteboard(text: deviceId)
-            
-            completion(.success(()))
-        } catch  {
-            completion(.failure(error))
-        }
-    }
-    
-    func sendText(device: Device, text: String, _ completion: @escaping (DeviceServiceResult) -> Void) {
-        do {
-            let adbPath = try ADB.getAdbPath()
-            let deviceId = try ADB.getAdbId(for: device.name, adbPath: adbPath)
-            let formattedText = text.replacingOccurrences(of: " ", with: "%s").replacingOccurrences(of: "'", with: "''")
-            
-            try shellOut(to: "\(adbPath) -s \(deviceId) shell input text \"\(formattedText)\"")
-            
-            completion(.success(()))
-        } catch {
-            completion(.failure(error))
-        }
+    func sendText(device: Device, text: String) throws {
+        let adbPath = try ADB.getAdbPath()
+        let deviceId = try ADB.getAdbId(for: device.name, adbPath: adbPath)
+        let formattedText = text.replacingOccurrences(of: " ", with: "%s").replacingOccurrences(of: "'", with: "''")
+        
+        try shellOut(to: "\(adbPath) -s \(deviceId) shell input text \"\(formattedText)\"")
     }
 }

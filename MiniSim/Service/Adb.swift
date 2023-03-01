@@ -105,9 +105,7 @@ final class ADB: NSObject, ADBProtocol {
         
         for line in splitted {
             let device = line.match("^emulator-[0-9]+")
-            guard let deviceId = device.first?.first else {
-                continue
-            }
+            guard let deviceId = device.first?.first else { continue }
             let output = try? shellOut(to: "\(adbPath) -s \(deviceId) emu avd name").components(separatedBy: "\n")
             if let name = output?.first {
                 if name.trimmingCharacters(in: .whitespacesAndNewlines) == deviceName.trimmingCharacters(in: .whitespacesAndNewlines) {
