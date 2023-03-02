@@ -17,6 +17,15 @@ enum AndroidSubMenuItem: Int, CaseIterable {
     case toggleA11yAndroid = 105
     case pasteToEmulator = 106
     
+    var needBootedDevice: Bool {
+        switch self {
+        case .copyAdbId, .toggleA11yAndroid, .pasteToEmulator:
+            return true
+        default:
+            return false
+        }
+    }
+    
     var menuItem: NSMenuItem {
         let item = self == .separator ? NSMenuItem.separator() : NSMenuItem()
         item.tag = rawValue

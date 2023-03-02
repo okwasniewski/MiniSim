@@ -35,18 +35,20 @@ extension DeviceService {
     private func parseIOSDevices(result: [String]) -> [Device] {
         var devices: [Device] = []
         result.forEach { line in
-            let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\)")
+            let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\) (\\(.*?)\\)")
             if (!device.isEmpty) {
                 let firstDevice = device[0]
                 devices.append(
                     Device(
                         name: firstDevice[1].trimmingCharacters(in: .whitespacesAndNewlines),
                         version: firstDevice[3],
-                        uuid: firstDevice[4]
+                        ID: firstDevice[4],
+                        booted: firstDevice[5].contains("Booted")
                     )
                 )
             }
         }
+        print(devices)
         return devices
     }
     
@@ -85,22 +87,26 @@ extension DeviceService {
     
     func getAndroidDevices() throws -> [Device] {
         let emulatorPath = try ADB.getEmulatorPath()
+        let adbPath = try ADB.getAdbPath()
         let output = try shellOut(to: emulatorPath, arguments: ["-list-avds"])
         let splitted = output.components(separatedBy: "\n")
         
         return splitted.filter({ !$0.isEmpty }).map {
-            Device(name: $0, isAndroid: true)
+            let adbId = try? ADB.getAdbId(for: $0, adbPath: adbPath)
+            return Device(name: $0, ID: adbId, booted: adbId != nil, isAndroid: true)
         }
     }
     
     func toggleA11y(device: Device) throws {
         let adbPath = try ADB.getAdbPath()
-        let deviceId = try ADB.getAdbId(for: device.name, adbPath: adbPath)
+        guard let adbId = device.ID else {
+            return
+        }
         
-        if ADB.isAccesibilityOn(deviceId: deviceId, adbPath: adbPath) {
-            _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOff)")
+        if ADB.isAccesibilityOn(deviceId: adbId, adbPath: adbPath) {
+            _ = try? shellOut(to: "\(adbPath) -s \(adbId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOff)")
         } else {
-            _ = try? shellOut(to: "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOn)")
+            _ = try? shellOut(to: "\(adbPath) -s \(adbId) shell settings put secure enabled_accessibility_services \(ADB.talkbackOn)")
         }
     }
     

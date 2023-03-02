@@ -13,14 +13,14 @@ class Menu: NSMenu {
     var iosDevices: [Device] = [] {
         didSet { populateIOSDevices() }
         willSet {
-            removeMenuItems(removedDevices: Set(iosDevices).subtracting(Set(newValue)))
+            removeMenuItems(removedDevices: Set(iosDevices.map({ $0.name })).subtracting(Set(newValue.map({ $0.name }))))
         }
     }
     
     var androidDevices: [Device] = [] {
         didSet { populateAndroidDevices() }
         willSet {
-            removeMenuItems(removedDevices: Set(androidDevices).subtracting(Set(newValue)))
+            removeMenuItems(removedDevices: Set(androidDevices.map({ $0.name })).subtracting(Set(newValue.map({ $0.name }))))
         }
     }
     
@@ -56,9 +56,9 @@ class Menu: NSMenu {
         return device
     }
     
-    private func removeMenuItems(removedDevices: Set<Device>) {
+    private func removeMenuItems(removedDevices: Set<String>) {
         for removedDevice in removedDevices {
-            if let index = self.items.firstIndex(where: {$0.title == removedDevice.name}) {
+            if let index = self.items.firstIndex(where: {$0.title == removedDevice}) {
                 self.items.remove(at: index)
             }
         }
@@ -111,7 +111,7 @@ class Menu: NSMenu {
             case .copyName:
                 NSPasteboard.general.copyToPasteboard(text: device.name)
             case .copyUDID:
-                NSPasteboard.general.copyToPasteboard(text: device.uuid ?? "")
+                NSPasteboard.general.copyToPasteboard(text: device.ID ?? "")
             }
         }
     }
@@ -126,7 +126,7 @@ class Menu: NSMenu {
                 case .launchAndroid:
                     try deviceService.launchDevice(name: device.name, additionalArguments: [])
                 case .launchIOS:
-                    try deviceService.launchDevice(uuid: device.uuid ?? "")
+                    try deviceService.launchDevice(uuid: device.ID ?? "")
                 }
             } catch {
                 await NSAlert.showError(message: error.localizedDescription)
@@ -139,7 +139,15 @@ class Menu: NSMenu {
     }
     
     private func populateAndroidDevices() {
-        Array(androidDevices.enumerated()).forEach { index, device in
+        for (index, device) in androidDevices.enumerated() {
+            if let itemIndex = items.firstIndex(where: { $0.title == device.name }) {
+                DispatchQueue.main.async {
+                    self.items[itemIndex].state = device.booted ? .on : .off
+                    self.items[itemIndex].submenu = self.populateAndroidSubMenu(booted: device.booted)
+                }
+                continue
+            }
+            
             let menuItem = NSMenuItem(
                 title: device.name,
                 action: #selector(deviceItemClick),
@@ -148,42 +156,51 @@ class Menu: NSMenu {
             )
             menuItem.target = self
             menuItem.keyEquivalentModifierMask = [.option]
-            menuItem.submenu = populateAndroidSubMenu()
+            menuItem.submenu = populateAndroidSubMenu(booted: device.booted)
+            menuItem.state = device.booted ? .on : .off
             
-            if !items.contains(where: { $0.title == device.name }) {
-                DispatchQueue.main.async {
-                    self.insertItem(menuItem, at: self.iosDevices.count + 3)
-                }
+            DispatchQueue.main.async {
+                self.insertItem(menuItem, at: self.iosDevices.count + 3)
             }
         }
     }
     
     private func populateIOSDevices() {
-        Array(iosDevices.enumerated()).forEach { index, device in
+        for (index, device) in iosDevices.enumerated() {
+            if let itemIndex = items.firstIndex(where: { $0.title == device.name }) {
+                DispatchQueue.main.async { self.items[itemIndex].state = device.booted ? .on : .off }
+                continue
+            }
+            
             let menuItem = NSMenuItem(
                 title: device.name,
                 action: #selector(deviceItemClick),
                 keyEquivalent: getKeyKequivalent(index: index),
-                type: device.isAndroid ? .launchAndroid : .launchIOS
+                type: .launchIOS
             )
+            
             menuItem.target = self
             menuItem.keyEquivalentModifierMask = [.command]
             menuItem.submenu = populateIOSSubMenu()
+            menuItem.state = device.booted ? .on : .off
             
-            if !items.contains(where: { $0.title == device.name }) {
-                DispatchQueue.main.async {
-                    self.insertItem(menuItem, at: 1)
-                }
+            DispatchQueue.main.async {
+                self.insertItem(menuItem, at: 1)
             }
+            
         }
     }
     
-    private func populateAndroidSubMenu() -> NSMenu {
+    private func populateAndroidSubMenu(booted: Bool) -> NSMenu {
         let subMenu = NSMenu()
-        AndroidSubMenuItem.allCases.map({$0.menuItem}).forEach { item in
-            item.target = self
-            item.action = #selector(androidSubMenuClick)
-            subMenu.addItem(item)
+        for item in AndroidSubMenuItem.allCases {
+            let menuItem = item.menuItem
+            menuItem.target = self
+            menuItem.action = #selector(androidSubMenuClick)
+            if item.needBootedDevice && !booted {
+                continue
+            }
+            subMenu.addItem(menuItem)
         }
         return subMenu
     }
