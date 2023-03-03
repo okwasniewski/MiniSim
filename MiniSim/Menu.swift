@@ -241,6 +241,9 @@ class Menu: NSMenu {
             if item.needBootedDevice && !booted {
                 continue
             }
+            if item.bootsDevice && booted {
+                continue
+            }
             subMenu.addItem(menuItem)
         }
         return subMenu

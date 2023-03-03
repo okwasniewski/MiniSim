@@ -26,6 +26,15 @@ enum AndroidSubMenuItem: Int, CaseIterable {
         }
     }
     
+    var bootsDevice: Bool {
+        switch self {
+        case .androidNoAudio, .coldBootAndroid:
+            return true
+        default:
+            return false
+        }
+    }
+    
     var menuItem: NSMenuItem {
         let item = self == .separator ? NSMenuItem.separator() : NSMenuItem()
         item.tag = rawValue
