@@ -7,6 +7,7 @@
 
 import AppKit
 import KeyboardShortcuts
+import UserNotifications
 
 class Menu: NSMenu {
     public let maxKeyEquivalent = 9
@@ -88,10 +89,12 @@ class Menu: NSMenu {
                 case .copyAdbId:
                     if let deviceId = device.ID {
                         NSPasteboard.general.copyToPasteboard(text: deviceId)
+                        showNotification(title: "Device ID copied to clipboard!", body: deviceId)
                     }
                     
                 case .copyName:
                     NSPasteboard.general.copyToPasteboard(text: device.name)
+                    showNotification(title: "Device name copied to clipboard!", body: device.name)
                     
                 case .pasteToEmulator:
                     let pasteboard = NSPasteboard.general
@@ -116,8 +119,12 @@ class Menu: NSMenu {
             switch tag {
             case .copyName:
                 NSPasteboard.general.copyToPasteboard(text: device.name)
+                showNotification(title: "Device name copied to clipboard!", body: device.name)
             case .copyUDID:
-                NSPasteboard.general.copyToPasteboard(text: device.ID ?? "")
+                if let deviceID = device.ID {
+                    NSPasteboard.general.copyToPasteboard(text: deviceID)
+                    showNotification(title: "Device ID copied to clipboard!", body: deviceID)
+                }
             }
         }
     }
@@ -263,6 +270,15 @@ class Menu: NSMenu {
             subMenu.addItem(item)
         }
         return subMenu
+    }
+    
+    private func showNotification(title: String, body: String) {
+        let center = UNUserNotificationCenter.current()
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+        center.add(request)
     }
     
     private func safeInsertItem(_ item: NSMenuItem, at index: Int) {
