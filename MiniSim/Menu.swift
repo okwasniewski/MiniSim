@@ -89,8 +89,9 @@ class Menu: NSMenu {
                     try deviceService.toggleA11y(device: device)
                     
                 case .copyAdbId:
-                    let deviceId = try deviceService.getAdbId(device: device)
-                    NSPasteboard.general.copyToPasteboard(text: deviceId)
+                    if let deviceId = device.ID {
+                        NSPasteboard.general.copyToPasteboard(text: deviceId)
+                    }
                     
                 case .copyName:
                     NSPasteboard.general.copyToPasteboard(text: device.name)

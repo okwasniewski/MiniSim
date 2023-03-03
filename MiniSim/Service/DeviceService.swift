@@ -16,7 +16,6 @@ protocol DeviceServiceProtocol {
     func launchDevice(name: String, additionalArguments: [String]) throws
     func toggleA11y(device: Device) throws
     func getAndroidDevices() throws -> [Device]
-    func getAdbId(device: Device) throws -> String
     func sendText(device: Device, text: String) throws
 }
 
@@ -99,7 +98,7 @@ extension DeviceService {
     func toggleA11y(device: Device) throws {
         let adbPath = try ADB.getAdbPath()
         guard let adbId = device.ID else {
-            return
+            throw DeviceError.deviceNotFound
         }
         
         if ADB.isAccesibilityOn(deviceId: adbId, adbPath: adbPath) {
@@ -109,14 +108,12 @@ extension DeviceService {
         }
     }
     
-    func getAdbId(device: Device) throws -> String {
-        let adbPath = try ADB.getAdbPath()
-        return try ADB.getAdbId(for: device.name, adbPath: adbPath)
-    }
-    
     func sendText(device: Device, text: String) throws {
         let adbPath = try ADB.getAdbPath()
-        let deviceId = try ADB.getAdbId(for: device.name, adbPath: adbPath)
+        guard let deviceId = device.ID else {
+            throw DeviceError.deviceNotFound
+        }
+        
         let formattedText = text.replacingOccurrences(of: " ", with: "%s").replacingOccurrences(of: "'", with: "''")
         
         try shellOut(to: "\(adbPath) -s \(deviceId) shell input text \"\(formattedText)\"")
