@@ -48,7 +48,6 @@ extension DeviceService {
                 )
             }
         }
-        print(devices)
         return devices
     }
     

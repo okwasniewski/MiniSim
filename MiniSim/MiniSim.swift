@@ -78,9 +78,11 @@ class MiniSim: NSObject {
     
     private func populateSections() {
         MenuSections.allCases.map({$0.menuItem}).forEach { item in
-            item.target = self
             if item.tag >= MenuSections.preferences.rawValue {
                 item.action = #selector(menuItemAction)
+                item.target = self
+            } else {
+                item.isEnabled = false
             }
             menu.addItem(item)
         }

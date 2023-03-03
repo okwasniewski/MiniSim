@@ -9,16 +9,24 @@ import AppKit
 import KeyboardShortcuts
 
 class Menu: NSMenu {
+    public let maxKeyEquivalent = 9
+    
     var deviceService: DeviceServiceProtocol!
     var iosDevices: [Device] = [] {
-        didSet { populateIOSDevices() }
+        didSet {
+            populateIOSDevices()
+            assignKeyEquivalents()
+        }
         willSet {
             removeMenuItems(removedDevices: Set(iosDevices.map({ $0.name })).subtracting(Set(newValue.map({ $0.name }))))
         }
     }
     
     var androidDevices: [Device] = [] {
-        didSet { populateAndroidDevices() }
+        didSet {
+            populateAndroidDevices()
+            assignKeyEquivalents()
+        }
         willSet {
             removeMenuItems(removedDevices: Set(androidDevices.map({ $0.name })).subtracting(Set(newValue.map({ $0.name }))))
         }
@@ -138,8 +146,40 @@ class Menu: NSMenu {
         return Character(UnicodeScalar(0x0030+index)!).lowercased()
     }
     
+    private func assignKeyEquivalents() {
+        let sections = MenuSections.allCases.map({$0.title})
+        let devices = items.filter({ !sections.contains($0.title) })
+        
+        let iosDevices = devices.prefix(upTo: iosDevices.count)
+        let androidDevices = devices.suffix(androidDevices.count)
+        
+        assignKeyEquivalent(devices: Array(iosDevices))
+        assignKeyEquivalent(devices: Array(androidDevices))
+    }
+    
+    private func assignKeyEquivalent(devices: [NSMenuItem]) {
+        for (index, item) in devices.enumerated() {
+            if index > maxKeyEquivalent {
+                DispatchQueue.main.async {
+                    item.keyEquivalent = ""
+                }
+                continue
+            }
+            
+            let keyEquivalent = getKeyKequivalent(index: index)
+            
+            if item.keyEquivalent == keyEquivalent {
+                continue
+            }
+            
+            DispatchQueue.main.async {
+                item.keyEquivalent = keyEquivalent
+            }
+        }
+    }
+    
     private func populateAndroidDevices() {
-        for (index, device) in androidDevices.enumerated() {
+        for device in androidDevices {
             if let itemIndex = items.firstIndex(where: { $0.title == device.name }) {
                 DispatchQueue.main.async {
                     self.items[itemIndex].state = device.booted ? .on : .off
@@ -151,7 +191,7 @@ class Menu: NSMenu {
             let menuItem = NSMenuItem(
                 title: device.name,
                 action: #selector(deviceItemClick),
-                keyEquivalent: getKeyKequivalent(index: index),
+                keyEquivalent: "",
                 type: .launchAndroid
             )
             menuItem.target = self
@@ -166,7 +206,7 @@ class Menu: NSMenu {
     }
     
     private func populateIOSDevices() {
-        for (index, device) in iosDevices.enumerated() {
+        for device in iosDevices {
             if let itemIndex = items.firstIndex(where: { $0.title == device.name }) {
                 DispatchQueue.main.async { self.items[itemIndex].state = device.booted ? .on : .off }
                 continue
@@ -175,7 +215,7 @@ class Menu: NSMenu {
             let menuItem = NSMenuItem(
                 title: device.name,
                 action: #selector(deviceItemClick),
-                keyEquivalent: getKeyKequivalent(index: index),
+                keyEquivalent: "",
                 type: .launchIOS
             )
             
