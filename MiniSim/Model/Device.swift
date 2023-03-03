@@ -8,7 +8,8 @@
 struct Device: Hashable {
     var name: String
     var version: String?
-    var uuid: String?
+    var ID: String?
+    var booted: Bool = false
     
     var isAndroid: Bool = false
 }

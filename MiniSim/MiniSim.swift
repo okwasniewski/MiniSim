@@ -16,7 +16,6 @@ class MiniSim: NSObject {
     
     @objc let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
-    
     var deviceService: DeviceServiceProtocol
     
     init(deviceService: DeviceServiceProtocol = DeviceService()) {
@@ -33,10 +32,8 @@ class MiniSim: NSObject {
             button.image = itemImage
         }
         
-        populateSections {
-            getAndroidDevices()
-            getiOSDevices()
-        }
+        populateSections()
+        self.menu.getDevices()
     }
     
     private lazy var settingsController = PreferencesWindowController(
@@ -79,36 +76,15 @@ class MiniSim: NSObject {
         }
     }
     
-    private func populateSections(_ completion: () -> Void) {
+    private func populateSections() {
         MenuSections.allCases.map({$0.menuItem}).forEach { item in
-            item.target = self
             if item.tag >= MenuSections.preferences.rawValue {
                 item.action = #selector(menuItemAction)
+                item.target = self
+            } else {
+                item.isEnabled = false
             }
             menu.addItem(item)
-        }
-        completion()
-    }
-    
-    private func getAndroidDevices() {
-        self.deviceService.getAndroidDevices { result in
-            switch result {
-            case .success(let devices):
-                self.menu.androidDevices.append(contentsOf: devices)
-            case .failure(let error):
-                NSAlert.showError(message: error.localizedDescription)
-            }
-        }
-    }
-    
-    private func getiOSDevices() {
-        deviceService.getIOSDevices { result in
-            switch result {
-            case .success(let devices):
-                self.menu.iosDevices.append(contentsOf: devices)
-            case .failure(let error):
-                NSAlert.showError(message: error.localizedDescription)
-            }
         }
     }
 }

@@ -9,12 +9,27 @@ import AppKit
 import KeyboardShortcuts
 
 class Menu: NSMenu {
+    public let maxKeyEquivalent = 9
+    
     var deviceService: DeviceServiceProtocol!
     var iosDevices: [Device] = [] {
-        didSet { populateIOSDevices() }
+        didSet {
+            populateIOSDevices()
+            assignKeyEquivalents()
+        }
+        willSet {
+            removeMenuItems(removedDevices: Set(iosDevices.map({ $0.name })).subtracting(Set(newValue.map({ $0.name }))))
+        }
     }
+    
     var androidDevices: [Device] = [] {
-        didSet { populateAndroidDevices() }
+        didSet {
+            populateAndroidDevices()
+            assignKeyEquivalents()
+        }
+        willSet {
+            removeMenuItems(removedDevices: Set(androidDevices.map({ $0.name })).subtracting(Set(newValue.map({ $0.name }))))
+        }
     }
     
     required init(coder: NSCoder) {
@@ -25,6 +40,17 @@ class Menu: NSMenu {
         self.deviceService = deviceService
         super.init(title: "MiniSim")
         self.delegate = self
+    }
+    
+    func getDevices() {
+        Task {
+            do {
+                self.androidDevices = try deviceService.getAndroidDevices()
+                self.iosDevices = try deviceService.getIOSDevices()
+            } catch {
+                await NSAlert.showError(message: error.localizedDescription)
+            }
+        }
     }
     
     private func getDeviceByName(name: String) -> Device? {
@@ -38,57 +64,49 @@ class Menu: NSMenu {
         return device
     }
     
-    @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
-        guard let device = getDeviceByName(name: sender.parent?.title ?? "") else {
-            return
+    private func removeMenuItems(removedDevices: Set<String>) {
+        for removedDevice in removedDevices {
+            if let index = self.items.firstIndex(where: {$0.title == removedDevice}) {
+                self.items.remove(at: index)
+            }
         }
-        if let tag = AndroidSubMenuItem(rawValue: sender.tag) {
-            switch tag {
-            case .coldBootAndroid:
-                deviceService.launchDevice(name: device.name, additionalArguments: ["-no-snapshot"]) { result in
-                    if case .failure(let error) = result {
-                        NSAlert.showError(message: error.localizedDescription)
+    }
+    
+    @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
+        guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
+        guard let tag = AndroidSubMenuItem(rawValue: sender.tag) else { return }
+        
+        Task {
+            do {
+                switch tag {
+                case .coldBootAndroid:
+                    try deviceService.launchDevice(name: device.name, additionalArguments:["-no-snapshot"])
+                    
+                case .androidNoAudio:
+                    try deviceService.launchDevice(name: device.name, additionalArguments:["-no-audio"])
+                    
+                case .toggleA11yAndroid:
+                    try deviceService.toggleA11y(device: device)
+                    
+                case .copyAdbId:
+                    if let deviceId = device.ID {
+                        NSPasteboard.general.copyToPasteboard(text: deviceId)
                     }
-                }
-                
-            case .toggleA11yAndroid:
-                deviceService.toggleA11y(device: device) { result in
-                    if case .failure(let error) = result {
-                        NSAlert.showError(message: error.localizedDescription)
-                    }
-                }
-                
-            case .androidNoAudio:
-                deviceService.launchDevice(name: device.name, additionalArguments: ["-no-audio"]) { result in
-                    if case .failure(let error) = result {
-                        NSAlert.showError(message: error.localizedDescription)
-                    }
-                }
-                
-            case .copyAdbId:
-                deviceService.copyAdbId(device: device) { result in
-                    if case .failure(let error) = result {
-                        NSAlert.showError(message: error.localizedDescription)
-                    }
-                }
-            case .copyName:
-                NSPasteboard.general.copyToPasteboard(text: device.name)
-                
-            case .pasteToEmulator:
-                let pasteboard = NSPasteboard.general
-                let clipboard = pasteboard.pasteboardItems?.first?.string(forType: .string)
-                guard let clipboard else {
+                    
+                case .copyName:
+                    NSPasteboard.general.copyToPasteboard(text: device.name)
+                    
+                case .pasteToEmulator:
+                    let pasteboard = NSPasteboard.general
+                    guard let clipboard = pasteboard.pasteboardItems?.first?.string(forType: .string) else { break }
+                    try deviceService.sendText(device: device, text: clipboard)
+                    
+                default:
                     break
                 }
-                deviceService.sendText(device: device, text: clipboard) { result in
-                    if case .failure(let error) = result {
-                        NSAlert.showError(message: error.localizedDescription)
-                    }
-                }
-               
-                
-            default:
-                break
+            }
+            catch {
+                await NSAlert.showError(message: error.localizedDescription)
             }
         }
     }
@@ -102,29 +120,25 @@ class Menu: NSMenu {
             case .copyName:
                 NSPasteboard.general.copyToPasteboard(text: device.name)
             case .copyUDID:
-                NSPasteboard.general.copyToPasteboard(text: device.uuid ?? "")
+                NSPasteboard.general.copyToPasteboard(text: device.ID ?? "")
             }
         }
     }
     
     @objc private func deviceItemClick(_ sender: NSMenuItem) {
-        guard let device = getDeviceByName(name: sender.title) else {
-            return
-        }
-        if let tag = DeviceMenuItem(rawValue: sender.tag) {
-            switch tag {
-            case .launchAndroid:
-                deviceService.launchDevice(name: device.name, additionalArguments: []) { result in
-                    if case .failure(let error) = result {
-                        NSAlert.showError(message: error.localizedDescription)
-                    }
+        guard let device = getDeviceByName(name: sender.title) else { return }
+        guard let tag = DeviceMenuItem(rawValue: sender.tag) else { return }
+        
+        Task {
+            do {
+                switch tag {
+                case .launchAndroid:
+                    try deviceService.launchDevice(name: device.name, additionalArguments: [])
+                case .launchIOS:
+                    try deviceService.launchDevice(uuid: device.ID ?? "")
                 }
-            case .launchIOS:
-                deviceService.launchDevice(uuid: device.uuid ?? "") { result in
-                    if case .failure(let error) = result {
-                        NSAlert.showError(message: error.localizedDescription)
-                    }
-                }
+            } catch {
+                await NSAlert.showError(message: error.localizedDescription)
             }
         }
     }
@@ -133,52 +147,104 @@ class Menu: NSMenu {
         return Character(UnicodeScalar(0x0030+index)!).lowercased()
     }
     
+    private func assignKeyEquivalents() {
+        let sections = MenuSections.allCases.map({$0.title})
+        let devices = items.filter({ !sections.contains($0.title) })
+        
+        let iosDevices = devices.prefix(upTo: iosDevices.count)
+        let androidDevices = devices.suffix(androidDevices.count)
+        
+        assignKeyEquivalent(devices: Array(iosDevices))
+        assignKeyEquivalent(devices: Array(androidDevices))
+    }
+    
+    private func assignKeyEquivalent(devices: [NSMenuItem]) {
+        for (index, item) in devices.enumerated() {
+            if index > maxKeyEquivalent {
+                DispatchQueue.main.async {
+                    item.keyEquivalent = ""
+                }
+                continue
+            }
+            
+            let keyEquivalent = getKeyKequivalent(index: index)
+            
+            if item.keyEquivalent == keyEquivalent {
+                continue
+            }
+            
+            DispatchQueue.main.async {
+                item.keyEquivalent = keyEquivalent
+            }
+        }
+    }
+    
     private func populateAndroidDevices() {
-        Array(androidDevices.enumerated()).forEach { index, device in
+        for device in androidDevices {
+            if let itemIndex = items.firstIndex(where: { $0.title == device.name }) {
+                DispatchQueue.main.async {
+                    self.items[itemIndex].state = device.booted ? .on : .off
+                    self.items[itemIndex].submenu = self.populateAndroidSubMenu(booted: device.booted)
+                }
+                continue
+            }
+            
             let menuItem = NSMenuItem(
                 title: device.name,
                 action: #selector(deviceItemClick),
-                keyEquivalent: getKeyKequivalent(index: index),
+                keyEquivalent: "",
                 type: .launchAndroid
             )
             menuItem.target = self
             menuItem.keyEquivalentModifierMask = [.option]
-            menuItem.submenu = populateAndroidSubMenu()
+            menuItem.submenu = populateAndroidSubMenu(booted: device.booted)
+            menuItem.state = device.booted ? .on : .off
             
-            if !items.contains(where: { $0.title == device.name }) {
-                DispatchQueue.main.async {
-                    self.insertItem(menuItem, at: self.iosDevices.count + 3)
-                }
+            DispatchQueue.main.async {
+                self.insertItem(menuItem, at: self.iosDevices.count + 3)
             }
         }
     }
     
     private func populateIOSDevices() {
-        Array(iosDevices.enumerated()).forEach { index, device in
+        for device in iosDevices {
+            if let itemIndex = items.firstIndex(where: { $0.title == device.name }) {
+                DispatchQueue.main.async { self.items[itemIndex].state = device.booted ? .on : .off }
+                continue
+            }
+            
             let menuItem = NSMenuItem(
                 title: device.name,
                 action: #selector(deviceItemClick),
-                keyEquivalent: getKeyKequivalent(index: index),
-                type: device.isAndroid ? .launchAndroid : .launchIOS
+                keyEquivalent: "",
+                type: .launchIOS
             )
+            
             menuItem.target = self
             menuItem.keyEquivalentModifierMask = [.command]
             menuItem.submenu = populateIOSSubMenu()
+            menuItem.state = device.booted ? .on : .off
             
-            if !items.contains(where: { $0.title == device.name }) {
-                DispatchQueue.main.async {
-                    self.insertItem(menuItem, at: 1)
-                }
+            DispatchQueue.main.async {
+                self.insertItem(menuItem, at: 1)
             }
+            
         }
     }
     
-    private func populateAndroidSubMenu() -> NSMenu {
+    private func populateAndroidSubMenu(booted: Bool) -> NSMenu {
         let subMenu = NSMenu()
-        AndroidSubMenuItem.allCases.map({$0.menuItem}).forEach { item in
-            item.target = self
-            item.action = #selector(androidSubMenuClick)
-            subMenu.addItem(item)
+        for item in AndroidSubMenuItem.allCases {
+            let menuItem = item.menuItem
+            menuItem.target = self
+            menuItem.action = #selector(androidSubMenuClick)
+            if item.needBootedDevice && !booted {
+                continue
+            }
+            if item.bootsDevice && booted {
+                continue
+            }
+            subMenu.addItem(menuItem)
         }
         return subMenu
     }
@@ -196,6 +262,7 @@ class Menu: NSMenu {
 
 extension Menu: NSMenuDelegate {
     func menuWillOpen(_ menu: NSMenu) {
+        self.getDevices()
         KeyboardShortcuts.disable(.toggleMiniSim)
     }
     
