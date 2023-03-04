@@ -38,6 +38,7 @@
 		76F2A914299050F9002D4EF6 /* UserDefaults+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */; };
 		76F2A9172991B7B6002D4EF6 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */; };
 		76F2A91929924242002D4EF6 /* AndroidSubMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A91829924242002D4EF6 /* AndroidSubMenuItem.swift */; };
+		76FCABAB29B390D5003BBF9A /* Collection+get.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FCABAA29B390D5003BBF9A /* Collection+get.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,7 @@
 		76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Configuration.swift"; sourceTree = "<group>"; };
 		76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		76F2A91829924242002D4EF6 /* AndroidSubMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AndroidSubMenuItem.swift; sourceTree = "<group>"; };
+		76FCABAA29B390D5003BBF9A /* Collection+get.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+get.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 				7630B2762986D65800D8B57D /* Bundle+appName.swift */,
 				76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */,
 				7625140A2992B46D0060A225 /* Pasteboard+utils.swift */,
+				76FCABAA29B390D5003BBF9A /* Collection+get.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				7630B2732986C68000D8B57D /* PaneIdentifier.swift in Sources */,
 				7630B2662985C44A00D8B57D /* Preferences.swift in Sources */,
 				7625140B2992B46D0060A225 /* Pasteboard+utils.swift in Sources */,
+				76FCABAB29B390D5003BBF9A /* Collection+get.swift in Sources */,
 				7630B2752986D52900D8B57D /* NSAlert+showError.swift in Sources */,
 				7630B25E2984339100D8B57D /* MenuSections.swift in Sources */,
 				7645D5012982E6FA00019227 /* main.swift in Sources */,

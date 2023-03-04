@@ -65,11 +65,8 @@ class Menu: NSMenu {
     }
     
     private func removeMenuItems(removedDevices: Set<String>) {
-        for removedDevice in removedDevices {
-            if let index = self.items.firstIndex(where: {$0.title == removedDevice}) {
-                self.items.remove(at: index)
-            }
-        }
+        let itemsToRemove = self.items.filter({ removedDevices.contains($0.title) })
+        itemsToRemove.forEach(safeRemoveItem)
     }
     
     @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
@@ -188,8 +185,9 @@ class Menu: NSMenu {
         for device in androidDevices {
             if let itemIndex = items.firstIndex(where: { $0.title == device.name }) {
                 DispatchQueue.main.async {
-                    self.items[itemIndex].state = device.booted ? .on : .off
-                    self.items[itemIndex].submenu = self.populateAndroidSubMenu(booted: device.booted)
+                    let item = self.items.get(at: itemIndex)
+                    item?.state = device.booted ? .on : .off
+                    item?.submenu = self.populateAndroidSubMenu(booted: device.booted)
                 }
                 continue
             }
@@ -206,7 +204,7 @@ class Menu: NSMenu {
             menuItem.state = device.booted ? .on : .off
             
             DispatchQueue.main.async {
-                self.insertItem(menuItem, at: self.iosDevices.count + 3)
+                self.safeInsertItem(menuItem, at: self.iosDevices.count + 3)
             }
         }
     }
@@ -214,7 +212,10 @@ class Menu: NSMenu {
     private func populateIOSDevices() {
         for device in iosDevices {
             if let itemIndex = items.firstIndex(where: { $0.title == device.name }) {
-                DispatchQueue.main.async { self.items[itemIndex].state = device.booted ? .on : .off }
+                DispatchQueue.main.async {
+                    let item = self.items.get(at: itemIndex)
+                    item?.state = device.booted ? .on : .off
+                }
                 continue
             }
             
@@ -231,7 +232,7 @@ class Menu: NSMenu {
             menuItem.state = device.booted ? .on : .off
             
             DispatchQueue.main.async {
-                self.insertItem(menuItem, at: 1)
+                self.safeInsertItem(menuItem, at: 1)
             }
             
         }
@@ -262,6 +263,23 @@ class Menu: NSMenu {
             subMenu.addItem(item)
         }
         return subMenu
+    }
+    
+    private func safeInsertItem(_ item: NSMenuItem, at index: Int) {
+      guard !items.contains(item), index <= items.count else {
+        return
+      }
+
+      insertItem(item, at: index)
+    }
+    
+    private func safeRemoveItem(_ item: NSMenuItem?) {
+        guard let item = item,
+              items.contains(item) else {
+            return
+        }
+        
+        removeItem(item)
     }
 }
 
