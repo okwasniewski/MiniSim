@@ -29,6 +29,7 @@
 		766BD2382981628C0042261B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD2372981628C0042261B /* Assets.xcassets */; };
 		766BD23B2981628C0042261B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD23A2981628C0042261B /* Preview Assets.xcassets */; };
 		76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */; };
+		767C761F29B26ED3009B9AEC /* AccessibilityElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767C761E29B26ED3009B9AEC /* AccessibilityElement.swift */; };
 		768F8EC829954C8A00DFBCDB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 768F8EC729954C8A00DFBCDB /* Sparkle */; };
 		76D305722994155C005C373B /* IOSSubMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D305712994155C005C373B /* IOSSubMenuItem.swift */; };
 		76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F04A10298A5AE000BF9CA3 /* ADB.swift */; };
@@ -61,6 +62,7 @@
 		766BD23A2981628C0042261B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		766BD23C2981628C0042261B /* MiniSim.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MiniSim.entitlements; sourceTree = "<group>"; };
 		76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceMenuItem.swift; sourceTree = "<group>"; };
+		767C761E29B26ED3009B9AEC /* AccessibilityElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityElement.swift; sourceTree = "<group>"; };
 		768F8ECC2995575B00DFBCDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		76D305712994155C005C373B /* IOSSubMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSSubMenuItem.swift; sourceTree = "<group>"; };
 		76F04A10298A5AE000BF9CA3 /* ADB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADB.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				7645D4BC2982800D00019227 /* Service */,
 				762CF1E22981DE5400099999 /* Model */,
 				7645D4C12982CA9600019227 /* AppDelegate.swift */,
+				767C761E29B26ED3009B9AEC /* AccessibilityElement.swift */,
 				7630B27B2987207200D8B57D /* Menu.swift */,
 				7645D4C32982CB2B00019227 /* MiniSim.swift */,
 				7645D5002982E6FA00019227 /* main.swift */,
@@ -298,6 +301,7 @@
 				7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */,
 				76F2A912299033EA002D4EF6 /* DeviceError.swift in Sources */,
 				7630B2682985C4CF00D8B57D /* About.swift in Sources */,
+				767C761F29B26ED3009B9AEC /* AccessibilityElement.swift in Sources */,
 				7630B2732986C68000D8B57D /* PaneIdentifier.swift in Sources */,
 				7630B2662985C44A00D8B57D /* Preferences.swift in Sources */,
 				7625140B2992B46D0060A225 /* Pasteboard+utils.swift in Sources */,
