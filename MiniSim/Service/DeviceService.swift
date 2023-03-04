@@ -17,6 +17,8 @@ protocol DeviceServiceProtocol {
     func toggleA11y(device: Device) throws
     func getAndroidDevices() throws -> [Device]
     func sendText(device: Device, text: String) throws
+    
+    func focusDevice(_ device: Device)
 }
 
 class DeviceService: DeviceServiceProtocol {
@@ -25,6 +27,52 @@ class DeviceService: DeviceServiceProtocol {
     private enum ProcessPaths: String {
         case xcrun = "/usr/bin/xcrun"
         case xcodeSelect = "/usr/bin/xcode-select"
+    }
+    
+    private enum BundleURL: String {
+        case emulator = "qemu-system-aarch64"
+        case simulator = "Simulator.app"
+    }
+    
+    func focusDevice(_ device: Device) {
+        let runningApps = NSWorkspace.shared.runningApplications.filter({$0.activationPolicy == .regular})
+        
+        for app in runningApps {
+            guard
+                let bundleURL = app.bundleURL?.absoluteString,
+                (bundleURL.contains(BundleURL.simulator.rawValue) || bundleURL.contains(BundleURL.emulator.rawValue)) else {
+                continue
+            }
+            let isAndroid = bundleURL.contains(BundleURL.emulator.rawValue)
+            
+            for window in AccessibilityElement.allWindowsForPID(app.processIdentifier) {
+                guard let windowTitle = window.attribute(key: .title, type: String.self), !windowTitle.isEmpty else {
+                    continue
+                }
+                
+                if !matchDeviceTitle(windowTitle: windowTitle, device: device) {
+                    continue
+                }
+                
+                if isAndroid {
+                    AccessibilityElement.forceFocus(pid: app.processIdentifier)
+                } else {
+                    window.performAction(key: kAXRaiseAction)
+                    app.activate(options: [.activateIgnoringOtherApps])
+                }
+            }
+        }
+    }
+    
+    private func matchDeviceTitle(windowTitle: String, device: Device) -> Bool {
+        if device.isAndroid {
+            let deviceName = windowTitle.match(#"(?<=- ).*?(?=:)"#).first?.first
+            return deviceName == device.name
+        }
+        
+        let deviceName = windowTitle.match(#"^[^–]*"#).first?.first?.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        return deviceName == device.name
     }
 }
 
@@ -58,10 +106,6 @@ extension DeviceService {
     }
     
     func launchDevice(uuid: String) throws {
-        guard let activeDeveloperDir = try? shellOut(to: ProcessPaths.xcodeSelect.rawValue, arguments: ["-p"]).trimmingCharacters(in: .whitespacesAndNewlines) else {
-            throw DeviceError.XCodeError
-        }
-        try shellOut(to: "open \(activeDeveloperDir)/Applications/Simulator.app")
         do {
             try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "boot", uuid])
         } catch {
