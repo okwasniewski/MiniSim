@@ -37,6 +37,10 @@ class DeviceService: DeviceServiceProtocol {
     func focusDevice(_ device: Device) {
         let runningApps = NSWorkspace.shared.runningApplications.filter({$0.activationPolicy == .regular})
         
+        if let uuid = device.ID, !device.isAndroid {
+            try? launchSimulatorApp(uuid: uuid)
+        }
+        
         for app in runningApps {
             guard
                 let bundleURL = app.bundleURL?.absoluteString,
@@ -105,8 +109,20 @@ extension DeviceService {
         return parseIOSDevices(result: splitted)
     }
     
+    func launchSimulatorApp(uuid: String) throws {
+        let isSimulatorRunning = NSWorkspace.shared.runningApplications.contains(where: {$0.bundleIdentifier == "com.apple.iphonesimulator"})
+        
+        if !isSimulatorRunning {
+            guard let activeDeveloperDir = try? shellOut(to: ProcessPaths.xcodeSelect.rawValue, arguments: ["-p"]).trimmingCharacters(in: .whitespacesAndNewlines) else {
+                throw DeviceError.XCodeError
+            }
+            try shellOut(to: "\(activeDeveloperDir)/Applications/Simulator.app/Contents/MacOS/Simulator", arguments: ["--args", "-CurrentDeviceUDID", uuid])
+        }
+    }
+    
     func launchDevice(uuid: String) throws {
         do {
+            try launchSimulatorApp(uuid: uuid)
             try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "boot", uuid])
         } catch {
             if !error.localizedDescription.contains(deviceBootedError) {
