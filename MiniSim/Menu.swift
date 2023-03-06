@@ -127,7 +127,9 @@ class Menu: NSMenu {
         guard let tag = DeviceMenuItem(rawValue: sender.tag) else { return }
         
         if device.booted {
-            deviceService.focusDevice(device)
+            Task {
+                deviceService.focusDevice(device)
+            }
             return
         }
         
