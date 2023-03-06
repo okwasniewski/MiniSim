@@ -155,7 +155,7 @@ class Menu: NSMenu {
         let sections = MenuSections.allCases.map({$0.title})
         let devices = items.filter({ !sections.contains($0.title) })
         
-        let iosDevices = devices.prefix(upTo: iosDevices.count)
+        let iosDevices = devices.prefix(upTo: iosDevices.count > devices.count ? devices.count : iosDevices.count)
         let androidDevices = devices.suffix(androidDevices.count)
         
         assignKeyEquivalent(devices: Array(iosDevices))
@@ -268,7 +268,7 @@ class Menu: NSMenu {
     }
     
     private func safeInsertItem(_ item: NSMenuItem, at index: Int) {
-      guard !items.contains(item), index <= items.count else {
+        guard !items.contains(where: {$0.title == item.title}), index <= items.count else {
         return
       }
 
