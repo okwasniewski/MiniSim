@@ -6,20 +6,23 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>0.3.0</title>
+      <title>0.4.0</title>
       <description>
       <![CDATA[ <ul>
-        <li>New feature: Send clipboard text to Android emulator.</li>
-        <li>Fix icons of cold boot and run without audio option.</li>
+      <li>Fixed issue with wrong placement of android devices in the menu after cleaning cache</li>
+      <li>Indicate running emulators by adding checkmark next to them</li>
+      <li>Display submenus according to current device state (on / off)</li>
+      <li>Opt-in notifications when copying text</li>
+      <li>Focus devices using accessibility API instead of trying to open it (Requires additional permissions)</li>
       </ul> ]]>
       </description>
       <pubDate>2023-02-11</pubDate>
-      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.3.0</releaseNotesLink>
+      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.4.0</releaseNotesLink>
       <sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
       <enclosure
-        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.3.0/MiniSim.app.zip"
+        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.4.0/MiniSim.app.zip"
         sparkle:version="1"
-        sparkle:shortVersionString="0.3.0"
+        sparkle:shortVersionString="0.4.0"
         length="0"
         type="application/octet-stream"
       />
