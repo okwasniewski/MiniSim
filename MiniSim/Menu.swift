@@ -179,6 +179,9 @@ class Menu: NSMenu {
                 DispatchQueue.main.async {
                     let item = self.items.get(at: itemIndex)
                     item?.state = device.booted ? .on : .off
+                    if device.isAndroid {
+                        item?.submenu = self.populateAndroidSubMenu(booted: device.booted)
+                    }
                 }
                 continue
             }
