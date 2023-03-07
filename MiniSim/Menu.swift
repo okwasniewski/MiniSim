@@ -194,7 +194,7 @@ class Menu: NSMenu {
             )
             
             menuItem.target = self
-            menuItem.keyEquivalentModifierMask = [.command]
+            menuItem.keyEquivalentModifierMask = device.isAndroid ? [.option] : [.command]
             menuItem.submenu = device.isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu()
             menuItem.state = device.booted ? .on : .off
             
