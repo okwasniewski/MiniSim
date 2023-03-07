@@ -22,10 +22,13 @@ Written in Swift and AppKit.
     - Toggle a11y on selected emulator
     - Copy device name
     - Copy device ADB id
+- Focus devices using accessibility API
+- Indicate running devices
+
 
 ## Screenshots 
 
-<img width="512" src="https://user-images.githubusercontent.com/52801365/215720502-bc27dd65-8e5f-47d8-871e-b273f622f909.png">
+<img width="512" src="https://user-images.githubusercontent.com/52801365/223483262-aa3bad72-2948-4893-87a0-578e5d3d8e89.png">
 
 https://user-images.githubusercontent.com/52801365/215720684-d21deafe-356e-4e5a-9afd-5107bd1c4b2f.mp4
 
