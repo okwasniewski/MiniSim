@@ -16,7 +16,7 @@
       <li>Focus devices using accessibility API instead of trying to open it (Requires additional permissions)</li>
       </ul> ]]>
       </description>
-      <pubDate>2023-02-11</pubDate>
+      <pubDate>2023-03-07</pubDate>
       <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.4.0</releaseNotesLink>
       <sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
       <enclosure
