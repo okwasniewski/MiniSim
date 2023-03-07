@@ -21,7 +21,7 @@
       <sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
       <enclosure
         url="https://github.com/okwasniewski/MiniSim/releases/download/v0.4.0/MiniSim.app.zip"
-        sparkle:version="1"
+        sparkle:version="4"
         sparkle:shortVersionString="0.4.0"
         length="0"
         type="application/octet-stream"
