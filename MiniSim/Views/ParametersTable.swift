@@ -7,14 +7,6 @@
 
 import SwiftUI
 
-
-struct Parameter: Identifiable, Hashable, Codable {
-    var id = UUID()
-    var title: String
-    var command: String
-    var enabled: Bool = true
-}
-
 struct ParametersTable: View {
     @State private var parameters: [Parameter] = [.init(title: "", command: "", enabled: false)]
     @State private var selection: Parameter?
@@ -38,7 +30,7 @@ struct ParametersTable: View {
                     Text("Android additional launch parameters")
                         .font(.headline)
                         .padding(.bottom, 2)
-                    Text("These parameters are passed to every android launch command. \nFor example: Cold boot, Run without audio.")
+                    Text("These parameters are passed to every android launch command. \nFor example: Cold boot, Run without audio etc.")
                         .font(.caption)
                         .opacity(0.3)
                 }
