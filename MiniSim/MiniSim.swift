@@ -16,12 +16,9 @@ class MiniSim: NSObject {
     
     @objc let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
-    var deviceService: DeviceServiceProtocol
-    
-    init(deviceService: DeviceServiceProtocol = DeviceService()) {
-        self.deviceService = deviceService
+    override init() {
         statusBar = NSStatusBar()
-        menu = Menu(deviceService: deviceService)
+        menu = Menu()
         statusItem.menu = menu
         
         super.init()
@@ -32,11 +29,13 @@ class MiniSim: NSObject {
             button.image = itemImage
         }
         
+        settingsController.window?.delegate = self
+        
         populateSections()
         self.menu.getDevices()
     }
     
-    private lazy var settingsController = PreferencesWindowController(
+    private lazy var settingsController = SettingsWindowController(
         panes: [
             Settings.Pane(
                 identifier: .preferences,
@@ -44,6 +43,13 @@ class MiniSim: NSObject {
                 toolbarIcon: NSImage(systemSymbolName: "gear", accessibilityDescription: "") ?? NSImage()
             ) {
                 Preferences()
+            },
+            Settings.Pane(
+                identifier: .devices,
+                title: "Devices",
+                toolbarIcon: NSImage(systemSymbolName: "iphone", accessibilityDescription: "") ?? NSImage()
+            ) {
+                Devices()
             },
             Settings.Pane(
                 identifier: .about,
@@ -54,8 +60,7 @@ class MiniSim: NSObject {
             }
         ],
         style: .toolbarItems,
-        animated: false,
-        hidesToolbarForSingleItem: true
+        animated: false
     )
     
     func open() {
@@ -86,5 +91,16 @@ class MiniSim: NSObject {
             }
             menu.addItem(item)
         }
+    }
+}
+
+
+extension MiniSim: NSWindowDelegate {
+    func windowDidBecomeKey(_ notification: Notification) {
+        NSApplication.shared.setActivationPolicy(.regular)
+    }
+    
+    func windowWillClose(_ notification: Notification) {
+        NSApplication.shared.setActivationPolicy(.accessory)
     }
 }

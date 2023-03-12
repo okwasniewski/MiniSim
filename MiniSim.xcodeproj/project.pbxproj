@@ -26,6 +26,8 @@
 		7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C32982CB2B00019227 /* MiniSim.swift */; };
 		7645D5012982E6FA00019227 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D5002982E6FA00019227 /* main.swift */; };
 		7645D5032983186100019227 /* NSMenuItem+ImageInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */; };
+		76630F0C29BDD0C000FB64F9 /* Devices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76630F0B29BDD0C000FB64F9 /* Devices.swift */; };
+		76630F0E29BDE7EB00FB64F9 /* ParametersTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76630F0D29BDE7EB00FB64F9 /* ParametersTable.swift */; };
 		766BD2382981628C0042261B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD2372981628C0042261B /* Assets.xcassets */; };
 		766BD23B2981628C0042261B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD23A2981628C0042261B /* Preview Assets.xcassets */; };
 		76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */; };
@@ -58,6 +60,8 @@
 		7645D4C32982CB2B00019227 /* MiniSim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniSim.swift; sourceTree = "<group>"; };
 		7645D5002982E6FA00019227 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMenuItem+ImageInit.swift"; sourceTree = "<group>"; };
+		76630F0B29BDD0C000FB64F9 /* Devices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Devices.swift; sourceTree = "<group>"; };
+		76630F0D29BDE7EB00FB64F9 /* ParametersTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTable.swift; sourceTree = "<group>"; };
 		766BD2302981628A0042261B /* MiniSim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiniSim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		766BD2372981628C0042261B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		766BD23A2981628C0042261B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -120,6 +124,8 @@
 				76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */,
 				7630B2652985C44A00D8B57D /* Preferences.swift */,
 				7630B2672985C4CF00D8B57D /* About.swift */,
+				76630F0B29BDD0C000FB64F9 /* Devices.swift */,
+				76630F0D29BDE7EB00FB64F9 /* ParametersTable.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -303,7 +309,9 @@
 				76D305722994155C005C373B /* IOSSubMenuItem.swift in Sources */,
 				7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */,
 				76F2A912299033EA002D4EF6 /* DeviceError.swift in Sources */,
+				76630F0E29BDE7EB00FB64F9 /* ParametersTable.swift in Sources */,
 				7630B2682985C4CF00D8B57D /* About.swift in Sources */,
+				76630F0C29BDD0C000FB64F9 /* Devices.swift in Sources */,
 				767C761F29B26ED3009B9AEC /* AccessibilityElement.swift in Sources */,
 				7630B2732986C68000D8B57D /* PaneIdentifier.swift in Sources */,
 				7630B2662985C44A00D8B57D /* Preferences.swift in Sources */,
