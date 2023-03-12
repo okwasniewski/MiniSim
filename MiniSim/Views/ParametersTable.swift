@@ -16,7 +16,7 @@ struct Parameter: Identifiable, Hashable, Codable {
 }
 
 struct ParametersTable: View {
-    @State private var parameters: [Parameter] = [.init(title: "", command: "")]
+    @State private var parameters: [Parameter] = [.init(title: "", command: "", enabled: false)]
     @State private var selection: Parameter?
     
     func saveData() {
