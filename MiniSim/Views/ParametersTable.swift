@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ParametersTable: View {
     @State private var parameters: [Parameter] = [.init(title: "", command: "", enabled: false)]
-    @State private var selection: Parameter?
     
     func saveData() {
         let data = try? JSONEncoder().encode(parameters)
@@ -20,6 +19,13 @@ struct ParametersTable: View {
         guard let paramData = UserDefaults.standard.parameters else { return }
         if let decodedData = try? JSONDecoder().decode([Parameter].self, from: paramData) {
             parameters = decodedData
+        }
+    }
+    
+    func deleteParameter(_ parameter: Parameter) {
+        NSApp.keyWindow?.makeFirstResponder(nil)
+        if let index = parameters.firstIndex(of: parameter)  {
+            parameters.remove(at: index)
         }
     }
     
@@ -67,9 +73,7 @@ struct ParametersTable: View {
                     }
                     .contextMenu {
                         Button("Delete") {
-                            if let index = parameters.firstIndex(of: $param.wrappedValue)  {
-                                parameters.remove(at: index)
-                            }
+                            deleteParameter($param.wrappedValue)
                         }
                     }
                     Divider()
@@ -82,10 +86,8 @@ struct ParametersTable: View {
                     Image(systemName: "plus")
                 }
                 Spacer()
-                Button {
+                Button("Save") {
                     saveData()
-                } label: {
-                    Text("Save")
                 }
             }
         }

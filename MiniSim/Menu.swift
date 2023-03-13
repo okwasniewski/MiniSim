@@ -57,12 +57,13 @@ class Menu: NSMenu {
         itemsToRemove.forEach(safeRemoveItem)
     }
     
-    private func getAdditionalLaunchParams() -> [Parameter]? {
-        guard let paramData = UserDefaults.standard.parameters else { return nil }
-        if let decodedData = try? JSONDecoder().decode([Parameter].self, from: paramData) {
-            return decodedData
+    private func getAdditionalLaunchParams() -> [String] {
+        guard let paramData = UserDefaults.standard.parameters else { return [] }
+        guard let parameters = try? JSONDecoder().decode([Parameter].self, from: paramData) else {
+            return []
         }
-        return nil
+        
+        return parameters.filter({ $0.enabled }).map({ $0.command })
     }
     
     @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
@@ -74,16 +75,12 @@ class Menu: NSMenu {
                 switch tag {
                 case .coldBootAndroid:
                     var params = ["-no-snapshot"]
-                    if let additionalParams = getAdditionalLaunchParams() {
-                        params.append(contentsOf: additionalParams.filter({$0.enabled}).map({$0.command}))
-                    }
+                    params.append(contentsOf: getAdditionalLaunchParams())
                     try deviceService.launchDevice(name: device.name, additionalArguments:params)
                     
                 case .androidNoAudio:
                     var params = ["-no-audio"]
-                    if let additionalParams = getAdditionalLaunchParams() {
-                        params.append(contentsOf: additionalParams.filter({$0.enabled}).map({$0.command}))
-                    }
+                    params.append(contentsOf: getAdditionalLaunchParams())
                     try deviceService.launchDevice(name: device.name, additionalArguments:params)
                     
                 case .toggleA11yAndroid:
@@ -147,10 +144,7 @@ class Menu: NSMenu {
             do {
                 switch tag {
                 case .launchAndroid:
-                    var params: [String] = []
-                    if let additionalParams = getAdditionalLaunchParams() {
-                        params.append(contentsOf: additionalParams.filter({$0.enabled}).map({$0.command}))
-                    }
+                    let params = getAdditionalLaunchParams()
                     try deviceService.launchDevice(name: device.name, additionalArguments: params)
                 case .launchIOS:
                     try deviceService.launchDevice(uuid: device.ID ?? "")
