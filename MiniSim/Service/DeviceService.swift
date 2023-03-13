@@ -139,7 +139,7 @@ extension DeviceService {
     func launchDevice(name: String, additionalArguments: [String]) throws {
         let emulatorPath = try ADB.getEmulatorPath()
         var arguments = ["@\(name)"]
-        let formattedArguments = additionalArguments.map {
+        let formattedArguments = additionalArguments.filter({ !$0.isEmpty }).map {
             if $0.hasPrefix("-") {
                 return $0
             }
