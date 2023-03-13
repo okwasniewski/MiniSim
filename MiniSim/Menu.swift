@@ -36,14 +36,14 @@ class Menu: NSMenu {
     }
     
     func getDevices() {
-        Task {
+        DispatchQueue.global().async {
             do {
                 var devicesArray: [Device] = []
-                try devicesArray.append(contentsOf: deviceService.getAndroidDevices())
-                try devicesArray.append(contentsOf: deviceService.getIOSDevices())
-                devices = devicesArray
+                try devicesArray.append(contentsOf: self.deviceService.getAndroidDevices())
+                try devicesArray.append(contentsOf: self.deviceService.getIOSDevices())
+                self.devices = devicesArray
             } catch {
-                await NSAlert.showError(message: error.localizedDescription)
+                NSAlert.showError(message: error.localizedDescription)
             }
         }
     }
@@ -57,18 +57,31 @@ class Menu: NSMenu {
         itemsToRemove.forEach(safeRemoveItem)
     }
     
+    private func getAdditionalLaunchParams() -> [String] {
+        guard let paramData = UserDefaults.standard.parameters else { return [] }
+        guard let parameters = try? JSONDecoder().decode([Parameter].self, from: paramData) else {
+            return []
+        }
+        
+        return parameters.filter({ $0.enabled }).map({ $0.command })
+    }
+    
     @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
         guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
         guard let tag = AndroidSubMenuItem(rawValue: sender.tag) else { return }
         
-        Task {
+        DispatchQueue.global().async { [self] in
             do {
                 switch tag {
                 case .coldBootAndroid:
-                    try deviceService.launchDevice(name: device.name, additionalArguments:["-no-snapshot"])
+                    var params = ["-no-snapshot"]
+                    params.append(contentsOf: getAdditionalLaunchParams())
+                    try deviceService.launchDevice(name: device.name, additionalArguments:params)
                     
                 case .androidNoAudio:
-                    try deviceService.launchDevice(name: device.name, additionalArguments:["-no-audio"])
+                    var params = ["-no-audio"]
+                    params.append(contentsOf: getAdditionalLaunchParams())
+                    try deviceService.launchDevice(name: device.name, additionalArguments:params)
                     
                 case .toggleA11yAndroid:
                     try deviceService.toggleA11y(device: device)
@@ -93,7 +106,7 @@ class Menu: NSMenu {
                 }
             }
             catch {
-                await NSAlert.showError(message: error.localizedDescription)
+                NSAlert.showError(message: error.localizedDescription)
             }
         }
     }
@@ -121,22 +134,23 @@ class Menu: NSMenu {
         guard let tag = DeviceMenuItem(rawValue: sender.tag) else { return }
         
         if device.booted {
-            Task {
-                deviceService.focusDevice(device)
+            DispatchQueue.global().async {
+                self.deviceService.focusDevice(device)
             }
             return
         }
         
-        Task {
+        DispatchQueue.global().async { [self] in
             do {
                 switch tag {
                 case .launchAndroid:
-                    try deviceService.launchDevice(name: device.name, additionalArguments: [])
+                    let params = getAdditionalLaunchParams()
+                    try deviceService.launchDevice(name: device.name, additionalArguments: params)
                 case .launchIOS:
                     try deviceService.launchDevice(uuid: device.ID ?? "")
                 }
             } catch {
-                await NSAlert.showError(message: error.localizedDescription)
+                NSAlert.showError(message: error.localizedDescription)
             }
         }
     }
