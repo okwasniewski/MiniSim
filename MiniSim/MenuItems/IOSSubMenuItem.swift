@@ -11,6 +11,7 @@ enum IOSSubMenuItem: Int, CaseIterable {
     
     case copyName = 100
     case copyUDID = 101
+    case deleteSim = 102
     
     var menuItem: NSMenuItem {
         let item = NSMenuItem()
@@ -27,6 +28,8 @@ enum IOSSubMenuItem: Int, CaseIterable {
             return NSLocalizedString("Copy name", comment: "")
         case .copyUDID:
             return NSLocalizedString("Copy UDID", comment: "")
+        case .deleteSim:
+            return NSLocalizedString("Delete simulator", comment: "")
         }
     }
     
@@ -36,6 +39,9 @@ enum IOSSubMenuItem: Int, CaseIterable {
             return NSImage(systemSymbolName: "square.and.arrow.up", accessibilityDescription: "Copy name")
         case .copyUDID:
             return NSImage(systemSymbolName: "doc.on.doc", accessibilityDescription: "Copy UDID")
+        case .deleteSim:
+            return NSImage(systemSymbolName: "trash", accessibilityDescription: "Delete simulator")
         }
+        
     }
 }
