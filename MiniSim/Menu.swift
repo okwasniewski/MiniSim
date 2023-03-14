@@ -125,6 +125,17 @@ class Menu: NSMenu {
                     NSPasteboard.general.copyToPasteboard(text: deviceID)
                     showNotification(title: "Device ID copied to clipboard!", body: deviceID)
                 }
+            case .deleteSim:
+                if let deviceID = device.ID {
+                    DispatchQueue.global().async { [self] in
+                        do {
+                            try deviceService.deleteSimulator(uuid: deviceID)
+                            showNotification(title: "Simulator deleted!", body: deviceID)
+                        } catch {
+                            NSAlert.showError(message: error.localizedDescription)
+                        }
+                    }
+                }
             }
         }
     }
