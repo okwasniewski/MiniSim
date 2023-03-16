@@ -146,7 +146,15 @@ extension DeviceService {
             return "-\($0)"
         }
         arguments.append(contentsOf: formattedArguments)
-        try shellOut(to: emulatorPath, arguments: arguments)
+        do {
+            try shellOut(to: emulatorPath, arguments: arguments)
+        } catch {
+            // Ignore force qutting emulator (CMD + Q)
+            if error.localizedDescription.contains("unexpected system image feature string") {
+                return
+            }
+            throw error
+        }
     }
     
     func getAndroidDevices() throws -> [Device] {
