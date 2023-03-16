@@ -6,19 +6,20 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>0.4.1</title>
+      <title>0.4.2</title>
       <description>
       <![CDATA[ <ul>
-      <li>NEW: Allow to pass custom Android launch parameters</li>
+      <li>Fix: Truncate error messages so they are not covering whole screen.</li>
+      <li>Feat: Silently catch erorr message while force quitting (CMD+Q) Android emulator.</li>
       </ul> ]]>
       </description>
-      <pubDate>2023-03-13</pubDate>
-      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.4.1</releaseNotesLink>
+      <pubDate>2023-03-16</pubDate>
+      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.4.2</releaseNotesLink>
       <sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
       <enclosure
-        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.4.1/MiniSim.app.zip"
-        sparkle:version="5"
-        sparkle:shortVersionString="0.4.1"
+        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.4.2/MiniSim.app.zip"
+        sparkle:version="6"
+        sparkle:shortVersionString="0.4.2"
         length="0"
         type="application/octet-stream"
       />
