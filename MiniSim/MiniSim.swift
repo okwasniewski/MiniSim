@@ -16,23 +16,25 @@ class MiniSim: NSObject {
     
     @objc let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
+    private var isOnboardingFinishedObserver: NSKeyValueObservation?
+    
+    private lazy var onboarding = Onboarding()
+    
     override init() {
+        super.init()
         statusBar = NSStatusBar()
         menu = Menu()
         statusItem.menu = menu
         
-        super.init()
-        
-        if let button = statusItem.button {
-            button.toolTip = "MiniSim"
-            let itemImage = NSImage(systemSymbolName: "iphone", accessibilityDescription: "iPhone")
-            button.image = itemImage
-        }
-        
         settingsController.window?.delegate = self
         
-        populateSections()
+        appendMenu()
         self.menu.getDevices()
+        initObservers()
+    }
+    
+    deinit {
+        isOnboardingFinishedObserver?.invalidate()
     }
     
     private lazy var settingsController = SettingsWindowController(
@@ -67,6 +69,28 @@ class MiniSim: NSObject {
         self.statusItem.button?.performClick(self)
     }
     
+    private func initObservers() {
+        isOnboardingFinishedObserver = UserDefaults.standard.observe(\.isOnboardingFinished, options: .new) { _, _ in
+            if UserDefaults.standard.isOnboardingFinished == true {
+                self.appendMenu()
+                self.onboarding.showPopOver(button: self.statusItem.button)
+            }
+        }
+    }
+    
+    private func appendMenu() {
+        if !(UserDefaults.standard.androidHome != nil && UserDefaults.standard.isOnboardingFinished) {
+            onboarding.show()
+            return
+        }
+        if let button = statusItem.button {
+            button.toolTip = "MiniSim"
+            let itemImage = NSImage(systemSymbolName: "iphone", accessibilityDescription: "iPhone")
+            button.image = itemImage
+        }
+        populateSections()
+    }
+    
     @objc func menuItemAction(_ sender: NSMenuItem) {
         if let tag = MenuSections(rawValue: sender.tag) {
             switch tag {
@@ -82,6 +106,9 @@ class MiniSim: NSObject {
     }
     
     private func populateSections() {
+        if !menu.items.isEmpty {
+            return
+        }
         MenuSections.allCases.map({$0.menuItem}).forEach { item in
             if item.tag >= MenuSections.preferences.rawValue {
                 item.action = #selector(menuItemAction)

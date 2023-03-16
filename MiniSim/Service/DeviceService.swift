@@ -12,12 +12,14 @@ import AppKit
 protocol DeviceServiceProtocol {
     func launchDevice(uuid: String) throws
     func getIOSDevices() throws -> [Device]
+    static func checkXcodeSetup() -> Bool
     func deleteSimulator(uuid: String) throws
     
     func launchDevice(name: String, additionalArguments: [String]) throws
     func toggleA11y(device: Device) throws
     func getAndroidDevices() throws -> [Device]
     func sendText(device: Device, text: String) throws
+    static func checkAndroidSetup() throws -> String
     
     func focusDevice(_ device: Device)
 }
@@ -78,6 +80,16 @@ class DeviceService: DeviceServiceProtocol {
         let deviceName = windowTitle.match(#"^[^–]*"#).first?.first?.trimmingCharacters(in: .whitespacesAndNewlines)
         
         return deviceName == device.name
+    }
+    
+    static func checkXcodeSetup() -> Bool {
+        return FileManager.default.fileExists(atPath: ProcessPaths.xcrun.rawValue)
+    }
+    
+    static func checkAndroidSetup() throws -> String {
+        let emulatorPath = try ADB.getAndroidHome()
+        try ADB.checkAndroidHome(path: emulatorPath)
+        return emulatorPath
     }
 }
 
