@@ -13,10 +13,10 @@ extension NSAlert {
         DispatchQueue.main.async {
             let alert = self.init()
             alert.alertStyle = .warning
-            var messageText = message
+            var messageText = ""
             
             if let appName = Bundle.main.appName {
-                messageText = "\(appName) - " + message
+                messageText = "\(appName) - " + String(message.prefix(300))
             }
             
             alert.messageText = messageText
