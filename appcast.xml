@@ -6,20 +6,19 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>0.4.2</title>
+      <title>0.4.3</title>
       <description>
       <![CDATA[ <ul>
-      <li>Fix: Truncate error messages so they are not covering whole screen.</li>
-      <li>Feat: Silently catch erorr message while force quitting (CMD+Q) Android emulator.</li>
+      <li>Feat: allow to delete iOS Simulators.</li>
       </ul> ]]>
       </description>
-      <pubDate>2023-03-16</pubDate>
-      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.4.2</releaseNotesLink>
+      <pubDate>2023-03-17</pubDate>
+      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.4.3</releaseNotesLink>
       <sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
       <enclosure
-        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.4.2/MiniSim.app.zip"
-        sparkle:version="6"
-        sparkle:shortVersionString="0.4.2"
+        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.4.3/MiniSim.app.zip"
+        sparkle:version="7"
+        sparkle:shortVersionString="0.4.3"
         length="0"
         type="application/octet-stream"
       />
