@@ -126,16 +126,21 @@ class Menu: NSMenu {
                     showNotification(title: "Device ID copied to clipboard!", body: deviceID)
                 }
             case .deleteSim:
-                if let deviceID = device.ID {
-                    DispatchQueue.global().async { [self] in
-                        do {
-                            try deviceService.deleteSimulator(uuid: deviceID)
-                            showNotification(title: "Simulator deleted!", body: deviceID)
-                        } catch {
-                            NSAlert.showError(message: error.localizedDescription)
-                        }
+                guard let deviceID = device.ID else { return }
+                if !NSAlert.showQuestionDialog(title: "Are you sure?", message: "Are you sure you want to delete this Simulator?") {
+                    return
+                }
+                DispatchQueue.global().async { [self] in
+                    do {
+                        try deviceService.deleteSimulator(uuid: deviceID)
+                        showNotification(title: "Simulator deleted!", body: deviceID)
+                        getDevices()
+                    } catch {
+                        NSAlert.showError(message: error.localizedDescription)
                     }
                 }
+            default:
+                break
             }
         }
     }
@@ -175,10 +180,10 @@ class Menu: NSMenu {
         let deviceItems = items.filter { !sections.contains($0.title) }
         let iosDeviceNames = devices.filter({ !$0.isAndroid }).map { $0.name }
         let androidDeviceNames = devices.filter({ $0.isAndroid }).map { $0.name }
-
+        
         let iosDevices = deviceItems.filter { iosDeviceNames.contains($0.title) }
         let androidDevices = deviceItems.filter { androidDeviceNames.contains($0.title) }
-
+        
         assignKeyEquivalent(devices: iosDevices)
         assignKeyEquivalent(devices: androidDevices)
     }
@@ -276,10 +281,10 @@ class Menu: NSMenu {
     
     private func safeInsertItem(_ item: NSMenuItem, at index: Int) {
         guard !items.contains(where: {$0.title == item.title}), index <= items.count else {
-        return
-      }
-
-      insertItem(item, at: index)
+            return
+        }
+        
+        insertItem(item, at: index)
     }
     
     private func safeRemoveItem(_ item: NSMenuItem?) {
