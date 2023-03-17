@@ -24,4 +24,14 @@ extension NSAlert {
             alert.runModal()
         }
     }
+    
+    static func showQuestionDialog(title: String, message: String) -> Bool {
+        let alert = self.init()
+        alert.messageText = title
+        alert.informativeText = message
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Cancel")
+        return alert.runModal() == .alertFirstButtonReturn
+    }
 }

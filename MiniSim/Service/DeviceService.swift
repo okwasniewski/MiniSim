@@ -12,6 +12,7 @@ import AppKit
 protocol DeviceServiceProtocol {
     func launchDevice(uuid: String) throws
     func getIOSDevices() throws -> [Device]
+    func deleteSimulator(uuid: String) throws
     
     func launchDevice(name: String, additionalArguments: [String]) throws
     func toggleA11y(device: Device) throws
@@ -129,6 +130,10 @@ extension DeviceService {
                 throw error
             }
         }
+    }
+    
+    func deleteSimulator(uuid: String) throws {
+        try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "delete", uuid])
     }
     
 }
