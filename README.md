@@ -8,14 +8,23 @@ MiniSim is a small utility menu bar app for lauching Android 🤖 and iOS  em
 
 Written in Swift and AppKit. 
 
+## Install
+
+Download the app from [releases](https://github.com/okwasniewski/MiniSim/releases) page or use [Homebrew](https://brew.sh):
+
+```shell
+brew install --cask minisim
+```
+
 ## Features
 - Lightweight
 - Fast, 100% native
 - Open Source
-- Open with shortcut `⌥ + ⇧ + e` (option + shift + e)
+- Open with shortcut: <kbd>⌥ + ⇧ + e</kbd>
 - Launch iOS emulators
     - Copy device UDID
     - Copy device name
+    - Delete simulators
 - Launch Android emulators
     - Cold boot android emulators 
     - Run android emulators without audio (Your bluetooth headphones will thank you 🎧)
@@ -23,6 +32,7 @@ Written in Swift and AppKit.
     - Copy device name
     - Copy device ADB id
 - Focus devices using accessibility API
+- Set default launch flags 
 - Indicate running devices
 
 
@@ -38,5 +48,5 @@ This utility uses `xcrun` and `sdk/emulator` to fetch available devices on your 
 
 It might not work if you don't have a proper XCode and Android Studio setup.
 
-There is a global shortcut for invoking the menu: `⌥ + ⇧ + e` (option + shift + e).
+There is a global shortcut for invoking the menu: <kbd>⌥ + ⇧ + e</kbd>.
 
