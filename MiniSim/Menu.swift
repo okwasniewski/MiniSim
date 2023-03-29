@@ -36,6 +36,9 @@ class Menu: NSMenu {
     }
     
     func getDevices() {
+        if UserDefaults.standard.androidHome == nil {
+            return
+        }
         DispatchQueue.global().async {
             do {
                 var devicesArray: [Device] = []
@@ -204,7 +207,9 @@ class Menu: NSMenu {
             }
             
             DispatchQueue.main.async {
-                item.keyEquivalent = keyEquivalent
+                if self.items.contains(item) {
+                    item.keyEquivalent = keyEquivalent
+                }
             }
         }
     }
@@ -299,11 +304,13 @@ class Menu: NSMenu {
 
 extension Menu: NSMenuDelegate {
     func menuWillOpen(_ menu: NSMenu) {
+        NotificationCenter.default.post(name: .menuWillOpen, object: nil)
         self.getDevices()
         KeyboardShortcuts.disable(.toggleMiniSim)
     }
     
     func menuDidClose(_ menu: NSMenu) {
+        NotificationCenter.default.post(name: .menuDidClose, object: nil)
         KeyboardShortcuts.enable(.toggleMiniSim)
     }
 }

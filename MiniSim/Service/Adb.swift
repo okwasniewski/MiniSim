@@ -12,20 +12,14 @@ protocol ADBProtocol {
     static func getAdbPath() throws -> String
     static func getEmulatorPath() throws -> String
     static func getAdbId(for deviceName: String, adbPath: String) throws -> String
+    static func checkAndroidHome(path: String) throws -> Bool
     static func isAccesibilityOn(deviceId: String, adbPath: String) -> Bool
 }
 
-final class ADB: NSObject, ADBProtocol {
+final class ADB: ADBProtocol {
     
     static let talkbackOn = "com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService"
     static let talkbackOff = "com.android.talkback/com.google.android.marvin.talkback.TalkBackService"
-    
-    private enum ConfigLocation: String, CaseIterable {
-        case zshrc = "~/.zshrc"
-        case zprofile = "~/.zprofile"
-        case bashrc = "~/.bashrc"
-        case bash_profile = "~/.bash_profile"
-    }
     
     private enum Paths: String {
         case home = "/Android/sdk"
@@ -33,70 +27,44 @@ final class ADB: NSObject, ADBProtocol {
         case adb = "/platform-tools/adb"
     }
     
-    private static func getSourceFileScript(file: String) -> String {
-        return """
-                file=\(file)
-                if [ -f "$file" ]; then
-                    source $file
-                fi
-                """
-    }
-    
-    private static func getAndroidHome() throws -> String {
-        var androidHome = ""
-        do {
-            for config in ConfigLocation.allCases {
-                androidHome = try shellOut(to: [
-                    self.getSourceFileScript(file: config.rawValue),
-                    "echo $ANDROID_HOME"
-                ])
-                if !androidHome.isEmpty {
-                    break
-                }
-            }
-        } catch {
-            // Ignore errors they can be thrown if user has incorrect setup
+    /**
+     Gets `ANDROID_HOME` path. First checks in UserDefaults if androidHome exists if not defaults to:  `/Users/<name>/Library/Android/sdk`.
+     */
+    static func getAndroidHome() throws -> String {
+        if let savedAndroidHome = UserDefaults.standard.androidHome, !savedAndroidHome.isEmpty {
+            return savedAndroidHome
         }
         
-        if androidHome.isEmpty {
-            let libraryDirectory = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)
-            if let path = libraryDirectory.first {
-                return path + Paths.home.rawValue
-            }
-            
+        let libraryDirectory = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)
+        guard let path = libraryDirectory.first else {
             throw DeviceError.AndroidStudioError
         }
-        return androidHome
+        
+        return path + Paths.home.rawValue
     }
     
     static func getAdbPath() throws -> String {
-        if let savedAdbPath = UserDefaults.standard.adbPath, !savedAdbPath.isEmpty {
-            return savedAdbPath
+        return try getAndroidHome() + Paths.adb.rawValue
+    }
+    
+    /**
+     Checks if passed path exists and points to `ANDROID_HOME`.
+     */
+    @discardableResult static func checkAndroidHome(path: String) throws -> Bool {
+        if !FileManager.default.fileExists(atPath: path) {
+            throw AndroidHomeError.pathNotFound
         }
         
         do {
-            let adbPath = try getAndroidHome() + Paths.adb.rawValue
-            UserDefaults.standard.adbPath = adbPath
-            return adbPath
+            try shellOut(to: "\(path)" + Paths.emulator.rawValue, arguments: ["-list-avds"])
+        } catch {
+            throw AndroidHomeError.pathNotCorrect
         }
-        catch {
-            throw DeviceError.AndroidStudioError
-        }
+        return true
     }
     
     static func getEmulatorPath() throws -> String {
-        if let savedEmulatorPath = UserDefaults.standard.emulatorPath, !savedEmulatorPath.isEmpty {
-            return savedEmulatorPath
-        }
-        
-        do {
-            let emulatorPath = try getAndroidHome() + Paths.emulator.rawValue
-            UserDefaults.standard.emulatorPath = emulatorPath
-            return emulatorPath
-        }
-        catch {
-            throw DeviceError.AndroidStudioError
-        }
+        return try getAndroidHome() + Paths.emulator.rawValue
     }
     
     static func getAdbId(for deviceName: String, adbPath: String) throws -> String {

@@ -26,15 +26,27 @@
 		7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D4C32982CB2B00019227 /* MiniSim.swift */; };
 		7645D5012982E6FA00019227 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D5002982E6FA00019227 /* main.swift */; };
 		7645D5032983186100019227 /* NSMenuItem+ImageInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */; };
+		76489D5A29BFC60C0070EF03 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76489D5929BFC60C0070EF03 /* WelcomeView.swift */; };
+		76489D5C29BFCA330070EF03 /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76489D5B29BFCA330070EF03 /* OnboardingItem.swift */; };
 		76630F0C29BDD0C000FB64F9 /* Devices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76630F0B29BDD0C000FB64F9 /* Devices.swift */; };
 		76630F0E29BDE7EB00FB64F9 /* ParametersTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76630F0D29BDE7EB00FB64F9 /* ParametersTable.swift */; };
 		76630F2929BE09D800FB64F9 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76630F2829BE09D800FB64F9 /* Parameter.swift */; };
+		76630F2B29C718F500FB64F9 /* AndroidPathInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76630F2A29C718F500FB64F9 /* AndroidPathInput.swift */; };
 		766BD2382981628C0042261B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD2372981628C0042261B /* Assets.xcassets */; };
 		766BD23B2981628C0042261B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 766BD23A2981628C0042261B /* Preview Assets.xcassets */; };
 		76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */; };
+		7677999829C25894009030F8 /* OnboardingPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7677999729C25894009030F8 /* OnboardingPager.swift */; };
+		7677999C29C26240009030F8 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7677999B29C26240009030F8 /* SetupView.swift */; };
+		7677999E29C26264009030F8 /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7677999D29C26264009030F8 /* PermissionsView.swift */; };
+		767799A029C30BF5009030F8 /* BlurredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7677999F29C30BF5009030F8 /* BlurredView.swift */; };
+		767A9CC929C320ED00554193 /* OnboardingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767A9CC829C320ED00554193 /* OnboardingButton.swift */; };
 		767C761F29B26ED3009B9AEC /* AccessibilityElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767C761E29B26ED3009B9AEC /* AccessibilityElement.swift */; };
+		767DDF6829D32ABC005E6F32 /* ReadyPopOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767DDF6729D32ABC005E6F32 /* ReadyPopOver.swift */; };
+		7684FAAF29D202F500230BB0 /* AndroidHomeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7684FAAE29D202F500230BB0 /* AndroidHomeError.swift */; };
 		768F8EC829954C8A00DFBCDB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 768F8EC729954C8A00DFBCDB /* Sparkle */; };
 		76D305722994155C005C373B /* IOSSubMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D305712994155C005C373B /* IOSSubMenuItem.swift */; };
+		76E4451229D4391000039025 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451129D4391000039025 /* Onboarding.swift */; };
+		76E4451429D4403F00039025 /* NSNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451329D4403F00039025 /* NSNotificationName.swift */; };
 		76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F04A10298A5AE000BF9CA3 /* ADB.swift */; };
 		76F04A14298A62CF00BF9CA3 /* ShellOut in Frameworks */ = {isa = PBXBuildFile; productRef = 76F04A13298A62CF00BF9CA3 /* ShellOut */; };
 		76F2A912299033EA002D4EF6 /* DeviceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A911299033EA002D4EF6 /* DeviceError.swift */; };
@@ -61,17 +73,29 @@
 		7645D4C32982CB2B00019227 /* MiniSim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniSim.swift; sourceTree = "<group>"; };
 		7645D5002982E6FA00019227 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMenuItem+ImageInit.swift"; sourceTree = "<group>"; };
+		76489D5929BFC60C0070EF03 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		76489D5B29BFCA330070EF03 /* OnboardingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingItem.swift; sourceTree = "<group>"; };
 		76630F0B29BDD0C000FB64F9 /* Devices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Devices.swift; sourceTree = "<group>"; };
 		76630F0D29BDE7EB00FB64F9 /* ParametersTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTable.swift; sourceTree = "<group>"; };
 		76630F2829BE09D800FB64F9 /* Parameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parameter.swift; sourceTree = "<group>"; };
+		76630F2A29C718F500FB64F9 /* AndroidPathInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AndroidPathInput.swift; sourceTree = "<group>"; };
 		766BD2302981628A0042261B /* MiniSim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiniSim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		766BD2372981628C0042261B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		766BD23A2981628C0042261B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		766BD23C2981628C0042261B /* MiniSim.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MiniSim.entitlements; sourceTree = "<group>"; };
 		76730BB8298C1DF80019C680 /* DeviceMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceMenuItem.swift; sourceTree = "<group>"; };
+		7677999729C25894009030F8 /* OnboardingPager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPager.swift; sourceTree = "<group>"; };
+		7677999B29C26240009030F8 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
+		7677999D29C26264009030F8 /* PermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsView.swift; sourceTree = "<group>"; };
+		7677999F29C30BF5009030F8 /* BlurredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredView.swift; sourceTree = "<group>"; };
+		767A9CC829C320ED00554193 /* OnboardingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButton.swift; sourceTree = "<group>"; };
 		767C761E29B26ED3009B9AEC /* AccessibilityElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityElement.swift; sourceTree = "<group>"; };
+		767DDF6729D32ABC005E6F32 /* ReadyPopOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyPopOver.swift; sourceTree = "<group>"; };
+		7684FAAE29D202F500230BB0 /* AndroidHomeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AndroidHomeError.swift; sourceTree = "<group>"; };
 		768F8ECC2995575B00DFBCDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		76D305712994155C005C373B /* IOSSubMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSSubMenuItem.swift; sourceTree = "<group>"; };
+		76E4451129D4391000039025 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
+		76E4451329D4403F00039025 /* NSNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotificationName.swift; sourceTree = "<group>"; };
 		76F04A10298A5AE000BF9CA3 /* ADB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADB.swift; sourceTree = "<group>"; };
 		76F2A911299033EA002D4EF6 /* DeviceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceError.swift; sourceTree = "<group>"; };
 		76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Configuration.swift"; sourceTree = "<group>"; };
@@ -108,6 +132,7 @@
 				76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */,
 				7625140A2992B46D0060A225 /* Pasteboard+utils.swift */,
 				76FCABAA29B390D5003BBF9A /* Collection+get.swift */,
+				76E4451329D4403F00039025 /* NSNotificationName.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -124,6 +149,7 @@
 		7630B2642985C43300D8B57D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7677999629C25865009030F8 /* Onboarding */,
 				76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */,
 				7630B2652985C44A00D8B57D /* Preferences.swift */,
 				7630B2672985C4CF00D8B57D /* About.swift */,
@@ -139,6 +165,7 @@
 				7645D4BD2982A1B100019227 /* DeviceService.swift */,
 				76F04A10298A5AE000BF9CA3 /* ADB.swift */,
 				76F2A911299033EA002D4EF6 /* DeviceError.swift */,
+				7684FAAE29D202F500230BB0 /* AndroidHomeError.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -170,6 +197,7 @@
 				762CF1E22981DE5400099999 /* Model */,
 				7645D4C12982CA9600019227 /* AppDelegate.swift */,
 				767C761E29B26ED3009B9AEC /* AccessibilityElement.swift */,
+				76E4451129D4391000039025 /* Onboarding.swift */,
 				7630B27B2987207200D8B57D /* Menu.swift */,
 				7645D4C32982CB2B00019227 /* MiniSim.swift */,
 				7645D5002982E6FA00019227 /* main.swift */,
@@ -186,6 +214,22 @@
 				766BD23A2981628C0042261B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		7677999629C25865009030F8 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				76489D5929BFC60C0070EF03 /* WelcomeView.swift */,
+				7677999B29C26240009030F8 /* SetupView.swift */,
+				7677999D29C26264009030F8 /* PermissionsView.swift */,
+				76489D5B29BFCA330070EF03 /* OnboardingItem.swift */,
+				7677999729C25894009030F8 /* OnboardingPager.swift */,
+				7677999F29C30BF5009030F8 /* BlurredView.swift */,
+				767A9CC829C320ED00554193 /* OnboardingButton.swift */,
+				76630F2A29C718F500FB64F9 /* AndroidPathInput.swift */,
+				767DDF6729D32ABC005E6F32 /* ReadyPopOver.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		76E5FAD1299BEBD2007987E0 /* MenuItems */ = {
@@ -306,13 +350,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76489D5A29BFC60C0070EF03 /* WelcomeView.swift in Sources */,
 				7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */,
 				76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */,
 				76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */,
+				767A9CC929C320ED00554193 /* OnboardingButton.swift in Sources */,
+				7677999C29C26240009030F8 /* SetupView.swift in Sources */,
 				76D305722994155C005C373B /* IOSSubMenuItem.swift in Sources */,
+				767799A029C30BF5009030F8 /* BlurredView.swift in Sources */,
 				7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */,
 				76F2A912299033EA002D4EF6 /* DeviceError.swift in Sources */,
+				7677999E29C26264009030F8 /* PermissionsView.swift in Sources */,
+				76630F2B29C718F500FB64F9 /* AndroidPathInput.swift in Sources */,
+				76E4451429D4403F00039025 /* NSNotificationName.swift in Sources */,
 				76630F0E29BDE7EB00FB64F9 /* ParametersTable.swift in Sources */,
+				7677999829C25894009030F8 /* OnboardingPager.swift in Sources */,
 				7630B2682985C4CF00D8B57D /* About.swift in Sources */,
 				76630F0C29BDD0C000FB64F9 /* Devices.swift in Sources */,
 				767C761F29B26ED3009B9AEC /* AccessibilityElement.swift in Sources */,
@@ -320,11 +372,14 @@
 				7630B2662985C44A00D8B57D /* Preferences.swift in Sources */,
 				7625140B2992B46D0060A225 /* Pasteboard+utils.swift in Sources */,
 				76FCABAB29B390D5003BBF9A /* Collection+get.swift in Sources */,
+				76E4451229D4391000039025 /* Onboarding.swift in Sources */,
 				7630B2752986D52900D8B57D /* NSAlert+showError.swift in Sources */,
 				7630B25E2984339100D8B57D /* MenuSections.swift in Sources */,
+				76489D5C29BFCA330070EF03 /* OnboardingItem.swift in Sources */,
 				7645D5012982E6FA00019227 /* main.swift in Sources */,
 				76F2A914299050F9002D4EF6 /* UserDefaults+Configuration.swift in Sources */,
 				7630B2772986D65800D8B57D /* Bundle+appName.swift in Sources */,
+				767DDF6829D32ABC005E6F32 /* ReadyPopOver.swift in Sources */,
 				76630F2929BE09D800FB64F9 /* Parameter.swift in Sources */,
 				7630B27C2987207200D8B57D /* Menu.swift in Sources */,
 				762CF1E02981968F00099999 /* String+match.swift in Sources */,
@@ -333,6 +388,7 @@
 				7645D5032983186100019227 /* NSMenuItem+ImageInit.swift in Sources */,
 				76F2A91929924242002D4EF6 /* AndroidSubMenuItem.swift in Sources */,
 				7630B26D2986B4FD00D8B57D /* KeyboardShortcuts.swift in Sources */,
+				7684FAAF29D202F500230BB0 /* AndroidHomeError.swift in Sources */,
 				7645D4BE2982A1B100019227 /* DeviceService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

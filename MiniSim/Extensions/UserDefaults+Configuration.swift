@@ -9,19 +9,19 @@ import Foundation
 
 extension UserDefaults {
     public struct Keys {
-        static let adbPath = "adbPath"
-        static let emulatorPath = "emulatorPath"
         static let parameters = "parameters"
+        static let androidHome = "androidHome"
+        static let isOnboardingFinished = "isOnboardingFinished"
     }
     
-    public var adbPath: String? {
-        get { string(forKey: Keys.adbPath) }
-        set { set(newValue, forKey: Keys.adbPath) }
+    @objc dynamic public var androidHome: String? {
+        get { string(forKey: Keys.androidHome) }
+        set { set(newValue, forKey: Keys.androidHome) }
     }
     
-    public var emulatorPath: String? {
-        get { string(forKey: Keys.emulatorPath) }
-        set { set(newValue, forKey: Keys.emulatorPath) }
+    @objc dynamic public var isOnboardingFinished: Bool {
+        get { bool(forKey: Keys.isOnboardingFinished) }
+        set { set(newValue, forKey: Keys.isOnboardingFinished) }
     }
     
     public var parameters: Data? {
