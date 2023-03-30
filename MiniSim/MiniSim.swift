@@ -8,6 +8,7 @@
 import AppKit
 import Preferences
 import SwiftUI
+import UserNotifications
 
 
 class MiniSim: NSObject {
@@ -99,10 +100,17 @@ class MiniSim: NSObject {
             case .quit:
                 NSApp.terminate(sender)
             case .clearDerrivedData:
-                do {
-                    try DeviceService.clearDerivedData()
-                } catch {
-                    NSAlert.showError(message: error.localizedDescription)
+                let shouldDelete = NSAlert.showQuestionDialog(title: "Are you sure?", message: "This action will delete derived data from your computer.")
+                if !shouldDelete {
+                    return
+                }
+                DispatchQueue.global().async {
+                    do {
+                        let amountCleared = try DeviceService.clearDerivedData()
+                        UNUserNotificationCenter.showNotification(title: "Derived data has been cleared!", body: "Removed \(amountCleared) of data")
+                    } catch {
+                        NSAlert.showError(message: error.localizedDescription)
+                    }
                 }
             default:
                 break

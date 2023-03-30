@@ -92,12 +92,12 @@ class Menu: NSMenu {
                 case .copyAdbId:
                     if let deviceId = device.ID {
                         NSPasteboard.general.copyToPasteboard(text: deviceId)
-                        showNotification(title: "Device ID copied to clipboard!", body: deviceId)
+                        UNUserNotificationCenter.showNotification(title: "Device ID copied to clipboard!", body: deviceId)
                     }
                     
                 case .copyName:
                     NSPasteboard.general.copyToPasteboard(text: device.name)
-                    showNotification(title: "Device name copied to clipboard!", body: device.name)
+                    UNUserNotificationCenter.showNotification(title: "Device name copied to clipboard!", body: device.name)
                     
                 case .pasteToEmulator:
                     let pasteboard = NSPasteboard.general
@@ -122,11 +122,11 @@ class Menu: NSMenu {
             switch tag {
             case .copyName:
                 NSPasteboard.general.copyToPasteboard(text: device.name)
-                showNotification(title: "Device name copied to clipboard!", body: device.name)
+                UNUserNotificationCenter.showNotification(title: "Device name copied to clipboard!", body: device.name)
             case .copyUDID:
                 if let deviceID = device.ID {
                     NSPasteboard.general.copyToPasteboard(text: deviceID)
-                    showNotification(title: "Device ID copied to clipboard!", body: deviceID)
+                    UNUserNotificationCenter.showNotification(title: "Device ID copied to clipboard!", body: deviceID)
                 }
             case .deleteSim:
                 guard let deviceID = device.ID else { return }
@@ -136,7 +136,7 @@ class Menu: NSMenu {
                 DispatchQueue.global().async { [self] in
                     do {
                         try deviceService.deleteSimulator(uuid: deviceID)
-                        showNotification(title: "Simulator deleted!", body: deviceID)
+                        UNUserNotificationCenter.showNotification(title: "Simulator deleted!", body: deviceID)
                         getDevices()
                     } catch {
                         NSAlert.showError(message: error.localizedDescription)
@@ -273,15 +273,6 @@ class Menu: NSMenu {
             subMenu.addItem(item)
         }
         return subMenu
-    }
-    
-    private func showNotification(title: String, body: String) {
-        let center = UNUserNotificationCenter.current()
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-        center.add(request)
     }
     
     private func safeInsertItem(_ item: NSMenuItem, at index: Int) {
