@@ -98,6 +98,12 @@ class MiniSim: NSObject {
                 settingsController.show()
             case .quit:
                 NSApp.terminate(sender)
+            case .clearDerrivedData:
+                do {
+                    try DeviceService.clearDerivedData()
+                } catch {
+                    NSAlert.showError(message: error.localizedDescription)
+                }
             default:
                 break
             }
@@ -110,7 +116,7 @@ class MiniSim: NSObject {
             return
         }
         MenuSections.allCases.map({$0.menuItem}).forEach { item in
-            if item.tag >= MenuSections.preferences.rawValue {
+            if item.tag >= MenuSections.clearDerrivedData.rawValue {
                 item.action = #selector(menuItemAction)
                 item.target = self
             } else {
