@@ -42,6 +42,7 @@
 		767A9CC929C320ED00554193 /* OnboardingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767A9CC829C320ED00554193 /* OnboardingButton.swift */; };
 		767C761F29B26ED3009B9AEC /* AccessibilityElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767C761E29B26ED3009B9AEC /* AccessibilityElement.swift */; };
 		767DDF6829D32ABC005E6F32 /* ReadyPopOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767DDF6729D32ABC005E6F32 /* ReadyPopOver.swift */; };
+		767F713229D574EF004159A6 /* UNUserNotificationCenter+showNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767F713129D574EF004159A6 /* UNUserNotificationCenter+showNotification.swift */; };
 		7684FAAF29D202F500230BB0 /* AndroidHomeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7684FAAE29D202F500230BB0 /* AndroidHomeError.swift */; };
 		768F8EC829954C8A00DFBCDB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 768F8EC729954C8A00DFBCDB /* Sparkle */; };
 		76D305722994155C005C373B /* IOSSubMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D305712994155C005C373B /* IOSSubMenuItem.swift */; };
@@ -91,6 +92,7 @@
 		767A9CC829C320ED00554193 /* OnboardingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButton.swift; sourceTree = "<group>"; };
 		767C761E29B26ED3009B9AEC /* AccessibilityElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityElement.swift; sourceTree = "<group>"; };
 		767DDF6729D32ABC005E6F32 /* ReadyPopOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyPopOver.swift; sourceTree = "<group>"; };
+		767F713129D574EF004159A6 /* UNUserNotificationCenter+showNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNUserNotificationCenter+showNotification.swift"; sourceTree = "<group>"; };
 		7684FAAE29D202F500230BB0 /* AndroidHomeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AndroidHomeError.swift; sourceTree = "<group>"; };
 		768F8ECC2995575B00DFBCDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		76D305712994155C005C373B /* IOSSubMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSSubMenuItem.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				7625140A2992B46D0060A225 /* Pasteboard+utils.swift */,
 				76FCABAA29B390D5003BBF9A /* Collection+get.swift */,
 				76E4451329D4403F00039025 /* NSNotificationName.swift */,
+				767F713129D574EF004159A6 /* UNUserNotificationCenter+showNotification.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 				76F2A912299033EA002D4EF6 /* DeviceError.swift in Sources */,
 				7677999E29C26264009030F8 /* PermissionsView.swift in Sources */,
 				76630F2B29C718F500FB64F9 /* AndroidPathInput.swift in Sources */,
+				767F713229D574EF004159A6 /* UNUserNotificationCenter+showNotification.swift in Sources */,
 				76E4451429D4403F00039025 /* NSNotificationName.swift in Sources */,
 				76630F0E29BDE7EB00FB64F9 /* ParametersTable.swift in Sources */,
 				7677999829C25894009030F8 /* OnboardingPager.swift in Sources */,

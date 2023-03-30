@@ -14,6 +14,7 @@ protocol DeviceServiceProtocol {
     func getIOSDevices() throws -> [Device]
     static func checkXcodeSetup() -> Bool
     func deleteSimulator(uuid: String) throws
+    static func clearDerivedData() throws -> String
     
     func launchDevice(name: String, additionalArguments: [String]) throws
     func toggleA11y(device: Device) throws
@@ -26,6 +27,8 @@ protocol DeviceServiceProtocol {
 
 class DeviceService: DeviceServiceProtocol {
     private let deviceBootedError = "Unable to boot device in current state: Booted"
+    
+    private static let derivedDataLocation = "~/Library/Developer/Xcode/DerivedData"
     
     private enum ProcessPaths: String {
         case xcrun = "/usr/bin/xcrun"
@@ -113,6 +116,12 @@ extension DeviceService {
             }
         }
         return devices
+    }
+    
+    static func clearDerivedData() throws -> String {
+        let amountCleared = try? shellOut(to: "du -sh \(derivedDataLocation)").match(###"\d+\.?\d+\w+"###).first?.first
+        try shellOut(to: "rm -rf \(derivedDataLocation)")
+        return amountCleared ?? ""
     }
     
     func getIOSDevices() throws -> [Device] {

@@ -13,6 +13,7 @@ enum MenuSections: Int, CaseIterable {
     case androidHeader = 101
     
     case separator2 = 2
+    case clearDerrivedData = 119
     case preferences = 120
     case quit = 121
     
@@ -53,6 +54,8 @@ enum MenuSections: Int, CaseIterable {
             return NSLocalizedString("Quit", comment: "")
         case .preferences:
             return NSLocalizedString("Preferences", comment: "")
+        case .clearDerrivedData:
+            return NSLocalizedString("Clear Xcode Derived Data", comment: "")
         default:
             return ""
         }
