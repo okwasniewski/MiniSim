@@ -14,6 +14,7 @@ protocol ADBProtocol {
     static func getAdbId(for deviceName: String, adbPath: String) throws -> String
     static func checkAndroidHome(path: String) throws -> Bool
     static func isAccesibilityOn(deviceId: String, adbPath: String) -> Bool
+    static func deleteEmulator(deviceName: String) throws
 }
 
 final class ADB: ADBProtocol {
@@ -25,6 +26,7 @@ final class ADB: ADBProtocol {
         case home = "/Android/sdk"
         case emulator = "/emulator/emulator"
         case adb = "/platform-tools/adb"
+        case avdmanager = "/tools/bin/avdmanager"
     }
     
     /**
@@ -82,6 +84,14 @@ final class ADB: ADBProtocol {
             }
         }
         throw DeviceError.deviceNotFound
+    }
+    
+    /**
+     Deletes android emulator using passed emulator name. Uses avdmanager cli tool: https://developer.android.com/tools/avdmanager
+     */
+    static func deleteEmulator(deviceName: String) throws {
+        let androidHome = try Self.getAndroidHome()
+        try shellOut(to: "\(androidHome + Paths.avdmanager.rawValue)", arguments: ["delete", "avd", "-n \(deviceName)"])
     }
     
     static func isAccesibilityOn(deviceId: String, adbPath: String) -> Bool {

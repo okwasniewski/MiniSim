@@ -16,6 +16,7 @@ enum AndroidSubMenuItem: Int, CaseIterable {
     case androidNoAudio = 104
     case toggleA11yAndroid = 105
     case pasteToEmulator = 106
+    case deleteEmulator = 107
     
     var needBootedDevice: Bool {
         switch self {
@@ -58,6 +59,8 @@ enum AndroidSubMenuItem: Int, CaseIterable {
             return NSLocalizedString("Toggle accessibility", comment: "")
         case .pasteToEmulator:
             return NSLocalizedString("Paste clipboard to emulator", comment: "")
+        case .deleteEmulator:
+            return NSLocalizedString("Delete emulator", comment: "")
         default:
             return ""
         }
@@ -77,6 +80,8 @@ enum AndroidSubMenuItem: Int, CaseIterable {
             return NSImage(systemSymbolName: "figure.walk.circle.fill", accessibilityDescription: "Toggle accessibility")
         case .pasteToEmulator:
             return NSImage(systemSymbolName: "keyboard", accessibilityDescription: "Keyboard")
+        case .deleteEmulator:
+            return NSImage(systemSymbolName: "trash", accessibilityDescription: "Delete emulator")
         default:
             return NSImage()
         }

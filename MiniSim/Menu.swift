@@ -104,6 +104,22 @@ class Menu: NSMenu {
                     guard let clipboard = pasteboard.pasteboardItems?.first?.string(forType: .string) else { break }
                     try deviceService.sendText(device: device, text: clipboard)
                     
+                case .deleteEmulator:
+                    DispatchQueue.main.async {
+                        if !NSAlert.showQuestionDialog(title: "Are you sure?", message: "Are you sure you want to delete this emulator?") {
+                            return
+                        }
+                        DispatchQueue.global().async {
+                            do {
+                                try ADB.deleteEmulator(deviceName: device.name)
+                                UNUserNotificationCenter.showNotification(title: "Emulator deleted!", body: device.name)
+                                self.getDevices()
+                            } catch  {
+                                NSAlert.showError(message: error.localizedDescription)
+                            }
+                        }
+                    }
+                    
                 default:
                     break
                 }
