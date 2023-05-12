@@ -86,7 +86,9 @@ class MiniSim: NSObject {
         }
         if let button = statusItem.button {
             button.toolTip = "MiniSim"
-            let itemImage = NSImage(systemSymbolName: "iphone", accessibilityDescription: "iPhone")
+            let itemImage = NSImage(named: "menu_icon")
+            itemImage?.size = NSSize(width: 9, height: 16)
+            itemImage?.isTemplate = true
             button.image = itemImage
         }
         populateSections()
