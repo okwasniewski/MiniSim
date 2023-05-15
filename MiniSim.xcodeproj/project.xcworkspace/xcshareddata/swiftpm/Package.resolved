@@ -1,6 +1,24 @@
 {
   "pins" : [
     {
+      "identity" : "codeeditor",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ZeeZide/CodeEditor.git",
+      "state" : {
+        "revision" : "180bde07b44dea839b32873bd8586ba146fa9106",
+        "version" : "1.2.2"
+      }
+    },
+    {
+      "identity" : "highlightr",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/raspu/Highlightr",
+      "state" : {
+        "revision" : "93199b9e434f04bda956a613af8f571933f9f037",
+        "version" : "2.1.2"
+      }
+    },
+    {
       "identity" : "keyboardshortcuts",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
@@ -43,6 +61,15 @@
       "state" : {
         "revision" : "9d85a02fe7916caa7531847452c4933d331503a5",
         "version" : "2.3.1"
+      }
+    },
+    {
+      "identity" : "symbolpicker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/xnth97/SymbolPicker.git",
+      "state" : {
+        "revision" : "1e81757fc81fdee86f48d101eab0d0f8e9e0ec3d",
+        "version" : "1.4.2"
       }
     }
   ],

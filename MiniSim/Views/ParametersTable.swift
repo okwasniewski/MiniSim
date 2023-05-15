@@ -31,17 +31,10 @@ struct ParametersTable: View {
     
     var body: some View {
         VStack {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("Android additional launch parameters")
-                        .font(.headline)
-                        .padding(.bottom, 2)
-                    Text("These parameters are passed to every android launch command. \nFor example: Cold boot, Run without audio etc.")
-                        .font(.caption)
-                        .opacity(0.3)
-                }
-                Spacer()
-            }
+            SectionHeader(
+                title: "Android additional launch parameters",
+                subTitle: "These parameters are passed to every android launch command. \nFor example: Cold boot, Run without audio etc."
+            )
             List {
                 HStack {
                     Text("Title")

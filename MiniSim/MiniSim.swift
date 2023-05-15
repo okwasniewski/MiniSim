@@ -12,7 +12,6 @@ import UserNotifications
 
 
 class MiniSim: NSObject {
-    private var statusBar: NSStatusBar!
     private var menu: Menu!
     
     @objc let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -23,7 +22,6 @@ class MiniSim: NSObject {
     
     override init() {
         super.init()
-        statusBar = NSStatusBar()
         menu = Menu()
         statusItem.menu = menu
         
@@ -53,6 +51,13 @@ class MiniSim: NSObject {
                 toolbarIcon: NSImage(systemSymbolName: "iphone", accessibilityDescription: "") ?? NSImage()
             ) {
                 Devices()
+            },
+            Settings.Pane(
+                identifier: .commands,
+                title: "Commands",
+                toolbarIcon: NSImage(systemSymbolName: "command", accessibilityDescription: "") ?? NSImage()
+            ) {
+                CustomCommands()
             },
             Settings.Pane(
                 identifier: .about,

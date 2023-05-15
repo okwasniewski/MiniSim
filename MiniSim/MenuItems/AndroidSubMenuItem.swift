@@ -16,6 +16,7 @@ enum AndroidSubMenuItem: Int, CaseIterable {
     case androidNoAudio = 104
     case toggleA11yAndroid = 105
     case pasteToEmulator = 106
+    case customCommand = 1000
     
     var needBootedDevice: Bool {
         switch self {

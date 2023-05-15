@@ -30,7 +30,7 @@ struct Preferences: View {
                 LaunchAtLogin.Toggle("Launch at login")
             }
         }
-        .frame(minHeight: 320)
+        .frame(minWidth: 650, minHeight: 450)
     }
     
     func resetDefaults() {
