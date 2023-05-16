@@ -14,6 +14,7 @@ protocol ADBProtocol {
     static func getAdbId(for deviceName: String, adbPath: String) throws -> String
     static func checkAndroidHome(path: String) throws -> Bool
     static func isAccesibilityOn(deviceId: String, adbPath: String) -> Bool
+    static func installPixel6WithAndroid13() throws
 }
 
 final class ADB: ADBProtocol {
@@ -25,6 +26,7 @@ final class ADB: ADBProtocol {
         case home = "/Android/sdk"
         case emulator = "/emulator/emulator"
         case adb = "/platform-tools/adb"
+        case cmdLineTools = "/cmdline-tools/latest/bin"
     }
     
     /**
@@ -93,4 +95,10 @@ final class ADB: ADBProtocol {
         
         return false
     }
+
+  static func installPixel6WithAndroid13() throws {
+    let androidHome = try Self.getAndroidHome()
+    try shellOut(to: "\(androidHome + Paths.cmdLineTools.rawValue)/sdkmanager", arguments: ["--install", "\"system-images;android-33;google_apis;arm64-v8a\""])
+    try shellOut(to: "echo no |  \(androidHome + Paths.cmdLineTools.rawValue)/avdmanager", arguments: ["create", "avd", "-n", "Android_13_Pixel_6", "-k", "\"system-images;android-33;google_apis;arm64-v8a\""])
+  }
 }

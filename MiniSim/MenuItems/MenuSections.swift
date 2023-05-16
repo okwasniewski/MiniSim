@@ -11,6 +11,7 @@ enum MenuSections: Int, CaseIterable {
     case iOSHeader = 100
     case separator1 = 1
     case androidHeader = 101
+    case createNewAndroidSimulator = 102
     
     case separator2 = 2
     case clearDerrivedData = 119
@@ -56,6 +57,8 @@ enum MenuSections: Int, CaseIterable {
             return NSLocalizedString("Preferences", comment: "")
         case .clearDerrivedData:
             return NSLocalizedString("Clear Xcode Derived Data", comment: "")
+        case .createNewAndroidSimulator:
+            return NSLocalizedString("Create Pixel 6 Android 13 Simulator", comment: "")
         default:
             return ""
         }

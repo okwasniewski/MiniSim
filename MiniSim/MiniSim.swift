@@ -114,6 +114,14 @@ class MiniSim: NSObject {
                         NSAlert.showError(message: error.localizedDescription)
                     }
                 }
+            case .createNewAndroidSimulator:
+              DispatchQueue.global().async {
+                do {
+                  try ADB.installPixel6WithAndroid13()
+                } catch  {
+                  NSAlert.showError(message: error.localizedDescription)
+                }
+              }
             default:
                 break
             }
@@ -126,7 +134,8 @@ class MiniSim: NSObject {
             return
         }
         MenuSections.allCases.map({$0.menuItem}).forEach { item in
-            if item.tag >= MenuSections.clearDerrivedData.rawValue {
+            if item.tag >= MenuSections.clearDerrivedData.rawValue ||
+               item.tag == MenuSections.createNewAndroidSimulator.rawValue {
                 item.action = #selector(menuItemAction)
                 item.target = self
             } else {
