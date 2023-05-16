@@ -14,6 +14,7 @@ import UserNotifications
 class MiniSim: NSObject {
     private var statusBar: NSStatusBar!
     private var menu: Menu!
+    private var deviceService: DeviceServiceProtocol!
     
     @objc let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
@@ -25,6 +26,7 @@ class MiniSim: NSObject {
         super.init()
         statusBar = NSStatusBar()
         menu = Menu()
+        deviceService = DeviceService()
         statusItem.menu = menu
         
         settingsController.window?.delegate = self
@@ -117,7 +119,7 @@ class MiniSim: NSObject {
             case .createNewAndroidSimulator:
               DispatchQueue.global().async {
                 do {
-                  try ADB.installPixel6WithAndroid13()
+                  try self.deviceService.installPixel6WithAndroid13()
                 } catch  {
                   NSAlert.showError(message: error.localizedDescription)
                 }

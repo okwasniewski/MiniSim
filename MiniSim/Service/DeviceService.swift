@@ -21,6 +21,7 @@ protocol DeviceServiceProtocol {
     func getAndroidDevices() throws -> [Device]
     func sendText(device: Device, text: String) throws
     static func checkAndroidSetup() throws -> String
+    func installPixel6WithAndroid13() throws
     
     func focusDevice(_ device: Device)
 }
@@ -218,4 +219,10 @@ extension DeviceService {
         
         try shellOut(to: "\(adbPath) -s \(deviceId) shell input text \"\(formattedText)\"")
     }
+
+    func installPixel6WithAndroid13() throws {
+        let cmdLineToolsPath = try ADB.getCmdLineToolsPath()
+        try shellOut(to: "\(cmdLineToolsPath)/sdkmanager", arguments: ["--install", "\"system-images;android-33;google_apis;arm64-v8a\""])
+        try shellOut(to: "echo no |  \(cmdLineToolsPath)/avdmanager", arguments: ["create", "avd", "-n", "Android_13_Pixel_6", "-k", "\"system-images;android-33;google_apis;arm64-v8a\""])
+  }
 }
