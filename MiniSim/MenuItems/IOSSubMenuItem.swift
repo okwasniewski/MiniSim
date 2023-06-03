@@ -13,6 +13,7 @@ enum IOSSubMenuItem: Int, CaseIterable {
     case copyUDID = 101
     case separator = 102
     case deleteSim = 103
+    case customCommand = 1000
     
     var menuItem: NSMenuItem {
         let item = self == .separator ? .separator() : NSMenuItem()

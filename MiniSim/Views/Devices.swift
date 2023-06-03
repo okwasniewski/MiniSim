@@ -14,7 +14,7 @@ struct Devices: View {
             ParametersTable()
                 .padding()
         }
-        .frame(minWidth: 450, minHeight: 330)
+        .frame(minWidth: 650, minHeight: 450)
     }
 }
 

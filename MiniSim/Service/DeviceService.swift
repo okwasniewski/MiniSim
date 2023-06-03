@@ -23,6 +23,7 @@ protocol DeviceServiceProtocol {
     static func checkAndroidSetup() throws -> String
     
     func focusDevice(_ device: Device)
+    func runCustomCommand(_ device: Device, command: Command) throws
 }
 
 class DeviceService: DeviceServiceProtocol {
@@ -38,6 +39,31 @@ class DeviceService: DeviceServiceProtocol {
     private enum BundleURL: String {
         case emulator = "qemu-system-aarch64"
         case simulator = "Simulator.app"
+    }
+    
+    func runCustomCommand(_ device: Device, command: Command) throws {
+        var commandToExecute = command.command
+            .replacingOccurrences(of: Variables.device_name.rawValue, with: device.name)
+        
+        let deviceID = device.ID ?? ""
+        
+        if (command.platform == .android) {
+            commandToExecute = try commandToExecute
+                .replacingOccurrences(of: Variables.adb_path.rawValue, with: ADB.getAdbPath())
+                .replacingOccurrences(of: Variables.adb_id.rawValue, with: deviceID)
+                .replacingOccurrences(of: Variables.android_home_path.rawValue, with: ADB.getAndroidHome())
+            
+        } else {
+            commandToExecute = commandToExecute
+                .replacingOccurrences(of: Variables.uuid.rawValue, with: deviceID)
+                .replacingOccurrences(of: Variables.xcrun_path.rawValue, with: ProcessPaths.xcrun.rawValue)
+        }
+        
+        do {
+            try shellOut(to: commandToExecute)
+        } catch {
+            throw CustomCommandError.commandError(errorMessage: error.localizedDescription)
+        }
     }
     
     func focusDevice(_ device: Device) {

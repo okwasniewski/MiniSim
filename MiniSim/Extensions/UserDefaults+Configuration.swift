@@ -10,6 +10,7 @@ import Foundation
 extension UserDefaults {
     public struct Keys {
         static let parameters = "parameters"
+        static let commands = "commands"
         static let androidHome = "androidHome"
         static let isOnboardingFinished = "isOnboardingFinished"
     }
@@ -27,5 +28,10 @@ extension UserDefaults {
     public var parameters: Data? {
         get { object(forKey: Keys.parameters) as? Data }
         set { set(newValue, forKey: Keys.parameters) }
+    }
+    
+    public var commands: Data? {
+        get { object(forKey: Keys.commands) as? Data }
+        set { set(newValue, forKey: Keys.commands) }
     }
 }

@@ -69,6 +69,16 @@ class Menu: NSMenu {
         return parameters.filter({ $0.enabled }).map({ $0.command })
     }
     
+    private func getAdditionalCommands(platform: Platform) -> [Command] {
+        guard let commandsData = UserDefaults.standard.commands else { return [] }
+        guard let commands = try? JSONDecoder().decode([Command].self, from: commandsData) else {
+            return []
+        }
+        
+        return commands.filter({ $0.platform == platform })
+    }
+    
+    
     @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
         guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
         guard let tag = AndroidSubMenuItem(rawValue: sender.tag) else { return }
@@ -103,6 +113,15 @@ class Menu: NSMenu {
                     let pasteboard = NSPasteboard.general
                     guard let clipboard = pasteboard.pasteboardItems?.first?.string(forType: .string) else { break }
                     try deviceService.sendText(device: device, text: clipboard)
+                
+                case .customCommand:
+                    let androidCommands = getAdditionalCommands(platform: .android)
+                    guard let command = androidCommands.first(where: {$0.name == sender.title}) else { return }
+                    do {
+                        try deviceService.runCustomCommand(device, command: command)
+                    } catch {
+                        NSAlert.showError(message: error.localizedDescription)
+                    }
                     
                 default:
                     break
@@ -141,6 +160,14 @@ class Menu: NSMenu {
                     } catch {
                         NSAlert.showError(message: error.localizedDescription)
                     }
+                }
+            case .customCommand:
+                let iosCommands = getAdditionalCommands(platform: .ios)
+                guard let command = iosCommands.first(where: {$0.name == sender.title}) else { return }
+                do {
+                    try deviceService.runCustomCommand(device, command: command)
+                } catch {
+                    NSAlert.showError(message: error.localizedDescription)
                 }
             default:
                 break
@@ -218,12 +245,10 @@ class Menu: NSMenu {
         let sortedDevices = devices.sorted(by: { $0.isAndroid && !$1.isAndroid })
         for (index, device) in sortedDevices.enumerated() {
             if let itemIndex = items.firstIndex(where: { $0.title == device.name }) {
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [self] in
                     let item = self.items.get(at: itemIndex)
                     item?.state = device.booted ? .on : .off
-                    if device.isAndroid {
-                        item?.submenu = self.populateAndroidSubMenu(booted: device.booted)
-                    }
+                    item?.submenu = device.isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu(booted: device.booted)
                 }
                 continue
             }
@@ -237,7 +262,7 @@ class Menu: NSMenu {
             
             menuItem.target = self
             menuItem.keyEquivalentModifierMask = device.isAndroid ? [.option] : [.command]
-            menuItem.submenu = device.isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu()
+            menuItem.submenu = device.isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu(booted: device.booted)
             menuItem.state = device.booted ? .on : .off
             
             DispatchQueue.main.async {
@@ -251,6 +276,10 @@ class Menu: NSMenu {
     private func populateAndroidSubMenu(booted: Bool) -> NSMenu {
         let subMenu = NSMenu()
         for item in AndroidSubMenuItem.allCases {
+            if item == AndroidSubMenuItem.customCommand {
+                continue
+            }
+            
             let menuItem = item.menuItem
             menuItem.target = self
             menuItem.action = #selector(androidSubMenuClick)
@@ -262,15 +291,43 @@ class Menu: NSMenu {
             }
             subMenu.addItem(menuItem)
         }
+
+        for item in self.getAdditionalCommands(platform: .android) {
+            let menuItem = AndroidSubMenuItem.customCommand.menuItem
+            menuItem.target = self
+            menuItem.action = #selector(androidSubMenuClick)
+            if item.needBootedDevice && !booted {
+                continue
+            }
+            menuItem.image = NSImage(systemSymbolName: item.icon, accessibilityDescription: item.name)
+            menuItem.title = item.name
+            subMenu.addItem(menuItem)
+        }
         return subMenu
     }
     
-    private func populateIOSSubMenu() -> NSMenu {
+    private func populateIOSSubMenu(booted: Bool) -> NSMenu {
         let subMenu = NSMenu()
-        IOSSubMenuItem.allCases.map({$0.menuItem}).forEach { item in
-            item.target = self
-            item.action = #selector(IOSSubMenuClick)
-            subMenu.addItem(item)
+        for item in IOSSubMenuItem.allCases {
+            if item == IOSSubMenuItem.customCommand {
+                continue
+            }
+            let menuItem = item.menuItem
+            menuItem.target = self
+            menuItem.action = #selector(IOSSubMenuClick)
+            subMenu.addItem(menuItem)
+        }
+        
+        for item in self.getAdditionalCommands(platform: .ios) {
+            let menuItem = IOSSubMenuItem.customCommand.menuItem
+            menuItem.target = self
+            menuItem.action = #selector(IOSSubMenuClick)
+            if item.needBootedDevice && !booted {
+                continue
+            }
+            menuItem.image = NSImage(systemSymbolName: item.icon, accessibilityDescription: item.name)
+            menuItem.title = item.name
+            subMenu.addItem(menuItem)
         }
         return subMenu
     }
