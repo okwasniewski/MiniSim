@@ -6,22 +6,23 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>0.5.0</title>
+      <title>0.6.0</title>
       <description>
       <![CDATA[ <ul>
-      <li>feat: add onboarding experience.</li>
-      <li>feat: add option to clear Xcode derived data.</li>
-      <li>feat: allow for custom installations of Android Studio (ANDROID_HOME path).</li>
-      <li>fix: fixed bugs with custom .zshrc / .bashrc configs causing issues.</li>
+      <li><b>New: Custom commands!</b></li>
+      <ul>
+       <li>Create your own commands with ease, possibilities are endless.</li>
+      </ul>
+      <li>fix: minor codebase improvements</li>
       </ul> ]]>
       </description>
-      <pubDate>2023-03-30</pubDate>
-      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.5.0</releaseNotesLink>
-      <sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+      <pubDate>2023-06-03</pubDate>
+      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.6.0</releaseNotesLink>
+      <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
       <enclosure
-        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.5.0/MiniSim.app.zip"
-        sparkle:version="8"
-        sparkle:shortVersionString="0.5.0"
+        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.6.0/MiniSim.app.zip"
+        sparkle:version="9"
+        sparkle:shortVersionString="0.6.0"
         length="0"
         type="application/octet-stream"
       />
