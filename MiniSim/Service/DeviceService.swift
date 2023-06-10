@@ -61,6 +61,7 @@ class DeviceService: DeviceServiceProtocol {
         
         do {
             try shellOut(to: commandToExecute)
+            NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
         } catch {
             throw CustomCommandError.commandError(errorMessage: error.localizedDescription)
         }
