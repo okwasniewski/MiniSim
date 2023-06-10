@@ -69,7 +69,7 @@ class DeviceService: DeviceServiceProtocol {
     func focusDevice(_ device: Device) {
         let runningApps = NSWorkspace.shared.runningApplications.filter({$0.activationPolicy == .regular})
         
-        if let uuid = device.ID, !device.isAndroid {
+        if let uuid = device.ID, device.platform == .ios {
             try? launchSimulatorApp(uuid: uuid)
         }
         
@@ -101,7 +101,7 @@ class DeviceService: DeviceServiceProtocol {
     }
     
     private func matchDeviceTitle(windowTitle: String, device: Device) -> Bool {
-        if device.isAndroid {
+        if device.platform == .android {
             let deviceName = windowTitle.match(#"(?<=- ).*?(?=:)"#).first?.first
             return deviceName == device.name
         }
@@ -127,16 +127,19 @@ extension DeviceService {
     
     private func parseIOSDevices(result: [String]) -> [Device] {
         var devices: [Device] = []
+        var osVersion = ""
         result.forEach { line in
-            let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\) (\\(.*?)\\)")
-            if (!device.isEmpty) {
-                let firstDevice = device[0]
+            if let currentOs = line.match("-- (.*?) --").first, currentOs.count > 0 {
+                osVersion = currentOs[1]
+            }
+            if let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\) (\\(.*?)\\)").first {
                 devices.append(
                     Device(
-                        name: firstDevice[1].trimmingCharacters(in: .whitespacesAndNewlines),
-                        version: firstDevice[3],
-                        ID: firstDevice[4],
-                        booted: firstDevice[5].contains("Booted")
+                        name: device[1].trimmingCharacters(in: .whitespacesAndNewlines),
+                        version: osVersion,
+                        ID: device[4],
+                        booted: device[5].contains("Booted"),
+                        platform: .ios
                     )
                 )
             }
@@ -217,7 +220,7 @@ extension DeviceService {
         
         return splitted.filter({ !$0.isEmpty }).map {
             let adbId = try? ADB.getAdbId(for: $0, adbPath: adbPath)
-            return Device(name: $0, ID: adbId, booted: adbId != nil, isAndroid: true)
+            return Device(name: $0, ID: adbId, booted: adbId != nil, platform: .android)
         }
     }
     

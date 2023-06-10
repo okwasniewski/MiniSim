@@ -19,8 +19,8 @@ class Menu: NSMenu {
             assignKeyEquivalents()
         }
         willSet {
-            let deviceNames = Set(devices.map({ $0.name }))
-            let updatedDeviceNames = Set(newValue.map({ $0.name }))
+            let deviceNames = Set(devices.map({ $0.displayName }))
+            let updatedDeviceNames = Set(newValue.map({ $0.displayName }))
             removeMenuItems(removedDevices: deviceNames.subtracting(updatedDeviceNames))
         }
     }
@@ -52,7 +52,7 @@ class Menu: NSMenu {
     }
     
     private func getDeviceByName(name: String) -> Device? {
-        return devices.first { $0.name == name }
+        return devices.first { $0.displayName == name }
     }
     
     private func removeMenuItems(removedDevices: Set<String>) {
@@ -208,8 +208,8 @@ class Menu: NSMenu {
     private func assignKeyEquivalents() {
         let sections = MenuSections.allCases.map {$0.title}
         let deviceItems = items.filter { !sections.contains($0.title) }
-        let iosDeviceNames = devices.filter({ !$0.isAndroid }).map { $0.name }
-        let androidDeviceNames = devices.filter({ $0.isAndroid }).map { $0.name }
+        let iosDeviceNames = devices.filter({ $0.platform == Platform.ios }).map { $0.displayName }
+        let androidDeviceNames = devices.filter({ $0.platform == Platform.android }).map { $0.displayName }
         
         let iosDevices = deviceItems.filter { iosDeviceNames.contains($0.title) }
         let androidDevices = deviceItems.filter { androidDeviceNames.contains($0.title) }
@@ -242,32 +242,33 @@ class Menu: NSMenu {
     }
     
     private func populateDevices(isFirst: Bool) {
-        let sortedDevices = devices.sorted(by: { $0.isAndroid && !$1.isAndroid })
+        let sortedDevices = devices.sorted(by: { $0.platform == .android && $1.platform == .ios })
         for (index, device) in sortedDevices.enumerated() {
-            if let itemIndex = items.firstIndex(where: { $0.title == device.name }) {
+            let isAndroid = device.platform == .android
+            if let itemIndex = items.firstIndex(where: { $0.title == device.displayName }) {
                 DispatchQueue.main.async { [self] in
                     let item = self.items.get(at: itemIndex)
                     item?.state = device.booted ? .on : .off
-                    item?.submenu = device.isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu(booted: device.booted)
+                    item?.submenu = isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu(booted: device.booted)
                 }
                 continue
             }
             
             let menuItem = NSMenuItem(
-                title: device.name,
+                title: device.displayName,
                 action: #selector(deviceItemClick),
                 keyEquivalent: "",
-                type: device.isAndroid ? .launchAndroid : .launchIOS
+                type: isAndroid ? .launchAndroid : .launchIOS
             )
             
             menuItem.target = self
-            menuItem.keyEquivalentModifierMask = device.isAndroid ? [.option] : [.command]
-            menuItem.submenu = device.isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu(booted: device.booted)
+            menuItem.keyEquivalentModifierMask = isAndroid ? [.option] : [.command]
+            menuItem.submenu = isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu(booted: device.booted)
             menuItem.state = device.booted ? .on : .off
             
             DispatchQueue.main.async {
-                let iosDevicesCount = self.devices.filter({ !$0.isAndroid }).count
-                self.safeInsertItem(menuItem, at: device.isAndroid ? (isFirst ? index : iosDevicesCount) + 3 : 1)
+                let iosDevicesCount = self.devices.filter({ $0.platform == .ios }).count
+                self.safeInsertItem(menuItem, at: isAndroid ? (isFirst ? index : iosDevicesCount) + 3 : 1)
             }
             
         }
