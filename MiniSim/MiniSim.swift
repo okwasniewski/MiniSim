@@ -34,6 +34,7 @@ class MiniSim: NSObject {
     
     deinit {
         isOnboardingFinishedObserver?.invalidate()
+        NotificationCenter.default.removeObserver(self, name: .commandDidSucceed, object: nil)
     }
     
     private lazy var settingsController = SettingsWindowController(
@@ -82,6 +83,7 @@ class MiniSim: NSObject {
                 self.onboarding.showPopOver(button: self.statusItem.button)
             }
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(toggleSuccessCheckmark), name: .commandDidSucceed, object: nil)
     }
     
     private func appendMenu() {
@@ -89,6 +91,11 @@ class MiniSim: NSObject {
             onboarding.show()
             return
         }
+        setMenuImage()
+        populateSections()
+    }
+    
+    private func setMenuImage() {
         if let button = statusItem.button {
             button.toolTip = "MiniSim"
             let itemImage = NSImage(named: "menu_icon")
@@ -96,7 +103,21 @@ class MiniSim: NSObject {
             itemImage?.isTemplate = true
             button.image = itemImage
         }
-        populateSections()
+    }
+    
+    @objc private func toggleSuccessCheckmark() {
+        DispatchQueue.main.async {
+            if let button = self.statusItem.button {
+                let itemImage = NSImage(named: "success_action")
+                itemImage?.size = NSSize(width: 9, height: 15)
+                itemImage?.isTemplate = true
+                button.image = itemImage
+            }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            self.setMenuImage()
+        }
     }
     
     @objc func menuItemAction(_ sender: NSMenuItem) {
@@ -115,6 +136,7 @@ class MiniSim: NSObject {
                     do {
                         let amountCleared = try DeviceService.clearDerivedData()
                         UNUserNotificationCenter.showNotification(title: "Derived data has been cleared!", body: "Removed \(amountCleared) of data")
+                        NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
                     } catch {
                         NSAlert.showError(message: error.localizedDescription)
                     }

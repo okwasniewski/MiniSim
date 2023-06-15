@@ -102,18 +102,18 @@ class Menu: NSMenu {
                 case .copyAdbId:
                     if let deviceId = device.ID {
                         NSPasteboard.general.copyToPasteboard(text: deviceId)
-                        UNUserNotificationCenter.showNotification(title: "Device ID copied to clipboard!", body: deviceId)
+                        handleSuccess(title: "Device ID copied to clipboard!", body: deviceId)
                     }
                     
                 case .copyName:
                     NSPasteboard.general.copyToPasteboard(text: device.name)
-                    UNUserNotificationCenter.showNotification(title: "Device name copied to clipboard!", body: device.name)
+                    handleSuccess(title: "Device name copied to clipboard!", body: device.name)
                     
                 case .pasteToEmulator:
                     let pasteboard = NSPasteboard.general
                     guard let clipboard = pasteboard.pasteboardItems?.first?.string(forType: .string) else { break }
                     try deviceService.sendText(device: device, text: clipboard)
-                
+                    
                 case .customCommand:
                     let androidCommands = getAdditionalCommands(platform: .android)
                     guard let command = androidCommands.first(where: {$0.name == sender.title}) else { return }
@@ -141,11 +141,11 @@ class Menu: NSMenu {
             switch tag {
             case .copyName:
                 NSPasteboard.general.copyToPasteboard(text: device.name)
-                UNUserNotificationCenter.showNotification(title: "Device name copied to clipboard!", body: device.name)
+                handleSuccess(title: "Device name copied to clipboard!", body: device.name)
             case .copyUDID:
                 if let deviceID = device.ID {
                     NSPasteboard.general.copyToPasteboard(text: deviceID)
-                    UNUserNotificationCenter.showNotification(title: "Device ID copied to clipboard!", body: deviceID)
+                    handleSuccess(title: "Device ID copied to clipboard!", body: deviceID)
                 }
             case .deleteSim:
                 guard let deviceID = device.ID else { return }
@@ -155,7 +155,7 @@ class Menu: NSMenu {
                 DispatchQueue.global().async { [self] in
                     do {
                         try deviceService.deleteSimulator(uuid: deviceID)
-                        UNUserNotificationCenter.showNotification(title: "Simulator deleted!", body: deviceID)
+                        handleSuccess(title: "Simulator deleted!", body: deviceID)
                         getDevices()
                     } catch {
                         NSAlert.showError(message: error.localizedDescription)
@@ -241,6 +241,11 @@ class Menu: NSMenu {
         }
     }
     
+    private func handleSuccess(title: String, body: String) {
+        UNUserNotificationCenter.showNotification(title: title, body: body)
+        NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
+    }
+    
     private func populateDevices(isFirst: Bool) {
         let sortedDevices = devices.sorted(by: { $0.platform == .android && $1.platform == .ios })
         for (index, device) in sortedDevices.enumerated() {
@@ -292,7 +297,7 @@ class Menu: NSMenu {
             }
             subMenu.addItem(menuItem)
         }
-
+        
         for item in self.getAdditionalCommands(platform: .android) {
             let menuItem = AndroidSubMenuItem.customCommand.menuItem
             menuItem.target = self
