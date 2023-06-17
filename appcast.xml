@@ -6,23 +6,20 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>0.6.0</title>
+      <title>0.6.1</title>
       <description>
       <![CDATA[ <ul>
-      <li><b>New: Custom commands!</b></li>
-      <ul>
-       <li>Create your own commands with ease, possibilities are endless.</li>
-      </ul>
-      <li>fix: minor codebase improvements</li>
+      <li>New: Show success state by changing menu icon when executing a command ✨</li>
+      <li>Fix: Handle multiple iOS simulator versions</li>
       </ul> ]]>
       </description>
       <pubDate>2023-06-03</pubDate>
-      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.6.0</releaseNotesLink>
+      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.6.1</releaseNotesLink>
       <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
       <enclosure
-        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.6.0/MiniSim.app.zip"
-        sparkle:version="9"
-        sparkle:shortVersionString="0.6.0"
+        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.6.1/MiniSim.app.zip"
+        sparkle:version="10"
+        sparkle:shortVersionString="0.6.1"
         length="0"
         type="application/octet-stream"
       />
