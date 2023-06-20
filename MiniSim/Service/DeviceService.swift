@@ -10,24 +10,25 @@ import ShellOut
 import AppKit
 
 protocol DeviceServiceProtocol {
-    func launchDevice(uuid: String) throws
-    func getIOSDevices() throws -> [Device]
+    static func launchDevice(uuid: String) throws
+    static func getIOSDevices() throws -> [Device]
     static func checkXcodeSetup() -> Bool
-    func deleteSimulator(uuid: String) throws
+    static func deleteSimulator(uuid: String) throws
     static func clearDerivedData() throws -> String
     
-    func launchDevice(name: String, additionalArguments: [String]) throws
-    func toggleA11y(device: Device) throws
-    func getAndroidDevices() throws -> [Device]
-    func sendText(device: Device, text: String) throws
+    static func launchDevice(name: String, additionalArguments: [String]) throws
+    static func toggleA11y(device: Device) throws
+    static func getAndroidDevices() throws -> [Device]
+    static func sendText(device: Device, text: String) throws
     static func checkAndroidSetup() throws -> String
     
-    func focusDevice(_ device: Device)
-    func runCustomCommand(_ device: Device, command: Command) throws
+    static func focusDevice(_ device: Device)
+    static func runCustomCommand(_ device: Device, command: Command) throws
+    static func getCustomCommands(platform: Platform) -> [Command]
 }
 
 class DeviceService: DeviceServiceProtocol {
-    private let deviceBootedError = "Unable to boot device in current state: Booted"
+    private static let deviceBootedError = "Unable to boot device in current state: Booted"
     
     private static let derivedDataLocation = "~/Library/Developer/Xcode/DerivedData"
     
@@ -41,7 +42,17 @@ class DeviceService: DeviceServiceProtocol {
         case simulator = "Simulator.app"
     }
     
-    func runCustomCommand(_ device: Device, command: Command) throws {
+    static func getCustomCommands(platform: Platform) -> [Command] {
+        guard let commandsData = UserDefaults.standard.commands else { return [] }
+        guard let commands = try? JSONDecoder().decode([Command].self, from: commandsData) else {
+            return []
+        }
+        
+        return commands.filter({ $0.platform == platform })
+    }
+    
+    
+    static func runCustomCommand(_ device: Device, command: Command) throws {
         var commandToExecute = command.command
             .replacingOccurrences(of: Variables.device_name.rawValue, with: device.name)
         
@@ -70,11 +81,11 @@ class DeviceService: DeviceServiceProtocol {
         }
     }
     
-    func focusDevice(_ device: Device) {
+    static func focusDevice(_ device: Device) {
         let runningApps = NSWorkspace.shared.runningApplications.filter({$0.activationPolicy == .regular})
         
         if let uuid = device.ID, device.platform == .ios {
-            try? launchSimulatorApp(uuid: uuid)
+            try? Self.launchSimulatorApp(uuid: uuid)
         }
         
         for app in runningApps {
@@ -90,7 +101,7 @@ class DeviceService: DeviceServiceProtocol {
                     continue
                 }
                 
-                if !matchDeviceTitle(windowTitle: windowTitle, device: device) {
+                if !Self.matchDeviceTitle(windowTitle: windowTitle, device: device) {
                     continue
                 }
                 
@@ -104,7 +115,7 @@ class DeviceService: DeviceServiceProtocol {
         }
     }
     
-    private func matchDeviceTitle(windowTitle: String, device: Device) -> Bool {
+    private static func matchDeviceTitle(windowTitle: String, device: Device) -> Bool {
         if device.platform == .android {
             let deviceName = windowTitle.match(#"(?<=- ).*?(?=:)"#).first?.first
             return deviceName == device.name
@@ -129,7 +140,7 @@ class DeviceService: DeviceServiceProtocol {
 // MARK: iOS Methods
 extension DeviceService {
     
-    private func parseIOSDevices(result: [String]) -> [Device] {
+    static private func parseIOSDevices(result: [String]) -> [Device] {
         var devices: [Device] = []
         var osVersion = ""
         result.forEach { line in
@@ -157,14 +168,14 @@ extension DeviceService {
         return amountCleared ?? ""
     }
     
-    func getIOSDevices() throws -> [Device] {
+    static func getIOSDevices() throws -> [Device] {
         let output = try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "list", "devices", "available"])
         let splitted = output.components(separatedBy: "\n")
         
         return parseIOSDevices(result: splitted)
     }
     
-    func launchSimulatorApp(uuid: String) throws {
+    static func launchSimulatorApp(uuid: String) throws {
         let isSimulatorRunning = NSWorkspace.shared.runningApplications.contains(where: {$0.bundleIdentifier == "com.apple.iphonesimulator"})
         
         if !isSimulatorRunning {
@@ -175,9 +186,9 @@ extension DeviceService {
         }
     }
     
-    func launchDevice(uuid: String) throws {
+    static func launchDevice(uuid: String) throws {
         do {
-            try launchSimulatorApp(uuid: uuid)
+            try self.launchSimulatorApp(uuid: uuid)
             try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "boot", uuid])
         } catch {
             if !error.localizedDescription.contains(deviceBootedError) {
@@ -186,7 +197,7 @@ extension DeviceService {
         }
     }
     
-    func deleteSimulator(uuid: String) throws {
+    static func deleteSimulator(uuid: String) throws {
         try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "delete", uuid])
     }
     
@@ -195,7 +206,7 @@ extension DeviceService {
 
 // MARK: Android Methods
 extension DeviceService {
-    func launchDevice(name: String, additionalArguments: [String]) throws {
+    static func launchDevice(name: String, additionalArguments: [String]) throws {
         let emulatorPath = try ADB.getEmulatorPath()
         var arguments = ["@\(name)"]
         let formattedArguments = additionalArguments.filter({ !$0.isEmpty }).map {
@@ -216,7 +227,7 @@ extension DeviceService {
         }
     }
     
-    func getAndroidDevices() throws -> [Device] {
+    static func getAndroidDevices() throws -> [Device] {
         let emulatorPath = try ADB.getEmulatorPath()
         let adbPath = try ADB.getAdbPath()
         let output = try shellOut(to: emulatorPath, arguments: ["-list-avds"])
@@ -228,7 +239,7 @@ extension DeviceService {
         }
     }
     
-    func toggleA11y(device: Device) throws {
+    static func toggleA11y(device: Device) throws {
         let adbPath = try ADB.getAdbPath()
         guard let adbId = device.ID else {
             throw DeviceError.deviceNotFound
@@ -241,7 +252,7 @@ extension DeviceService {
         }
     }
     
-    func sendText(device: Device, text: String) throws {
+    static func sendText(device: Device, text: String) throws {
         let adbPath = try ADB.getAdbPath()
         guard let deviceId = device.ID else {
             throw DeviceError.deviceNotFound

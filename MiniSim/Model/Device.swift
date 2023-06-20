@@ -5,7 +5,7 @@
 //  Created by Oskar Kwaśniewski on 25/01/2023.
 //
 
-struct Device: Hashable {
+struct Device: Hashable, Codable {
     var name: String
     var version: String?
     var ID: String?

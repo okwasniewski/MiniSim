@@ -7,6 +7,7 @@
 
 import Foundation
 
-enum Platform: Codable {
-    case ios, android
+enum Platform: String, Codable {
+    case ios = "ios"
+    case android = "android"
 }

@@ -49,4 +49,8 @@ enum IOSSubMenuItem: Int, CaseIterable {
             return nil
         }
     }
+    
+    var CommandItem: Command {
+        return Command(name: self.title, command: "", icon: "", platform: Platform.ios, needBootedDevice: false)
+    }
 }

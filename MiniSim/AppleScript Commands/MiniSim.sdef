@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="MiniSim Terminology">
+    <suite name="Standard Suite" code="????" description="Common classes and commands for all applications.">
+        <command name="quit" code="aevtquit" description="Quit the application.">
+            <cocoa class="NSQuitCommand"/>
+        </command>
+    </suite>
+    
+    <suite name="MiniSim Commands Suite" code="MinS" description="MiniSim Commands Suite">
+        <command name="getDevices" code="MinSDevi">
+            <cocoa class="MiniSim.GetDevicesCommand"/>
+            <access-group identifier="*"/>
+            <parameter code="plat" name="platform" description="Platform to get. Can be either android | ios." type="text">
+                <cocoa key="platform"/>
+            </parameter>
+            <result type="text" description="JSON string with devices."/>
+        </command>
+        
+        <command name="launchDevice" code="MinSLaun">
+            <cocoa class="MiniSim.LaunchDeviceCommand"/>
+            <access-group identifier="*"/>
+            <parameter code="devi" name="deviceName" description="Device name to launch." type="text">
+                <cocoa key="deviceName"/>
+            </parameter>
+            <result type="text" description="Response code"/>
+        </command>
+    </suite>
+</dictionary>

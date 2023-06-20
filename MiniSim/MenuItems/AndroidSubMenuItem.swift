@@ -82,4 +82,8 @@ enum AndroidSubMenuItem: Int, CaseIterable {
             return NSImage()
         }
     }
+    
+    var CommandItem: Command {
+        return Command(name: self.title, command: "", icon: "", platform: Platform.android, needBootedDevice: needBootedDevice)
+    }
 }
