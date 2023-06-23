@@ -4,7 +4,7 @@
 
 ## About
 
-MiniSim is a small utility menu bar app for lauching Android 🤖 and iOS  emulators (and more!).
+MiniSim is a small utility menu bar app for launching Android 🤖 and iOS  emulators (and more!).
 
 Written in Swift and AppKit. 
 
