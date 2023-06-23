@@ -6,20 +6,19 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>0.6.1</title>
+      <title>0.6.2</title>
       <description>
       <![CDATA[ <ul>
-      <li>New: Show success state by changing menu icon when executing a command ✨</li>
-      <li>Fix: Handle multiple iOS simulator versions</li>
+      <li>New: add support for Apple Vision Pro 🥽</li>
       </ul> ]]>
       </description>
-      <pubDate>2023-06-03</pubDate>
-      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.6.1</releaseNotesLink>
+      <pubDate>2023-06-23</pubDate>
+      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.6.2</releaseNotesLink>
       <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
       <enclosure
-        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.6.1/MiniSim.app.zip"
-        sparkle:version="10"
-        sparkle:shortVersionString="0.6.1"
+        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.6.2/MiniSim.app.zip"
+        sparkle:version="11"
+        sparkle:shortVersionString="0.6.2"
         length="0"
         type="application/octet-stream"
       />
