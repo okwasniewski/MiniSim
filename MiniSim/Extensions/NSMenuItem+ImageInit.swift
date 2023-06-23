@@ -14,8 +14,15 @@ extension NSMenuItem {
         if let image {
             self.image = image
         } else {
-            let imageName = self.getSystemImageFromName(name: title)
-            self.image = NSImage(systemSymbolName: imageName, accessibilityDescription: title)
+            if title.contains("Vision") {
+                self.image = NSImage(named: "vision_os")
+                self.image?.isTemplate = true
+                self.image?.size = NSSize(width: 15, height: 8.5)
+            } else {
+                let imageName = self.getSystemImageFromName(name: title)
+                self.image = NSImage(systemSymbolName: imageName, accessibilityDescription: title)
+            }
+            
         }
         
         self.tag = type.rawValue
