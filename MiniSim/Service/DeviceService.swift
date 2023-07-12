@@ -61,6 +61,9 @@ class DeviceService: DeviceServiceProtocol {
         
         do {
             try shellOut(to: commandToExecute)
+            if (command.bootsDevice ?? false && command.platform == .ios) {
+                try? launchSimulatorApp(uuid: deviceID)
+            }
             NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
         } catch {
             throw CustomCommandError.commandError(errorMessage: error.localizedDescription)
