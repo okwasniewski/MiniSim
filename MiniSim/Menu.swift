@@ -164,10 +164,12 @@ class Menu: NSMenu {
             case .customCommand:
                 let iosCommands = getAdditionalCommands(platform: .ios)
                 guard let command = iosCommands.first(where: {$0.name == sender.title}) else { return }
-                do {
-                    try deviceService.runCustomCommand(device, command: command)
-                } catch {
-                    NSAlert.showError(message: error.localizedDescription)
+                DispatchQueue.global().async { [self] in
+                    do {
+                        try deviceService.runCustomCommand(device, command: command)
+                    } catch {
+                        NSAlert.showError(message: error.localizedDescription)
+                    }
                 }
             default:
                 break
@@ -305,6 +307,9 @@ class Menu: NSMenu {
             if item.needBootedDevice && !booted {
                 continue
             }
+            if item.bootsDevice ?? false && booted {
+                continue
+            }
             menuItem.image = NSImage(systemSymbolName: item.icon, accessibilityDescription: item.name)
             menuItem.title = item.name
             subMenu.addItem(menuItem)
@@ -329,6 +334,9 @@ class Menu: NSMenu {
             menuItem.target = self
             menuItem.action = #selector(IOSSubMenuClick)
             if item.needBootedDevice && !booted {
+                continue
+            }
+            if item.bootsDevice ?? false && booted {
                 continue
             }
             menuItem.image = NSImage(systemSymbolName: item.icon, accessibilityDescription: item.name)

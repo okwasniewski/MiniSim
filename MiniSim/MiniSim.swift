@@ -28,7 +28,7 @@ class MiniSim: NSObject {
         settingsController.window?.delegate = self
         
         appendMenu()
-        self.menu.getDevices()
+        menu.getDevices()
         initObservers()
     }
     

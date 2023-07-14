@@ -13,6 +13,7 @@ extension CustomCommandForm {
         @Published var commandName = ""
         @Published var command = ""
         @Published var needsBootedDevice = false
+        @Published var bootsDevice = false
         @Published var platform: Platform = Platform.android
         @Published var icon = "info"
         
@@ -21,10 +22,11 @@ extension CustomCommandForm {
         var allCommands: [Command] = []
         var isUpdating: Bool = false
         
-        func onAppear(commandName: String = "", command: String = "", needsBootedDevice: Bool = false, platform: Platform = Platform.android, icon: String = "info", iconPickerPresented: Bool = false) {
+        func onAppear(commandName: String = "", command: String = "", needsBootedDevice: Bool = false, bootsDevice: Bool = false, platform: Platform = Platform.android, icon: String = "info", iconPickerPresented: Bool = false) {
             self.commandName = commandName
             self.command = command
             self.needsBootedDevice = needsBootedDevice
+            self.bootsDevice = bootsDevice
             self.platform = platform
             self.icon = icon
             self.iconPickerPresented = iconPickerPresented

@@ -74,9 +74,18 @@ struct CustomCommandForm: View {
             }
             
             Toggle(isOn: $viewModel.needsBootedDevice, label: {
-                Text("Booted device")
+                Text("Needs booted device")
             })
+            .help("Determines if command needs a booted device to execute.")
             .toggleStyle(.switch)
+            .disabled(viewModel.bootsDevice)
+            
+            Toggle(isOn: $viewModel.bootsDevice, label: {
+                Text("Boots device")
+            })
+            .help("Determines if executed command boots device. This command will be hidden on booted devices.")
+            .toggleStyle(.switch)
+            .disabled(viewModel.needsBootedDevice)
             
             HStack {
                 HStack {
@@ -87,7 +96,17 @@ struct CustomCommandForm: View {
                 }
                 Spacer()
                 Button(command != nil ? "Update" : "Add") {
-                    onSubmit(Command(name: viewModel.commandName, command: viewModel.command, icon: viewModel.icon, platform: viewModel.platform, needBootedDevice: viewModel.needsBootedDevice), command)
+                    onSubmit(
+                        Command(
+                            name: viewModel.commandName,
+                            command: viewModel.command,
+                            icon: viewModel.icon,
+                            platform: viewModel.platform,
+                            needBootedDevice: viewModel.needsBootedDevice,
+                            bootsDevice: viewModel.bootsDevice
+                        ),
+                        command
+                    )
                     viewModel.clearForm()
                 }
                 .buttonStyle(.borderedProminent)
@@ -103,7 +122,14 @@ struct CustomCommandForm: View {
         }
         .onAppear {
             if let command {
-                viewModel.onAppear(commandName: command.name, command: command.command, needsBootedDevice: command.needBootedDevice, platform: command.platform, icon: command.icon)
+                viewModel.onAppear(
+                    commandName: command.name,
+                    command: command.command,
+                    needsBootedDevice: command.needBootedDevice,
+                    bootsDevice: command.bootsDevice ?? false,
+                    platform: command.platform,
+                    icon: command.icon
+                )
             }
             viewModel.onAppear(allCommands: allCommands, isUpdating: command != nil)
         }
