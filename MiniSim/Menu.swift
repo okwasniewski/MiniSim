@@ -39,7 +39,7 @@ class Menu: NSMenu {
         if UserDefaults.standard.androidHome == nil {
             return
         }
-        DispatchQueue.global().async {
+        DispatchQueue.global(qos: .userInitiated).async {
             do {
                 var devicesArray: [Device] = []
                 try devicesArray.append(contentsOf: self.deviceService.getAndroidDevices())
@@ -83,7 +83,7 @@ class Menu: NSMenu {
         guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
         guard let tag = AndroidSubMenuItem(rawValue: sender.tag) else { return }
         
-        DispatchQueue.global().async { [self] in
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
             do {
                 switch tag {
                 case .coldBootAndroid:
@@ -152,7 +152,7 @@ class Menu: NSMenu {
                 if !NSAlert.showQuestionDialog(title: "Are you sure?", message: "Are you sure you want to delete this Simulator?") {
                     return
                 }
-                DispatchQueue.global().async { [self] in
+                DispatchQueue.global(qos: .userInitiated).async { [self] in
                     do {
                         try deviceService.deleteSimulator(uuid: deviceID)
                         handleSuccess(title: "Simulator deleted!", body: deviceID)
@@ -164,7 +164,7 @@ class Menu: NSMenu {
             case .customCommand:
                 let iosCommands = getAdditionalCommands(platform: .ios)
                 guard let command = iosCommands.first(where: {$0.name == sender.title}) else { return }
-                DispatchQueue.global().async { [self] in
+                DispatchQueue.global(qos: .userInitiated).async { [self] in
                     do {
                         try deviceService.runCustomCommand(device, command: command)
                     } catch {
@@ -182,13 +182,13 @@ class Menu: NSMenu {
         guard let tag = DeviceMenuItem(rawValue: sender.tag) else { return }
         
         if device.booted {
-            DispatchQueue.global().async {
+            DispatchQueue.global(qos: .userInitiated).async {
                 self.deviceService.focusDevice(device)
             }
             return
         }
         
-        DispatchQueue.global().async { [self] in
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
             do {
                 switch tag {
                 case .launchAndroid:
