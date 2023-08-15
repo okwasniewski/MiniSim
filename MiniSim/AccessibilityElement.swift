@@ -38,7 +38,7 @@ class AccessibilityElement {
     }
     
     static func forceFocus(pid: pid_t) {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .userInitiated).async {
             let script = """
                     osascript -e 'tell application "System Events"
                         set frontmost of every process whose unix id is \(pid) to true

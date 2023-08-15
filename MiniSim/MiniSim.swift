@@ -132,7 +132,7 @@ class MiniSim: NSObject {
                 if !shouldDelete {
                     return
                 }
-                DispatchQueue.global().async {
+                DispatchQueue.global(qos: .userInitiated).async {
                     do {
                         let amountCleared = try DeviceService.clearDerivedData()
                         UNUserNotificationCenter.showNotification(title: "Derived data has been cleared!", body: "Removed \(amountCleared) of data")
