@@ -39,4 +39,9 @@ struct Command: Identifiable, Codable, Hashable {
      Needs to be optional to preserve backwards compatibility with data stored in UserDefaults.
      */
     var bootsDevice: Bool?
+    
+    /**
+     Command tag used for AppleScript support.
+     */
+    var tag: Int?
 }

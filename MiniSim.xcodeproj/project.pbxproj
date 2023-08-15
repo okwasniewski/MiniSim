@@ -39,6 +39,7 @@
 		764BA3E92A5AD418003A78AF /* GetDevicesCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764BA3E82A5AD418003A78AF /* GetDevicesCommand.swift */; };
 		764BA3EB2A5AD43F003A78AF /* LaunchDeviceCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764BA3EA2A5AD43F003A78AF /* LaunchDeviceCommand.swift */; };
 		764BA3ED2A5AD478003A78AF /* GetCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764BA3EC2A5AD478003A78AF /* GetCommands.swift */; };
+		765ABF382A8BECD900A063CB /* ExecuteCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765ABF372A8BECD900A063CB /* ExecuteCommand.swift */; };
 		765C44C82A2A6C9600FCC159 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 765C44C72A2A6C9600FCC159 /* MainMenu.xib */; };
 		76630F0C29BDD0C000FB64F9 /* Devices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76630F0B29BDD0C000FB64F9 /* Devices.swift */; };
 		76630F0E29BDE7EB00FB64F9 /* ParametersTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76630F0D29BDE7EB00FB64F9 /* ParametersTable.swift */; };
@@ -103,6 +104,7 @@
 		764BA3E82A5AD418003A78AF /* GetDevicesCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDevicesCommand.swift; sourceTree = "<group>"; };
 		764BA3EA2A5AD43F003A78AF /* LaunchDeviceCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDeviceCommand.swift; sourceTree = "<group>"; };
 		764BA3EC2A5AD478003A78AF /* GetCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCommands.swift; sourceTree = "<group>"; };
+		765ABF372A8BECD900A063CB /* ExecuteCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecuteCommand.swift; sourceTree = "<group>"; };
 		765C44C72A2A6C9600FCC159 /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		76630F0B29BDD0C000FB64F9 /* Devices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Devices.swift; sourceTree = "<group>"; };
 		76630F0D29BDE7EB00FB64F9 /* ParametersTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTable.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				764BA3E82A5AD418003A78AF /* GetDevicesCommand.swift */,
 				764BA3EA2A5AD43F003A78AF /* LaunchDeviceCommand.swift */,
 				764BA3EC2A5AD478003A78AF /* GetCommands.swift */,
+				765ABF372A8BECD900A063CB /* ExecuteCommand.swift */,
 			);
 			path = "AppleScript Commands";
 			sourceTree = "<group>";
@@ -494,6 +497,7 @@
 				7630B26D2986B4FD00D8B57D /* KeyboardShortcuts.swift in Sources */,
 				7684FAAF29D202F500230BB0 /* AndroidHomeError.swift in Sources */,
 				7645D4BE2982A1B100019227 /* DeviceService.swift in Sources */,
+				765ABF382A8BECD900A063CB /* ExecuteCommand.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

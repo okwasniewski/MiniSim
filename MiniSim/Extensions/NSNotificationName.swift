@@ -10,5 +10,6 @@ import Foundation
 extension NSNotification.Name {
     static let menuWillOpen = NSNotification.Name("menuWillOpen")
     static let menuDidClose = NSNotification.Name("menuDidClose")
+    static let deviceDeleted = NSNotification.Name("deviceDeleted")
     static let commandDidSucceed = NSNotification.Name("commandDidSucceed")
 }

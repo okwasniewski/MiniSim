@@ -87,6 +87,6 @@ enum AndroidSubMenuItem: Int, CaseIterable {
         if self == .separator || self == .customCommand {
             return nil
         }
-        return Command(name: self.title, command: "", icon: "", platform: Platform.android, needBootedDevice: needBootedDevice)
+        return Command(name: self.title, command: "", icon: "", platform: Platform.android, needBootedDevice: needBootedDevice, bootsDevice: self.bootsDevice, tag: self.rawValue)
     }
 }

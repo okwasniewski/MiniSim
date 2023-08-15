@@ -8,6 +8,7 @@
 import Foundation
 import ShellOut
 import AppKit
+import UserNotifications
 
 protocol DeviceServiceProtocol {
     static func launchDevice(uuid: String) throws
@@ -15,19 +16,24 @@ protocol DeviceServiceProtocol {
     static func checkXcodeSetup() -> Bool
     static func deleteSimulator(uuid: String) throws
     static func clearDerivedData() throws -> String
+    static func handleiOSMenuClick(device: Device, commandTag: IOSSubMenuItem, itemName: String)
     
     static func launchDevice(name: String, additionalArguments: [String]) throws
     static func toggleA11y(device: Device) throws
     static func getAndroidDevices() throws -> [Device]
     static func sendText(device: Device, text: String) throws
     static func checkAndroidSetup() throws -> String
+    static func handleAndroidMenuClick(device: Device, commandTag: AndroidSubMenuItem, itemName: String)
     
     static func focusDevice(_ device: Device)
     static func runCustomCommand(_ device: Device, command: Command) throws
     static func getCustomCommands(platform: Platform) -> [Command]
+    static func getCustomCommand(platform: Platform, commandName: String) -> Command?
+    static func showSuccessMessage(title: String, message: String)
 }
 
 class DeviceService: DeviceServiceProtocol {
+    
     private static let deviceBootedError = "Unable to boot device in current state: Booted"
     
     private static let derivedDataLocation = "~/Library/Developer/Xcode/DerivedData"
@@ -49,6 +55,11 @@ class DeviceService: DeviceServiceProtocol {
         }
         
         return commands.filter({ $0.platform == platform })
+    }
+    
+    static func getCustomCommand(platform: Platform, commandName: String) -> Command? {
+        let commands = getCustomCommands(platform: platform)
+        return commands.first(where: { $0.name == commandName })
     }
     
     
@@ -135,6 +146,11 @@ class DeviceService: DeviceServiceProtocol {
         try ADB.checkAndroidHome(path: emulatorPath)
         return emulatorPath
     }
+    
+    static func showSuccessMessage(title: String, message: String) {
+        UNUserNotificationCenter.showNotification(title: title, body: message)
+        NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
+    }
 }
 
 // MARK: iOS Methods
@@ -201,12 +217,53 @@ extension DeviceService {
         try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "delete", uuid])
     }
     
+    static func handleiOSMenuClick(device: Device, commandTag: IOSSubMenuItem, itemName: String) {
+        
+        switch commandTag {
+        case .copyName:
+            NSPasteboard.general.copyToPasteboard(text: device.name)
+            DeviceService.showSuccessMessage(title: "Device name copied to clipboard!", message: device.name)
+        case .copyUDID:
+            if let deviceID = device.ID {
+                NSPasteboard.general.copyToPasteboard(text: deviceID)
+                DeviceService.showSuccessMessage(title: "Device ID copied to clipboard!", message: deviceID)
+            }
+        case .deleteSim:
+            guard let deviceID = device.ID else { return }
+            if !NSAlert.showQuestionDialog(title: "Are you sure?", message: "Are you sure you want to delete this Simulator?") {
+                return
+            }
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    try DeviceService.deleteSimulator(uuid: deviceID)
+                    DeviceService.showSuccessMessage(title: "Simulator deleted!", message: deviceID)
+                    NotificationCenter.default.post(name: .deviceDeleted, object: nil)
+                } catch {
+                    NSAlert.showError(message: error.localizedDescription)
+                }
+            }
+        case .customCommand:
+            guard let command = DeviceService.getCustomCommand(platform: .ios, commandName: itemName) else {
+                return
+            }
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    try DeviceService.runCustomCommand(device, command: command)
+                } catch {
+                    NSAlert.showError(message: error.localizedDescription)
+                }
+            }
+        default:
+            break
+        }
+    }
+    
 }
 
 
 // MARK: Android Methods
 extension DeviceService {
-    static func launchDevice(name: String, additionalArguments: [String]) throws {
+    static func launchDevice(name: String, additionalArguments: [String] = []) throws {
         let emulatorPath = try ADB.getEmulatorPath()
         var arguments = ["@\(name)"]
         let formattedArguments = additionalArguments.filter({ !$0.isEmpty }).map {
@@ -215,6 +272,7 @@ extension DeviceService {
             }
             return "-\($0)"
         }
+        arguments.append(contentsOf: getAndroidLaunchParams())
         arguments.append(contentsOf: formattedArguments)
         do {
             try shellOut(to: emulatorPath, arguments: arguments)
@@ -225,6 +283,15 @@ extension DeviceService {
             }
             throw error
         }
+    }
+    
+    private static func getAndroidLaunchParams() -> [String] {
+        guard let paramData = UserDefaults.standard.parameters else { return [] }
+        guard let parameters = try? JSONDecoder().decode([Parameter].self, from: paramData) else {
+            return []
+        }
+        
+        return parameters.filter({ $0.enabled }).map({ $0.command })
     }
     
     static func getAndroidDevices() throws -> [Device] {
@@ -261,5 +328,47 @@ extension DeviceService {
         let formattedText = text.replacingOccurrences(of: " ", with: "%s").replacingOccurrences(of: "'", with: "''")
         
         try shellOut(to: "\(adbPath) -s \(deviceId) shell input text \"\(formattedText)\"")
+    }
+    
+    static func handleAndroidMenuClick(device: Device, commandTag: AndroidSubMenuItem, itemName: String) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                switch commandTag {
+                case .coldBootAndroid:
+                    try DeviceService.launchDevice(name: device.name, additionalArguments:["-no-snapshot"])
+                    
+                case .androidNoAudio:
+                    try DeviceService.launchDevice(name: device.name, additionalArguments:["-no-audio"])
+                    
+                case .toggleA11yAndroid:
+                    try DeviceService.toggleA11y(device: device)
+                    
+                case .copyAdbId:
+                    if let deviceId = device.ID {
+                        NSPasteboard.general.copyToPasteboard(text: deviceId)
+                        DeviceService.showSuccessMessage(title: "Device ID copied to clipboard!", message: deviceId)
+                    }
+                    
+                case .copyName:
+                    NSPasteboard.general.copyToPasteboard(text: device.name)
+                    DeviceService.showSuccessMessage(title: "Device name copied to clipboard!", message: device.name)
+                    
+                case .pasteToEmulator:
+                    guard let clipboard = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { break }
+                    try DeviceService.sendText(device: device, text: clipboard)
+                    
+                case .customCommand:
+                    if let command = DeviceService.getCustomCommand(platform: .android, commandName: itemName) {
+                        try DeviceService.runCustomCommand(device, command: command)
+                    }
+                    
+                default:
+                    break
+                }
+            }
+            catch {
+                NSAlert.showError(message: error.localizedDescription)
+            }
+        }
     }
 }

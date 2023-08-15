@@ -34,5 +34,26 @@
             </parameter>
             <result type="text" description="Response code"/>
         </command>
+        
+        <command name="executeCommand" code="MinExecu">
+            <cocoa class="MiniSim.ExecuteCommand"/>
+            <access-group identifier="*"/>
+            <parameter code="plat" name="platform" description="Platform to get. Can be either android | ios." type="text">
+                <cocoa key="platform"/>
+            </parameter>
+            <parameter code="comm" name="commandName" description="-" type="text">
+                <cocoa key="commandName"/>
+            </parameter>
+            <parameter code="ctag" name="commandTag" description="-" type="text">
+                <cocoa key="commandTag"/>
+            </parameter>
+            <parameter code="devN" name="deviceName" description="-" type="text">
+                <cocoa key="deviceName"/>
+            </parameter>
+            <parameter code="devI" name="deviceId" description="-" type="text">
+                <cocoa key="deviceId"/>
+            </parameter>
+            <result type="text" description="Response code"/>
+        </command>
     </suite>
 </dictionary>
