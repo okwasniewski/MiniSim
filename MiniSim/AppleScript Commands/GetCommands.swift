@@ -14,29 +14,31 @@ class GetCommands: NSScriptCommand {
             let argument = self.property(forKey: "platform") as? String,
             let platform = Platform(rawValue: argument)
         else {
-            return "Error: Unexpected argument passed"
+            scriptErrorNumber = NSRequiredArgumentsMissingScriptError;
+            return nil;
         }
         
         do {
             var commands: [Command] = []
             switch platform {
             case .android:
-                commands = AndroidSubMenuItem.allCases.map { item in
+                commands = AndroidSubMenuItem.allCases.compactMap { item in
                     item.CommandItem
                 }
             case .ios:
-                commands = IOSSubMenuItem.allCases.map { item in
+                commands = IOSSubMenuItem.allCases.compactMap { item in
                     item.CommandItem
                 }
             }
             
-            let customCommands = DeviceService.getCustomCommands(platform: platform)
-            commands.append(contentsOf: customCommands)
+//            let customCommands = DeviceService.getCustomCommands(platform: platform)
+//            commands.append(contentsOf: customCommands)
             
             return try self.encode(commands)
             
         } catch {
-            return "Error: failed to get commands"
+            scriptErrorNumber = NSInternalScriptError;
+            return nil
         }
         
     }

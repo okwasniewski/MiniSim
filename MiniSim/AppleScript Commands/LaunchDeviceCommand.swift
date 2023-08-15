@@ -26,20 +26,20 @@ class LaunchDeviceCommand: NSScriptCommand {
             }
             
             if device.booted {
-                DispatchQueue.global().async {
+                DispatchQueue.global(qos: .userInitiated).async {
                     DeviceService.focusDevice(device)
                 }
-                return true
+                return "OK"
             }
             
-            DispatchQueue.global().async {
+            DispatchQueue.global(qos: .userInitiated).async {
                 if device.platform == .android {
                     try? DeviceService.launchDevice(name: device.name, additionalArguments: [])
                 } else {
                     try? DeviceService.launchDevice(uuid: device.ID ?? "")
                 }
             }
-            return true
+            return "OK"
         } catch {
             scriptErrorNumber = NSInternalScriptError;
             return nil

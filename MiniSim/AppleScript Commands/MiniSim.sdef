@@ -25,5 +25,14 @@
             </parameter>
             <result type="text" description="Response code"/>
         </command>
+        
+        <command name="getCommands" code="MinSGetc">
+            <cocoa class="MiniSim.GetCommands"/>
+            <access-group identifier="*"/>
+            <parameter code="plat" name="platform" description="Platform to get. Can be either android | ios." type="text">
+                <cocoa key="platform"/>
+            </parameter>
+            <result type="text" description="Response code"/>
+        </command>
     </suite>
 </dictionary>

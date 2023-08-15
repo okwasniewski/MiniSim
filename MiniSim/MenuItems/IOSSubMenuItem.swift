@@ -50,7 +50,10 @@ enum IOSSubMenuItem: Int, CaseIterable {
         }
     }
     
-    var CommandItem: Command {
+    var CommandItem: Command? {
+        if self == .separator || self == .customCommand {
+            return nil
+        }
         return Command(name: self.title, command: "", icon: "", platform: Platform.ios, needBootedDevice: false)
     }
 }
