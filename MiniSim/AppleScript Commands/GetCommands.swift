@@ -20,6 +20,7 @@ class GetCommands: NSScriptCommand {
         
         do {
             var commands: [Command] = []
+            
             switch platform {
             case .android:
                 commands = AndroidSubMenuItem.allCases.compactMap { $0.CommandItem }

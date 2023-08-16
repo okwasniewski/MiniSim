@@ -16,14 +16,14 @@ protocol DeviceServiceProtocol {
     static func checkXcodeSetup() -> Bool
     static func deleteSimulator(uuid: String) throws
     static func clearDerivedData() throws -> String
-    static func handleiOSMenuClick(device: Device, commandTag: IOSSubMenuItem, itemName: String)
+    static func handleiOSAction(device: Device, commandTag: IOSSubMenuItem, itemName: String)
     
     static func launchDevice(name: String, additionalArguments: [String]) throws
     static func toggleA11y(device: Device) throws
     static func getAndroidDevices() throws -> [Device]
     static func sendText(device: Device, text: String) throws
     static func checkAndroidSetup() throws -> String
-    static func handleAndroidMenuClick(device: Device, commandTag: AndroidSubMenuItem, itemName: String)
+    static func handleAndroidAction(device: Device, commandTag: AndroidSubMenuItem, itemName: String)
     
     static func focusDevice(_ device: Device)
     static func runCustomCommand(_ device: Device, command: Command) throws
@@ -93,36 +93,40 @@ class DeviceService: DeviceServiceProtocol {
     }
     
     static func focusDevice(_ device: Device) {
-        let runningApps = NSWorkspace.shared.runningApplications.filter({$0.activationPolicy == .regular})
-        
-        if let uuid = device.ID, device.platform == .ios {
-            try? Self.launchSimulatorApp(uuid: uuid)
-        }
-        
-        for app in runningApps {
-            guard
-                let bundleURL = app.bundleURL?.absoluteString,
-                (bundleURL.contains(BundleURL.simulator.rawValue) || bundleURL.contains(BundleURL.emulator.rawValue)) else {
-                continue
-            }
-            let isAndroid = bundleURL.contains(BundleURL.emulator.rawValue)
+        DispatchQueue.global(qos: .userInitiated).async {
             
-            for window in AccessibilityElement.allWindowsForPID(app.processIdentifier) {
-                guard let windowTitle = window.attribute(key: .title, type: String.self), !windowTitle.isEmpty else {
+            let runningApps = NSWorkspace.shared.runningApplications.filter({$0.activationPolicy == .regular})
+            
+            if let uuid = device.ID, device.platform == .ios {
+                try? Self.launchSimulatorApp(uuid: uuid)
+            }
+            
+            for app in runningApps {
+                guard
+                    let bundleURL = app.bundleURL?.absoluteString,
+                    (bundleURL.contains(BundleURL.simulator.rawValue) || bundleURL.contains(BundleURL.emulator.rawValue)) else {
                     continue
                 }
+                let isAndroid = bundleURL.contains(BundleURL.emulator.rawValue)
                 
-                if !Self.matchDeviceTitle(windowTitle: windowTitle, device: device) {
-                    continue
-                }
-                
-                if isAndroid {
-                    AccessibilityElement.forceFocus(pid: app.processIdentifier)
-                } else {
-                    window.performAction(key: kAXRaiseAction)
-                    app.activate(options: [.activateIgnoringOtherApps])
+                for window in AccessibilityElement.allWindowsForPID(app.processIdentifier) {
+                    guard let windowTitle = window.attribute(key: .title, type: String.self), !windowTitle.isEmpty else {
+                        continue
+                    }
+                    
+                    if !Self.matchDeviceTitle(windowTitle: windowTitle, device: device) {
+                        continue
+                    }
+                    
+                    if isAndroid {
+                        AccessibilityElement.forceFocus(pid: app.processIdentifier)
+                    } else {
+                        window.performAction(key: kAXRaiseAction)
+                        app.activate(options: [.activateIgnoringOtherApps])
+                    }
                 }
             }
+            
         }
     }
     
@@ -217,7 +221,7 @@ extension DeviceService {
         try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "delete", uuid])
     }
     
-    static func handleiOSMenuClick(device: Device, commandTag: IOSSubMenuItem, itemName: String) {
+    static func handleiOSAction(device: Device, commandTag: IOSSubMenuItem, itemName: String) {
         
         switch commandTag {
         case .copyName:
@@ -330,7 +334,7 @@ extension DeviceService {
         try shellOut(to: "\(adbPath) -s \(deviceId) shell input text \"\(formattedText)\"")
     }
     
-    static func handleAndroidMenuClick(device: Device, commandTag: AndroidSubMenuItem, itemName: String) {
+    static func handleAndroidAction(device: Device, commandTag: AndroidSubMenuItem, itemName: String) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 switch commandTag {

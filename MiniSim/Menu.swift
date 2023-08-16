@@ -62,14 +62,14 @@ class Menu: NSMenu {
         guard let tag = AndroidSubMenuItem(rawValue: sender.tag) else { return }
         guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
         
-        DeviceService.handleAndroidMenuClick(device: device, commandTag: tag, itemName: sender.title)
+        DeviceService.handleAndroidAction(device: device, commandTag: tag, itemName: sender.title)
     }
     
     @objc private func IOSSubMenuClick(_ sender: NSMenuItem) {
         guard let tag = IOSSubMenuItem(rawValue: sender.tag) else { return }
         guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
         
-        DeviceService.handleiOSMenuClick(device: device, commandTag: tag, itemName: sender.title)
+        DeviceService.handleiOSAction(device: device, commandTag: tag, itemName: sender.title)
     }
     
     @objc private func deviceItemClick(_ sender: NSMenuItem) {
@@ -77,9 +77,7 @@ class Menu: NSMenu {
         guard let tag = DeviceMenuItem(rawValue: sender.tag) else { return }
         
         if device.booted {
-            DispatchQueue.global(qos: .userInitiated).async {
-                DeviceService.focusDevice(device)
-            }
+            DeviceService.focusDevice(device)
             return
         }
         

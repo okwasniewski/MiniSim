@@ -19,8 +19,12 @@ class GetDevicesCommand: NSScriptCommand {
         }
         
         do {
-            let devices = try platform == Platform.android ? DeviceService.getAndroidDevices() : DeviceService.getIOSDevices()
-            return try self.encode(devices)
+            if platform == .android {
+                return try self.encode(DeviceService.getAndroidDevices())
+            } else {
+                return try self.encode(DeviceService.getIOSDevices())
+            }
+            
         } catch {
             scriptErrorNumber = NSInternalScriptError;
             return nil
