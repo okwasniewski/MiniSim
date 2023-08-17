@@ -49,4 +49,14 @@ enum IOSSubMenuItem: Int, CaseIterable {
             return nil
         }
     }
+    
+    var CommandItem: Command? {
+        if self == .separator || self == .customCommand {
+            return nil
+        }
+        
+        // `needBootedDevice` is not supported on iOS.
+        return Command(name: self.title, command: "", icon: "", platform: Platform.ios, needBootedDevice: false, tag: self.rawValue)
+    }
+    
 }

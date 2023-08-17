@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7610992D2A3F95850067885A /* MiniSim.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 7610992C2A3F95850067885A /* MiniSim.sdef */; };
+		7610992F2A3F95D90067885A /* NSScriptCommand+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7610992E2A3F95D90067885A /* NSScriptCommand+utils.swift */; };
 		7625140B2992B46D0060A225 /* Pasteboard+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7625140A2992B46D0060A225 /* Pasteboard+utils.swift */; };
 		762CF1E02981968F00099999 /* String+match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1DF2981968F00099999 /* String+match.swift */; };
 		762CF1E42981DE6100099999 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1E32981DE6100099999 /* Device.swift */; };
@@ -34,6 +36,10 @@
 		7645D5032983186100019227 /* NSMenuItem+ImageInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */; };
 		76489D5A29BFC60C0070EF03 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76489D5929BFC60C0070EF03 /* WelcomeView.swift */; };
 		76489D5C29BFCA330070EF03 /* OnboardingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76489D5B29BFCA330070EF03 /* OnboardingItem.swift */; };
+		764BA3E92A5AD418003A78AF /* GetDevicesCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764BA3E82A5AD418003A78AF /* GetDevicesCommand.swift */; };
+		764BA3EB2A5AD43F003A78AF /* LaunchDeviceCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764BA3EA2A5AD43F003A78AF /* LaunchDeviceCommand.swift */; };
+		764BA3ED2A5AD478003A78AF /* GetCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764BA3EC2A5AD478003A78AF /* GetCommands.swift */; };
+		765ABF382A8BECD900A063CB /* ExecuteCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765ABF372A8BECD900A063CB /* ExecuteCommand.swift */; };
 		765C44C82A2A6C9600FCC159 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 765C44C72A2A6C9600FCC159 /* MainMenu.xib */; };
 		76630F0C29BDD0C000FB64F9 /* Devices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76630F0B29BDD0C000FB64F9 /* Devices.swift */; };
 		76630F0E29BDE7EB00FB64F9 /* ParametersTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76630F0D29BDE7EB00FB64F9 /* ParametersTable.swift */; };
@@ -70,6 +76,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7610992C2A3F95850067885A /* MiniSim.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MiniSim.sdef; sourceTree = "<group>"; };
+		7610992E2A3F95D90067885A /* NSScriptCommand+utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSScriptCommand+utils.swift"; sourceTree = "<group>"; };
 		7625140A2992B46D0060A225 /* Pasteboard+utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pasteboard+utils.swift"; sourceTree = "<group>"; };
 		762CF1DF2981968F00099999 /* String+match.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+match.swift"; sourceTree = "<group>"; };
 		762CF1E32981DE6100099999 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
@@ -93,6 +101,10 @@
 		7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMenuItem+ImageInit.swift"; sourceTree = "<group>"; };
 		76489D5929BFC60C0070EF03 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		76489D5B29BFCA330070EF03 /* OnboardingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingItem.swift; sourceTree = "<group>"; };
+		764BA3E82A5AD418003A78AF /* GetDevicesCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDevicesCommand.swift; sourceTree = "<group>"; };
+		764BA3EA2A5AD43F003A78AF /* LaunchDeviceCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchDeviceCommand.swift; sourceTree = "<group>"; };
+		764BA3EC2A5AD478003A78AF /* GetCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCommands.swift; sourceTree = "<group>"; };
+		765ABF372A8BECD900A063CB /* ExecuteCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecuteCommand.swift; sourceTree = "<group>"; };
 		765C44C72A2A6C9600FCC159 /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		76630F0B29BDD0C000FB64F9 /* Devices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Devices.swift; sourceTree = "<group>"; };
 		76630F0D29BDE7EB00FB64F9 /* ParametersTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTable.swift; sourceTree = "<group>"; };
@@ -211,6 +223,19 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
+		764BA3E72A5AD3F6003A78AF /* AppleScript Commands */ = {
+			isa = PBXGroup;
+			children = (
+				7610992E2A3F95D90067885A /* NSScriptCommand+utils.swift */,
+				7610992C2A3F95850067885A /* MiniSim.sdef */,
+				764BA3E82A5AD418003A78AF /* GetDevicesCommand.swift */,
+				764BA3EA2A5AD43F003A78AF /* LaunchDeviceCommand.swift */,
+				764BA3EC2A5AD478003A78AF /* GetCommands.swift */,
+				765ABF372A8BECD900A063CB /* ExecuteCommand.swift */,
+			);
+			path = "AppleScript Commands";
+			sourceTree = "<group>";
+		};
 		766BD2272981628A0042261B = {
 			isa = PBXGroup;
 			children = (
@@ -230,6 +255,7 @@
 		766BD2322981628A0042261B /* MiniSim */ = {
 			isa = PBXGroup;
 			children = (
+				764BA3E72A5AD3F6003A78AF /* AppleScript Commands */,
 				768F8ECC2995575B00DFBCDB /* Info.plist */,
 				76F269882A2A40E600424BDA /* Components */,
 				76E5FAD1299BEBD2007987E0 /* MenuItems */,
@@ -383,6 +409,7 @@
 			files = (
 				766BD23B2981628C0042261B /* Preview Assets.xcassets in Resources */,
 				766BD2382981628C0042261B /* Assets.xcassets in Resources */,
+				7610992D2A3F95850067885A /* MiniSim.sdef in Resources */,
 				765C44C82A2A6C9600FCC159 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -439,7 +466,9 @@
 				7630B2682985C4CF00D8B57D /* About.swift in Sources */,
 				76630F0C29BDD0C000FB64F9 /* Devices.swift in Sources */,
 				767C761F29B26ED3009B9AEC /* AccessibilityElement.swift in Sources */,
+				7610992F2A3F95D90067885A /* NSScriptCommand+utils.swift in Sources */,
 				76F269872A2A39D100424BDA /* Variables.swift in Sources */,
+				764BA3EB2A5AD43F003A78AF /* LaunchDeviceCommand.swift in Sources */,
 				7630B2732986C68000D8B57D /* PaneIdentifier.swift in Sources */,
 				7630B2662985C44A00D8B57D /* Preferences.swift in Sources */,
 				7625140B2992B46D0060A225 /* Pasteboard+utils.swift in Sources */,
@@ -455,6 +484,7 @@
 				7630B2772986D65800D8B57D /* Bundle+appName.swift in Sources */,
 				763121892A12AF9C00EE7F48 /* Command.swift in Sources */,
 				767DDF6829D32ABC005E6F32 /* ReadyPopOver.swift in Sources */,
+				764BA3E92A5AD418003A78AF /* GetDevicesCommand.swift in Sources */,
 				76630F2929BE09D800FB64F9 /* Parameter.swift in Sources */,
 				7630B27C2987207200D8B57D /* Menu.swift in Sources */,
 				762CF1E02981968F00099999 /* String+match.swift in Sources */,
@@ -463,9 +493,11 @@
 				762CF1E42981DE6100099999 /* Device.swift in Sources */,
 				7645D5032983186100019227 /* NSMenuItem+ImageInit.swift in Sources */,
 				76F2A91929924242002D4EF6 /* AndroidSubMenuItem.swift in Sources */,
+				764BA3ED2A5AD478003A78AF /* GetCommands.swift in Sources */,
 				7630B26D2986B4FD00D8B57D /* KeyboardShortcuts.swift in Sources */,
 				7684FAAF29D202F500230BB0 /* AndroidHomeError.swift in Sources */,
 				7645D4BE2982A1B100019227 /* DeviceService.swift in Sources */,
+				765ABF382A8BECD900A063CB /* ExecuteCommand.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

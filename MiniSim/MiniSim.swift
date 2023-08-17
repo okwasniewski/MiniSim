@@ -35,6 +35,7 @@ class MiniSim: NSObject {
     deinit {
         isOnboardingFinishedObserver?.invalidate()
         NotificationCenter.default.removeObserver(self, name: .commandDidSucceed, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .deviceDeleted, object: nil)
     }
     
     private lazy var settingsController = SettingsWindowController(
@@ -84,6 +85,7 @@ class MiniSim: NSObject {
             }
         }
         NotificationCenter.default.addObserver(self, selector: #selector(toggleSuccessCheckmark), name: .commandDidSucceed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDeviceDeleted), name: .deviceDeleted, object: nil)
     }
     
     private func appendMenu() {
@@ -118,6 +120,10 @@ class MiniSim: NSObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
             self.setMenuImage()
         }
+    }
+    
+    @objc private func handleDeviceDeleted() {
+        menu.getDevices()
     }
     
     @objc func menuItemAction(_ sender: NSMenuItem) {

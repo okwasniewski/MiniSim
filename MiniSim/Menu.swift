@@ -12,7 +12,6 @@ import UserNotifications
 class Menu: NSMenu {
     public let maxKeyEquivalent = 9
     
-    var deviceService: DeviceServiceProtocol!
     var devices: [Device] = [] {
         didSet {
             populateDevices(isFirst: oldValue.isEmpty)
@@ -29,8 +28,7 @@ class Menu: NSMenu {
         super.init(coder: coder)
     }
     
-    init(deviceService: DeviceServiceProtocol = DeviceService()) {
-        self.deviceService = deviceService
+    init() {
         super.init(title: "MiniSim")
         self.delegate = self
     }
@@ -42,8 +40,8 @@ class Menu: NSMenu {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 var devicesArray: [Device] = []
-                try devicesArray.append(contentsOf: self.deviceService.getAndroidDevices())
-                try devicesArray.append(contentsOf: self.deviceService.getIOSDevices())
+                try devicesArray.append(contentsOf: DeviceService.getAndroidDevices())
+                try devicesArray.append(contentsOf: DeviceService.getIOSDevices())
                 self.devices = devicesArray
             } catch {
                 NSAlert.showError(message: error.localizedDescription)
@@ -60,121 +58,18 @@ class Menu: NSMenu {
         itemsToRemove.forEach(safeRemoveItem)
     }
     
-    private func getAdditionalLaunchParams() -> [String] {
-        guard let paramData = UserDefaults.standard.parameters else { return [] }
-        guard let parameters = try? JSONDecoder().decode([Parameter].self, from: paramData) else {
-            return []
-        }
-        
-        return parameters.filter({ $0.enabled }).map({ $0.command })
-    }
-    
-    private func getAdditionalCommands(platform: Platform) -> [Command] {
-        guard let commandsData = UserDefaults.standard.commands else { return [] }
-        guard let commands = try? JSONDecoder().decode([Command].self, from: commandsData) else {
-            return []
-        }
-        
-        return commands.filter({ $0.platform == platform })
-    }
-    
-    
     @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
-        guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
         guard let tag = AndroidSubMenuItem(rawValue: sender.tag) else { return }
+        guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
         
-        DispatchQueue.global(qos: .userInitiated).async { [self] in
-            do {
-                switch tag {
-                case .coldBootAndroid:
-                    var params = ["-no-snapshot"]
-                    params.append(contentsOf: getAdditionalLaunchParams())
-                    try deviceService.launchDevice(name: device.name, additionalArguments:params)
-                    
-                case .androidNoAudio:
-                    var params = ["-no-audio"]
-                    params.append(contentsOf: getAdditionalLaunchParams())
-                    try deviceService.launchDevice(name: device.name, additionalArguments:params)
-                    
-                case .toggleA11yAndroid:
-                    try deviceService.toggleA11y(device: device)
-                    
-                case .copyAdbId:
-                    if let deviceId = device.ID {
-                        NSPasteboard.general.copyToPasteboard(text: deviceId)
-                        handleSuccess(title: "Device ID copied to clipboard!", body: deviceId)
-                    }
-                    
-                case .copyName:
-                    NSPasteboard.general.copyToPasteboard(text: device.name)
-                    handleSuccess(title: "Device name copied to clipboard!", body: device.name)
-                    
-                case .pasteToEmulator:
-                    let pasteboard = NSPasteboard.general
-                    guard let clipboard = pasteboard.pasteboardItems?.first?.string(forType: .string) else { break }
-                    try deviceService.sendText(device: device, text: clipboard)
-                    
-                case .customCommand:
-                    let androidCommands = getAdditionalCommands(platform: .android)
-                    guard let command = androidCommands.first(where: {$0.name == sender.title}) else { return }
-                    do {
-                        try deviceService.runCustomCommand(device, command: command)
-                    } catch {
-                        NSAlert.showError(message: error.localizedDescription)
-                    }
-                    
-                default:
-                    break
-                }
-            }
-            catch {
-                NSAlert.showError(message: error.localizedDescription)
-            }
-        }
+        DeviceService.handleAndroidAction(device: device, commandTag: tag, itemName: sender.title)
     }
     
     @objc private func IOSSubMenuClick(_ sender: NSMenuItem) {
-        guard let device = getDeviceByName(name: sender.parent?.title ?? "") else {
-            return
-        }
-        if let tag = IOSSubMenuItem(rawValue: sender.tag) {
-            switch tag {
-            case .copyName:
-                NSPasteboard.general.copyToPasteboard(text: device.name)
-                handleSuccess(title: "Device name copied to clipboard!", body: device.name)
-            case .copyUDID:
-                if let deviceID = device.ID {
-                    NSPasteboard.general.copyToPasteboard(text: deviceID)
-                    handleSuccess(title: "Device ID copied to clipboard!", body: deviceID)
-                }
-            case .deleteSim:
-                guard let deviceID = device.ID else { return }
-                if !NSAlert.showQuestionDialog(title: "Are you sure?", message: "Are you sure you want to delete this Simulator?") {
-                    return
-                }
-                DispatchQueue.global(qos: .userInitiated).async { [self] in
-                    do {
-                        try deviceService.deleteSimulator(uuid: deviceID)
-                        handleSuccess(title: "Simulator deleted!", body: deviceID)
-                        getDevices()
-                    } catch {
-                        NSAlert.showError(message: error.localizedDescription)
-                    }
-                }
-            case .customCommand:
-                let iosCommands = getAdditionalCommands(platform: .ios)
-                guard let command = iosCommands.first(where: {$0.name == sender.title}) else { return }
-                DispatchQueue.global(qos: .userInitiated).async { [self] in
-                    do {
-                        try deviceService.runCustomCommand(device, command: command)
-                    } catch {
-                        NSAlert.showError(message: error.localizedDescription)
-                    }
-                }
-            default:
-                break
-            }
-        }
+        guard let tag = IOSSubMenuItem(rawValue: sender.tag) else { return }
+        guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
+        
+        DeviceService.handleiOSAction(device: device, commandTag: tag, itemName: sender.title)
     }
     
     @objc private func deviceItemClick(_ sender: NSMenuItem) {
@@ -182,20 +77,17 @@ class Menu: NSMenu {
         guard let tag = DeviceMenuItem(rawValue: sender.tag) else { return }
         
         if device.booted {
-            DispatchQueue.global(qos: .userInitiated).async {
-                self.deviceService.focusDevice(device)
-            }
+            DeviceService.focusDevice(device)
             return
         }
         
-        DispatchQueue.global(qos: .userInitiated).async { [self] in
+        DispatchQueue.global(qos: .userInitiated).async {
             do {
                 switch tag {
                 case .launchAndroid:
-                    let params = getAdditionalLaunchParams()
-                    try deviceService.launchDevice(name: device.name, additionalArguments: params)
+                    try DeviceService.launchDevice(name: device.name)
                 case .launchIOS:
-                    try deviceService.launchDevice(uuid: device.ID ?? "")
+                    try DeviceService.launchDevice(uuid: device.ID ?? "")
                 }
             } catch {
                 NSAlert.showError(message: error.localizedDescription)
@@ -242,11 +134,7 @@ class Menu: NSMenu {
             }
         }
     }
-    
-    private func handleSuccess(title: String, body: String) {
-        UNUserNotificationCenter.showNotification(title: title, body: body)
-        NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
-    }
+
     
     private func populateDevices(isFirst: Bool) {
         let sortedDevices = devices.sorted(by: { $0.platform == .android && $1.platform == .ios })
@@ -300,7 +188,7 @@ class Menu: NSMenu {
             subMenu.addItem(menuItem)
         }
         
-        for item in self.getAdditionalCommands(platform: .android) {
+        for item in DeviceService.getCustomCommands(platform: .android) {
             let menuItem = AndroidSubMenuItem.customCommand.menuItem
             menuItem.target = self
             menuItem.action = #selector(androidSubMenuClick)
@@ -329,7 +217,7 @@ class Menu: NSMenu {
             subMenu.addItem(menuItem)
         }
         
-        for item in self.getAdditionalCommands(platform: .ios) {
+        for item in DeviceService.getCustomCommands(platform: .ios) {
             let menuItem = IOSSubMenuItem.customCommand.menuItem
             menuItem.target = self
             menuItem.action = #selector(IOSSubMenuClick)
