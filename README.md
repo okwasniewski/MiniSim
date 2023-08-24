@@ -44,8 +44,8 @@ https://user-images.githubusercontent.com/52801365/224473566-a6248f20-8fc9-4b8e-
 
 ## Usage 
 
+> **important**
 This utility uses `xcrun` and `sdk/emulator` to fetch available devices on your machine. 
-
 It might not work if you don't have a proper XCode and Android Studio setup.
 
 There is a global shortcut for invoking the menu: <kbd>⌥ + ⇧ + e</kbd>.
