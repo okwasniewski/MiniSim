@@ -16,6 +16,12 @@ Download the app from [releases](https://github.com/okwasniewski/MiniSim/release
 brew install --cask minisim
 ```
 
+### Raycast extension
+
+You can use Minisim together with a [Raycast](https://www.raycast.com) extension.
+
+<a title="Install minisim Raycast Extension" href="https://www.raycast.com/okwasniewski/minisim"><img src="https://www.raycast.com/okwasniewski/minisim/install_button@2x.png?v=1.1" height="64" alt="" style="height: 64px;"></a> 
+
 ## Features
 - Lightweight
 - Fast, 100% native
