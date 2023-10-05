@@ -36,7 +36,7 @@ struct About: View {
             .padding(.bottom, 10)
             
             HStack {
-                Button("Github") {
+                Button("GitHub") {
                     openURL(URL(string: "https://github.com/okwasniewski/MiniSim")!)
                 }
                 Button("Buy me a coffee") {
