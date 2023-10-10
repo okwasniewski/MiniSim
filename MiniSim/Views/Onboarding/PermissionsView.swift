@@ -21,11 +21,11 @@ struct PermissionsView: View {
     var body: some View {
         VStack {
             Spacer()
-            Text("Permissions")
-                .font(.largeTitle)
-                .padding(.bottom, 5)
-            Text("MiniSim needs access to system APIs that require your permission.")
-                .multilineTextAlignment(.center)
+            OnboardingHeader(
+                title: "Permissions",
+                subTitle: "MiniSim needs access to system APIs that require your permission."
+            )
+            
             Spacer()
             VStack (alignment: .leading) {
                 Label("Accessibility", systemImage: "figure.roll")

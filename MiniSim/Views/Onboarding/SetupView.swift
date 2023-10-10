@@ -14,7 +14,19 @@ struct SetupView: View {
     @State private var isXcodeSetupCorrect: Bool = true
     @State private var isAndroidSetupCorrect: Bool = true
     
+    @AppStorage(UserDefaults.Keys.enableiOSSimulators, store: .standard) var enableiOSSimulators: Bool = true
+    @AppStorage(UserDefaults.Keys.enableAndroidEmulators, store: .standard) var enableAndroidEmulators: Bool = true
+    
+    var canContinue: Bool {
+        let enableiOS = enableiOSSimulators ? isXcodeSetupCorrect : true
+        let enableAndroid = enableAndroidEmulators ? isAndroidSetupCorrect : true
+        return enableiOS && enableAndroid
+    }
+    
     func checkXcode() {
+        if !enableiOSSimulators {
+            return
+        }
         isXcodeSetupCorrect = DeviceService.checkXcodeSetup()
     }
     
@@ -36,41 +48,31 @@ struct SetupView: View {
     var body: some View {
         VStack {
             Spacer()
-            Text("Let's check your setup 🛠️")
-                .font(.largeTitle)
-                .padding(.bottom, 5)
-            Text("In order to properly launch simulators,\nyou need to have correct setup.")
-                .multilineTextAlignment(.center)
+            OnboardingHeader(
+                title: "Let's check your setup 🛠️",
+                subTitle: "In order to properly launch simulators,\nyou need to have correct setup."
+            )
             Spacer()
-            VStack (alignment: .leading) {
-                Text("Android Studio")
-                    .font(.headline)
-                    .padding(.bottom, 2)
-                if isAndroidSetupCorrect {
-                    Label("Looks like everything is running correctly.", systemImage: "checkmark.circle.fill")
-                        .foregroundColor(.green)
-                } else {
-                    Label("Something is wrong with your Android setup. Please enter correct ANDROID_HOME path here:", systemImage: "exclamationmark.bubble")
-                    AndroidPathInput { isAndroidSetupCorrect = $0 }
-                }
-            }
-            .onboardingContainer()
-            .redacted(reason: isLoading ? .placeholder : [])
             
-            VStack (alignment: .leading) {
-                Text("Xcode")
-                    .font(.headline)
-                    .padding(.bottom, 2)
-                
-                if isXcodeSetupCorrect {
-                    Label("Looks like everything is running correctly.", systemImage: "checkmark.circle.fill")
-                        .foregroundColor(.green)
-                } else {
-                    Label("Something is wrong with your Xcode setup. Please double check if it's installed correctly.", systemImage: "exclamationmark.bubble")
+            if enableiOSSimulators {
+                SetupItemView(
+                    imageName: "xcode",
+                    title: "Xcode",
+                    subTitle: isXcodeSetupCorrect ? "Everything is running correctly." : "Something is wrong with your setup. Please check if Xcode is installed correctly."
+                ) {
+                    
                 }
+                .redacted(reason: isLoading ? .placeholder : [])
             }
-            .onboardingContainer()
-            .redacted(reason: isLoading ? .placeholder : [])
+            
+            if enableAndroidEmulators {
+                SetupItemView(imageName: "android_studio", title: "Android Studio", subTitle: isAndroidSetupCorrect ? "Everything is running correctly." : "Something is wrong with your Android setup. Please enter correct ANDROID_HOME path here:") {
+                    if !isAndroidSetupCorrect {
+                        AndroidPathInput { isAndroidSetupCorrect = $0 }
+                    }
+                }
+                .redacted(reason: isLoading ? .placeholder : [])
+            }
             HStack {
                 Spacer()
                 Button("Re-check") {
@@ -81,7 +83,7 @@ struct SetupView: View {
             
             Spacer()
             
-            if isXcodeSetupCorrect && isAndroidSetupCorrect {
+            if canContinue {
                 OnboardingButton("Continue") {
                     goToNextPage()
                 }

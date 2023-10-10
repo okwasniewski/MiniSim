@@ -22,14 +22,13 @@ class MiniSim: NSObject {
     
     override init() {
         super.init()
-        menu = Menu()
-        statusItem.menu = menu
         
         settingsController.window?.delegate = self
         
-        appendMenu()
-        menu.getDevices()
+        setDefaultValues()
         initObservers()
+        
+        setup()
     }
     
     deinit {
@@ -77,10 +76,23 @@ class MiniSim: NSObject {
         self.statusItem.button?.performClick(self)
     }
     
+    private func setup() {
+        if !UserDefaults.standard.isOnboardingFinished {
+            onboarding.show()
+            return
+        }
+        menu = Menu()
+        statusItem.menu = menu
+        setMenuImage()
+        populateSections()
+        
+        menu.getDevices()
+    }
+    
     private func initObservers() {
         isOnboardingFinishedObserver = UserDefaults.standard.observe(\.isOnboardingFinished, options: .new) { _, _ in
             if UserDefaults.standard.isOnboardingFinished == true {
-                self.appendMenu()
+                self.setup()
                 self.onboarding.showPopOver(button: self.statusItem.button)
             }
         }
@@ -88,13 +100,11 @@ class MiniSim: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(handleDeviceDeleted), name: .deviceDeleted, object: nil)
     }
     
-    private func appendMenu() {
-        if !(UserDefaults.standard.androidHome != nil && UserDefaults.standard.isOnboardingFinished) {
-            onboarding.show()
-            return
-        }
-        setMenuImage()
-        populateSections()
+    private func setDefaultValues() {
+        UserDefaults.standard.register(defaults: [
+            UserDefaults.Keys.enableAndroidEmulators: true,
+            UserDefaults.Keys.enableiOSSimulators: true
+        ])
     }
     
     private func setMenuImage() {
@@ -158,14 +168,19 @@ class MiniSim: NSObject {
         if !menu.items.isEmpty {
             return
         }
-        MenuSections.allCases.map({$0.menuItem}).forEach { item in
-            if item.tag >= MenuSections.clearDerrivedData.rawValue {
-                item.action = #selector(menuItemAction)
-                item.target = self
-            } else {
-                item.isEnabled = false
+        MenuSections.allCases.forEach { item in
+            if (!item.attachItem) {
+                return
             }
-            menu.addItem(item)
+            
+            let menuItem = item.menuItem
+            if menuItem.tag >= MenuSections.clearDerrivedData.rawValue {
+                menuItem.action = #selector(menuItemAction)
+                menuItem.target = self
+            } else {
+                menuItem.isEnabled = false
+            }
+            menu.addItem(menuItem)
         }
     }
 }

@@ -15,14 +15,27 @@ struct WelcomeView: View {
             if let appIcon = NSImage(named: "AppIcon") {
                 Image(nsImage: appIcon)
             }
-            Text("Welcome to MiniSim!")
-                .font(.largeTitle)
-            Text("Thanks for downloading the app")
-                .padding(.bottom, 35)
+            OnboardingHeader(
+                title: "Welcome to MiniSim!",
+                subTitle: "Thanks for downloading the app"
+            )
             
-            OnboardingItem(image: "iphone", title: "Easily open emulators", description: "All your emulators right in your menu bar without opening Android Studio or Xcode.")
-            OnboardingItem(image: "doc.on.clipboard", title: "Copy device name and ID", description: "Makes it easier to execute custom CLI commands.")
-            OnboardingItem(image: "sparkles", title: "And more useful utilities", description: "Like: Paste clipboard to emulator, Cold boot and more!")
+            OnboardingItem(
+                image: "iphone",
+                title: "Easily open emulators",
+                description: "All your emulators right in your menu bar without opening Android Studio or Xcode."
+            )
+            .padding(.top, 25)
+            OnboardingItem(
+                image: "doc.on.clipboard",
+                title: "Copy device name and ID",
+                description: "Makes it easier to execute custom CLI commands."
+            )
+            OnboardingItem(
+                image: "sparkles",
+                title: "And more useful utilities",
+                description: "Like: Paste clipboard to emulator, Cold boot and more!"
+            )
             
             OnboardingButton("Continue") {
                 goToNextPage()

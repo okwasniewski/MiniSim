@@ -9,6 +9,7 @@ import SwiftUI
 
 enum OnboardingPages: CaseIterable {
     case welcome
+    case setupPreferences
     case setup
     case permissions
     
@@ -17,6 +18,8 @@ enum OnboardingPages: CaseIterable {
         switch self {
         case .welcome:
             WelcomeView(goToNextPage: goToNextPage)
+        case .setupPreferences:
+            SetupPreferences(goToNextPage: goToNextPage)
         case .setup:
             SetupView(goToNextPage: goToNextPage)
         case .permissions:
@@ -27,6 +30,9 @@ enum OnboardingPages: CaseIterable {
 
 struct OnboardingPager: View {
     @State private var currentPage: OnboardingPages = .welcome
+    var pageIndex: Int {
+        OnboardingPages.allCases.firstIndex(of: currentPage) ?? 0
+    }
     
     func goToNextPage() {
         let allPages = OnboardingPages.allCases
@@ -35,12 +41,28 @@ struct OnboardingPager: View {
         }
     }
     
+    func goToPreviousPage() {
+        let allPages = OnboardingPages.allCases
+        if let index = allPages.firstIndex(of: currentPage), index > 0 {
+            currentPage = allPages[index - 1]
+        }
+    }
+    
     var body: some View {
-        VStack {
-            ForEach(OnboardingPages.allCases, id: \.self) { page in
-                if currentPage == page {
-                    page.view(goToNextPage: goToNextPage)
-                        .frame(maxWidth: 350, alignment: .center)
+        ZStack {
+            if (pageIndex > 0) {
+                Button("Go Back") {
+                    goToPreviousPage()
+                }
+                .buttonStyle(.link)
+                .position(x: 35, y: 20)
+            }
+            VStack {
+                ForEach(OnboardingPages.allCases, id: \.self) { page in
+                    if currentPage == page {
+                        page.view(goToNextPage: goToNextPage)
+                            .frame(maxWidth: 350, alignment: .center)
+                    }
                 }
             }
         }

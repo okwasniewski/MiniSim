@@ -34,14 +34,18 @@ class Menu: NSMenu {
     }
     
     func getDevices() {
-        if UserDefaults.standard.androidHome == nil {
+        if UserDefaults.standard.enableAndroidEmulators && UserDefaults.standard.androidHome == nil {
             return
         }
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 var devicesArray: [Device] = []
-                try devicesArray.append(contentsOf: DeviceService.getAndroidDevices())
-                try devicesArray.append(contentsOf: DeviceService.getIOSDevices())
+                if (UserDefaults.standard.enableiOSSimulators) {
+                    try devicesArray.append(contentsOf: DeviceService.getIOSDevices())
+                }
+                if (UserDefaults.standard.enableAndroidEmulators) {
+                    try devicesArray.append(contentsOf: DeviceService.getAndroidDevices())
+                }
                 self.devices = devicesArray
             } catch {
                 NSAlert.showError(message: error.localizedDescription)
@@ -163,7 +167,7 @@ class Menu: NSMenu {
             
             DispatchQueue.main.async {
                 let iosDevicesCount = self.devices.filter({ $0.platform == .ios }).count
-                self.safeInsertItem(menuItem, at: isAndroid ? (isFirst ? index : iosDevicesCount) + 3 : 1)
+                self.safeInsertItem(menuItem, at: isAndroid && UserDefaults.standard.enableiOSSimulators ? (isFirst ? index : iosDevicesCount) + 3 : 1)
             }
             
         }
