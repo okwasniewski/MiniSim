@@ -14,7 +14,7 @@ class Menu: NSMenu {
     
     var devices: [Device] = [] {
         didSet {
-            populateDevices(isFirst: oldValue.isEmpty)
+            populateDevices()
             assignKeyEquivalents()
         }
         willSet {
@@ -52,8 +52,8 @@ class Menu: NSMenu {
     }
     
     private func removeMenuItems(removedDevices: Set<String>) {
-        let itemsToRemove = self.items.filter({ removedDevices.contains($0.title) })
-        itemsToRemove.forEach(safeRemoveItem)
+        self.items.filter({ removedDevices.contains($0.title) })
+            .forEach(safeRemoveItem)
     }
     
     @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
@@ -121,35 +121,57 @@ class Menu: NSMenu {
         }
     }
     
-    
-    private func populateDevices(isFirst: Bool) {
+    // MARK: Populate sections
+    private func populateDevices() {
         let sortedDevices = devices.sorted(by: { $0.platform == .android && $1.platform == .ios })
-        for (index, device) in sortedDevices.enumerated() {
-            let isAndroid = device.platform == .android
-            if let itemIndex = items.firstIndex(where: { $0.title == device.displayName }) {
-                let item = self.items.get(at: itemIndex)
-                item?.state = device.booted ? .on : .off
-                item?.submenu = isAndroid ?
-                self.populateAndroidSubMenu(booted: device.booted) :
-                self.populateIOSSubMenu(booted: device.booted)
-                continue
-            }
-            
-            let menuItem = NSMenuItem(
-                title: device.displayName,
-                action: #selector(deviceItemClick),
-                keyEquivalent: "",
-                type: isAndroid ? .launchAndroid : .launchIOS
-            )
-            
-            menuItem.target = self
-            menuItem.keyEquivalentModifierMask = isAndroid ? [.option] : [.command]
-            menuItem.submenu = isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu(booted: device.booted)
-            menuItem.state = device.booted ? .on : .off
-            
-            let iosDevicesCount = self.devices.filter({ $0.platform == .ios }).count
-            self.safeInsertItem(menuItem, at: isAndroid && UserDefaults.standard.enableiOSSimulators ? (isFirst ? index : iosDevicesCount) + 3 : 1)
+        let platformSections: [MenuSections] = [.iOSHeader, .androidHeader]
+        for section in platformSections {
+            let devices = filter(devices: sortedDevices, for: section)
+            let menuItems = devices.map { createMenuItem(for: $0) }
+            self.updateSection(with: Array(menuItems), section: section)
         }
+    }
+    
+    private func filter(devices: [Device], for section: MenuSections) -> [Device] {
+        let platform: Platform = section == .iOSHeader ? .ios : .android
+        return devices.filter { $0.platform == platform }
+    }
+    
+    private func updateSection(with items: [NSMenuItem], section: MenuSections) {
+        guard let header = self.items.first(where: { $0.tag == section.rawValue }),
+              let startIndex = self.items.firstIndex(of: header) else {
+            return
+        }
+        
+        var count = 0
+        items.forEach { menuItem in
+            count += 1
+            if let itemIndex = self.items.firstIndex(where: { $0.title == menuItem.title }) {
+                self.replaceMenuItem(at: itemIndex, with: menuItem)
+                return
+            }
+            self.safeInsertItem(menuItem, at: startIndex + count)
+        }
+    }
+
+    private func createMenuItem(for device: Device) -> NSMenuItem {
+        let menuItem = NSMenuItem(
+            title: device.displayName,
+            action: #selector(deviceItemClick),
+            keyEquivalent: "",
+            type: device.platform == .ios ? .launchIOS : .launchAndroid
+        )
+        
+        menuItem.target = self
+        menuItem.keyEquivalentModifierMask = [.command]
+        menuItem.submenu = device.platform == .ios ? populateIOSSubMenu(booted: device.booted) : populateAndroidSubMenu(booted: device.booted)
+        menuItem.state = device.booted ? .on : .off
+        return menuItem
+    }
+    
+    private func replaceMenuItem(at index: Int, with newItem: NSMenuItem) {
+        self.removeItem(at: index)
+        self.insertItem(newItem, at: index)
     }
     
     private func populateAndroidSubMenu(booted: Bool) -> NSMenu {
