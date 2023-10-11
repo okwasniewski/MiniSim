@@ -155,6 +155,32 @@ class DeviceService: DeviceServiceProtocol {
         UNUserNotificationCenter.showNotification(title: title, body: message)
         NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
     }
+    
+    static func getAllDevices(
+        android: Bool,
+        iOS: Bool,
+        completionQueue: DispatchQueue = .main,
+        completion: @escaping ([Device], Error?) -> ()
+    ) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                var devicesArray: [Device] = []
+                if android {
+                    try devicesArray.append(contentsOf: getAndroidDevices())
+                }
+                if iOS {
+                    try devicesArray.append(contentsOf: getIOSDevices())
+                }
+                completionQueue.async {
+                    completion(devicesArray, nil)
+                }
+            } catch {
+                completionQueue.async {
+                    completion([], error)
+                }
+            }
+        }
+    }
 }
 
 // MARK: iOS Methods
