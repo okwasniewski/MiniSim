@@ -41,4 +41,12 @@ extension NSMenuItem {
         )
         self.title = command.name
     }
+    
+    convenience init(mainMenuItem: MainMenuActions, target: AnyObject, action: Selector) {
+        self.init(target: target, action: action)
+        self.tag = mainMenuItem.rawValue
+        self.keyEquivalent = mainMenuItem.keyEquivalent
+        self.title = mainMenuItem.title
+        self.toolTip = mainMenuItem.title
+    }
 }

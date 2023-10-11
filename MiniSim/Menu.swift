@@ -33,7 +33,7 @@ class Menu: NSMenu {
         self.delegate = self
     }
     
-    func getDevices() {
+    func updateDevicesList() {
         let userDefaults = UserDefaults.standard
         DeviceService.getAllDevices(
             android: userDefaults.enableAndroidEmulators && userDefaults.androidHome != nil,
@@ -90,7 +90,7 @@ class Menu: NSMenu {
     }
     
     private func assignKeyEquivalents() {
-        let sections = MenuSections.allCases.map {$0.title}
+        let sections = DeviceListSection.allCases.map {$0.title}
         let deviceItems = items.filter { !sections.contains($0.title) }
         let iosDeviceNames = devices.filter({ $0.platform == Platform.ios }).map { $0.displayName }
         let androidDeviceNames = devices.filter({ $0.platform == Platform.android }).map { $0.displayName }
@@ -124,7 +124,7 @@ class Menu: NSMenu {
     // MARK: Populate sections
     private func populateDevices() {
         let sortedDevices = devices.sorted(by: { $0.platform == .android && $1.platform == .ios })
-        let platformSections: [MenuSections] = [.iOSHeader, .androidHeader]
+        let platformSections: [DeviceListSection] = sections
         for section in platformSections {
             let devices = filter(devices: sortedDevices, for: section)
             let menuItems = devices.map { createMenuItem(for: $0) }
@@ -132,12 +132,23 @@ class Menu: NSMenu {
         }
     }
     
-    private func filter(devices: [Device], for section: MenuSections) -> [Device] {
-        let platform: Platform = section == .iOSHeader ? .ios : .android
+    var sections: [DeviceListSection] {
+        var sections: [DeviceListSection] = []
+        if UserDefaults.standard.enableAndroidEmulators {
+            sections.append(.android)
+        }
+        if UserDefaults.standard.enableiOSSimulators {
+            sections.append(.iOS)
+        }
+        return sections
+    }
+    
+    private func filter(devices: [Device], for section: DeviceListSection) -> [Device] {
+        let platform: Platform = section == .iOS ? .ios : .android
         return devices.filter { $0.platform == platform }
     }
     
-    private func updateSection(with items: [NSMenuItem], section: MenuSections) {
+    private func updateSection(with items: [NSMenuItem], section: DeviceListSection) {
         guard let header = self.items.first(where: { $0.tag == section.rawValue }),
               let startIndex = self.items.firstIndex(of: header) else {
             return
@@ -248,7 +259,7 @@ class Menu: NSMenu {
 extension Menu: NSMenuDelegate {
     func menuWillOpen(_ menu: NSMenu) {
         NotificationCenter.default.post(name: .menuWillOpen, object: nil)
-        self.getDevices()
+        self.updateDevicesList()
         KeyboardShortcuts.disable(.toggleMiniSim)
     }
     

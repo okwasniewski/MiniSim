@@ -84,9 +84,14 @@ class MiniSim: NSObject {
         menu = Menu()
         statusItem.menu = menu
         setMenuImage()
-        populateSections()
         
-        menu.getDevices()
+        guard menu.items.isEmpty else {
+            menu.updateDevicesList()
+            return
+        }
+        
+        (devicesListHeaders + mainMenu).forEach { menu.addItem($0) }
+        menu.updateDevicesList()
     }
     
     private func initObservers() {
@@ -133,11 +138,11 @@ class MiniSim: NSObject {
     }
     
     @objc private func handleDeviceDeleted() {
-        menu.getDevices()
+        menu.updateDevicesList()
     }
     
     @objc func menuItemAction(_ sender: NSMenuItem) {
-        if let tag = MenuSections(rawValue: sender.tag) {
+        if let tag = MainMenuActions(rawValue: sender.tag) {
             switch tag {
             case .preferences:
                 settingsController.show()
@@ -157,29 +162,50 @@ class MiniSim: NSObject {
                     UNUserNotificationCenter.showNotification(title: "Derived data has been cleared!", body: "Removed \(amountCleared) of data")
                     NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
                 }
-            default:
-                break
             }
         }
     }
     
-    private func populateSections() {
-        if !menu.items.isEmpty {
-            return
+    private var devicesListHeaders: [NSMenuItem] {
+        var sections: [DeviceListSection] = []
+        if UserDefaults.standard.enableiOSSimulators {
+            sections.append(.iOS)
         }
-        MenuSections.allCases.forEach { item in
-            if (!item.attachItem) {
-                return
-            }
-            
-            let menuItem = item.menuItem
-            if menuItem.tag >= MenuSections.clearDerrivedData.rawValue {
-                menuItem.action = #selector(menuItemAction)
-                menuItem.target = self
+        
+        if UserDefaults.standard.enableAndroidEmulators {
+            sections.append(.android)
+        }
+    
+        guard sections.count > 1 else {
+            return []
+        }
+        
+        var menuItems: [NSMenuItem] = []
+        
+        sections.forEach { section in
+            var menuItem: NSMenuItem
+            if #available(macOS 14.0, *) {
+                menuItem = NSMenuItem.sectionHeader(title: "")
             } else {
-                menuItem.isEnabled = false
+                menuItem = NSMenuItem()
             }
-            menu.addItem(menuItem)
+            menuItem.tag = section.rawValue
+            menuItem.title = section.title
+            menuItem.toolTip = section.title
+            
+            menuItems.append(menuItem)
+            menuItems.append(NSMenuItem.separator())
+        }
+        return menuItems
+    }
+    
+    private var mainMenu: [NSMenuItem] {
+        MainMenuActions.allCases.map { item in
+            NSMenuItem(
+                mainMenuItem: item,
+                target: self,
+                action: #selector(menuItemAction)
+            )
         }
     }
 }
