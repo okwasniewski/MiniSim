@@ -34,19 +34,22 @@ class Menu: NSMenu {
     }
     
     func getDevices() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                var devicesArray: [Device] = []
-                if UserDefaults.standard.enableiOSSimulators {
-                    try devicesArray.append(contentsOf: DeviceService.getIOSDevices())
-                }
-                if UserDefaults.standard.enableAndroidEmulators && UserDefaults.standard.androidHome != nil {
-                    try devicesArray.append(contentsOf: DeviceService.getAndroidDevices())
-                }
-                self.devices = devicesArray
-            } catch {
+        let userDefaults = UserDefaults.standard
+        guard userDefaults.enableiOSSimulators,
+              userDefaults.enableAndroidEmulators,
+              userDefaults.androidHome != nil else {
+            return
+        }
+
+        DeviceService.getAllDevices(
+            android: userDefaults.enableAndroidEmulators && userDefaults.androidHome != nil,
+            iOS: userDefaults.enableiOSSimulators
+        ) { devices, error in
+            if let error = error {
                 NSAlert.showError(message: error.localizedDescription)
+                return
             }
+            self.devices = devices
         }
     }
     
@@ -82,17 +85,15 @@ class Menu: NSMenu {
             return
         }
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                switch tag {
-                case .launchAndroid:
-                    try DeviceService.launchDevice(name: device.name)
-                case .launchIOS:
-                    try DeviceService.launchDevice(uuid: device.ID ?? "")
-                }
-            } catch {
-                NSAlert.showError(message: error.localizedDescription)
+        do {
+            switch tag {
+            case .launchAndroid:
+                try DeviceService.launchDevice(name: device.name)
+            case .launchIOS:
+                try DeviceService.launchDevice(uuid: device.ID ?? "")
             }
+        } catch {
+            NSAlert.showError(message: error.localizedDescription)
         }
     }
     
@@ -116,9 +117,7 @@ class Menu: NSMenu {
     private func assignKeyEquivalent(devices: [NSMenuItem]) {
         for (index, item) in devices.enumerated() {
             if index > maxKeyEquivalent {
-                DispatchQueue.main.async {
-                    item.keyEquivalent = ""
-                }
+                item.keyEquivalent = ""
                 continue
             }
             
@@ -128,10 +127,8 @@ class Menu: NSMenu {
                 continue
             }
             
-            DispatchQueue.main.async {
-                if self.items.contains(item) {
-                    item.keyEquivalent = keyEquivalent
-                }
+            if self.items.contains(item) {
+                item.keyEquivalent = keyEquivalent
             }
         }
     }
@@ -142,11 +139,9 @@ class Menu: NSMenu {
         for (index, device) in sortedDevices.enumerated() {
             let isAndroid = device.platform == .android
             if let itemIndex = items.firstIndex(where: { $0.title == device.displayName }) {
-                DispatchQueue.main.async { [self] in
-                    let item = self.items.get(at: itemIndex)
-                    item?.state = device.booted ? .on : .off
-                    item?.submenu = isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu(booted: device.booted)
-                }
+                let item = self.items.get(at: itemIndex)
+                item?.state = device.booted ? .on : .off
+                item?.submenu = isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu(booted: device.booted)
                 continue
             }
             
@@ -162,11 +157,8 @@ class Menu: NSMenu {
             menuItem.submenu = isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu(booted: device.booted)
             menuItem.state = device.booted ? .on : .off
             
-            DispatchQueue.main.async {
-                let iosDevicesCount = self.devices.filter({ $0.platform == .ios }).count
-                self.safeInsertItem(menuItem, at: isAndroid && UserDefaults.standard.enableiOSSimulators ? (isFirst ? index : iosDevicesCount) + 3 : 1)
-            }
-            
+            let iosDevicesCount = self.devices.filter({ $0.platform == .ios }).count
+            self.safeInsertItem(menuItem, at: isAndroid && UserDefaults.standard.enableiOSSimulators ? (isFirst ? index : iosDevicesCount) + 3 : 1)
         }
     }
     
