@@ -7,7 +7,7 @@
 
 import Cocoa
 
-enum AndroidSubMenuItem: Int, CaseIterable {
+enum AndroidSubMenuItem: Int, CaseIterable, SubMenuItem {
     
     case copyName = 100
     case copyAdbId = 101
@@ -36,15 +36,10 @@ enum AndroidSubMenuItem: Int, CaseIterable {
         }
     }
     
-    var menuItem: NSMenuItem {
-        let item = self == .separator ? NSMenuItem.separator() : NSMenuItem()
-        item.tag = rawValue
-        item.image = image
-        item.title = title
-        item.toolTip = title
-        return item
-    }
-    
+    var tag: Int { self.rawValue }
+
+    var isSeparator: Bool { self == .separator }
+
     var title: String {
         switch self {
         case .copyName:

@@ -10,6 +10,8 @@
 		52B363EA2AEC0D3D006F515C /* ParametersTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363E92AEC0D3D006F515C /* ParametersTableViewModel.swift */; };
 		52B363EC2AEC10A3006F515C /* ParametersTableForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363EB2AEC10A3006F515C /* ParametersTableForm.swift */; };
 		52B363EE2AEC10B3006F515C /* ParametersTableFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363ED2AEC10B3006F515C /* ParametersTableFormViewModel.swift */; };
+		4AFACC742AD730BE00EC369F /* SubMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFACC732AD730BE00EC369F /* SubMenuItem.swift */; };
+		4AFACC762AD73D7900EC369F /* NSMenuItem+ConvenienceInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFACC752AD73D7900EC369F /* NSMenuItem+ConvenienceInit.swift */; };
 		76059BF52AD4361C0008D38B /* SetupPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF42AD4361C0008D38B /* SetupPreferences.swift */; };
 		76059BF72AD449DC0008D38B /* OnboardingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF62AD449DC0008D38B /* OnboardingHeader.swift */; };
 		76059BF92AD558C30008D38B /* SetupItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF82AD558C30008D38B /* SetupItemView.swift */; };
@@ -85,6 +87,8 @@
 		52B363E92AEC0D3D006F515C /* ParametersTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableViewModel.swift; sourceTree = "<group>"; };
 		52B363EB2AEC10A3006F515C /* ParametersTableForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableForm.swift; sourceTree = "<group>"; };
 		52B363ED2AEC10B3006F515C /* ParametersTableFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableFormViewModel.swift; sourceTree = "<group>"; };
+		4AFACC732AD730BE00EC369F /* SubMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubMenuItem.swift; sourceTree = "<group>"; };
+		4AFACC752AD73D7900EC369F /* NSMenuItem+ConvenienceInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMenuItem+ConvenienceInit.swift"; sourceTree = "<group>"; };
 		76059BF42AD4361C0008D38B /* SetupPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPreferences.swift; sourceTree = "<group>"; };
 		76059BF62AD449DC0008D38B /* OnboardingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHeader.swift; sourceTree = "<group>"; };
 		76059BF82AD558C30008D38B /* SetupItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupItemView.swift; sourceTree = "<group>"; };
@@ -195,6 +199,7 @@
 				76FCABAA29B390D5003BBF9A /* Collection+get.swift */,
 				76E4451329D4403F00039025 /* NSNotificationName.swift */,
 				767F713129D574EF004159A6 /* UNUserNotificationCenter+showNotification.swift */,
+				4AFACC752AD73D7900EC369F /* NSMenuItem+ConvenienceInit.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -334,6 +339,7 @@
 				7630B25D2984339100D8B57D /* MenuSections.swift */,
 				76D305712994155C005C373B /* IOSSubMenuItem.swift */,
 				76F2A91829924242002D4EF6 /* AndroidSubMenuItem.swift */,
+				4AFACC732AD730BE00EC369F /* SubMenuItem.swift */,
 			);
 			path = MenuItems;
 			sourceTree = "<group>";
@@ -494,6 +500,7 @@
 				76630F0C29BDD0C000FB64F9 /* Devices.swift in Sources */,
 				767C761F29B26ED3009B9AEC /* AccessibilityElement.swift in Sources */,
 				7610992F2A3F95D90067885A /* NSScriptCommand+utils.swift in Sources */,
+				4AFACC762AD73D7900EC369F /* NSMenuItem+ConvenienceInit.swift in Sources */,
 				76F269872A2A39D100424BDA /* Variables.swift in Sources */,
 				764BA3EB2A5AD43F003A78AF /* LaunchDeviceCommand.swift in Sources */,
 				7630B2732986C68000D8B57D /* PaneIdentifier.swift in Sources */,
@@ -502,6 +509,7 @@
 				76FCABAB29B390D5003BBF9A /* Collection+get.swift in Sources */,
 				76E4451229D4391000039025 /* Onboarding.swift in Sources */,
 				7630B2752986D52900D8B57D /* NSAlert+showError.swift in Sources */,
+				4AFACC742AD730BE00EC369F /* SubMenuItem.swift in Sources */,
 				7630B25E2984339100D8B57D /* MenuSections.swift in Sources */,
 				76AC9AF62A0EA82C00864A8B /* CustomCommands.swift in Sources */,
 				76489D5C29BFCA330070EF03 /* OnboardingItem.swift in Sources */,

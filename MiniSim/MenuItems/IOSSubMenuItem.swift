@@ -7,7 +7,7 @@
 
 import Cocoa
 
-enum IOSSubMenuItem: Int, CaseIterable {
+enum IOSSubMenuItem: Int, CaseIterable, SubMenuItem {
     
     case copyName = 100
     case copyUDID = 101
@@ -15,15 +15,14 @@ enum IOSSubMenuItem: Int, CaseIterable {
     case deleteSim = 103
     case customCommand = 1000
     
-    var menuItem: NSMenuItem {
-        let item = self == .separator ? .separator() : NSMenuItem()
-        item.tag = rawValue
-        item.image = image
-        item.title = title
-        item.toolTip = title
-        return item
-    }
+    var needBootedDevice: Bool { false }
     
+    var bootsDevice: Bool { false }
+    
+    var tag: Int { self.rawValue }
+    
+    var isSeparator: Bool { self == .separator }
+
     var title: String {
         switch self {
         case .copyName:
