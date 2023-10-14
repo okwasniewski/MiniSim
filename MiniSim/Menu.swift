@@ -78,22 +78,16 @@ class Menu: NSMenu {
     
     @objc private func deviceItemClick(_ sender: NSMenuItem) {
         guard let device = getDeviceByName(name: sender.title) else { return }
-        guard let tag = DeviceMenuItem(rawValue: sender.tag) else { return }
-        
+    
         if device.booted {
             DeviceService.focusDevice(device)
             return
-        }
+        }        
         
-        do {
-            switch tag {
-            case .launchAndroid:
-                try DeviceService.launchDevice(name: device.name)
-            case .launchIOS:
-                try DeviceService.launchDevice(uuid: device.ID ?? "")
+        DeviceService.launch(device: device) { error in
+            if let error = error {
+                NSAlert.showError(message: error.localizedDescription)
             }
-        } catch {
-            NSAlert.showError(message: error.localizedDescription)
         }
     }
     
