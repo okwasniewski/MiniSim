@@ -11,14 +11,12 @@ import AppKit
 import UserNotifications
 
 protocol DeviceServiceProtocol {
-    static func launchDevice(uuid: String) throws
     static func getIOSDevices() throws -> [Device]
     static func checkXcodeSetup() -> Bool
     static func deleteSimulator(uuid: String) throws
     static func clearDerivedData() throws -> String
     static func handleiOSAction(device: Device, commandTag: IOSSubMenuItem, itemName: String)
     
-    static func launchDevice(name: String, additionalArguments: [String]) throws
     static func toggleA11y(device: Device) throws
     static func getAndroidDevices() throws -> [Device]
     static func sendText(device: Device, text: String) throws
@@ -181,6 +179,34 @@ class DeviceService: DeviceServiceProtocol {
             }
         }
     }
+    
+    private static func launch(device: Device) throws {
+        switch device.platform {
+        case .ios:
+            try launchDevice(uuid: device.ID ?? "")
+        case .android:
+            try launchDevice(name: device.name)
+        }
+    }
+    
+    static func launch(device: Device, completionQueue: DispatchQueue = .main, completion: @escaping (Error?) -> Void) {
+        self.queue.async {
+            do {
+                try self.launch(device: device)
+                completionQueue.async {
+                    completion(nil)
+                }
+            }
+            catch {
+                guard error.localizedDescription.contains(deviceBootedError) else {
+                    return
+                }
+                completionQueue.async {
+                    completion(error)
+                }
+            }
+        }
+    }
 }
 
 // MARK: iOS Methods
@@ -232,7 +258,7 @@ extension DeviceService {
         }
     }
     
-    static func launchDevice(uuid: String) throws {
+    private static func launchDevice(uuid: String) throws {
         do {
             try self.launchSimulatorApp(uuid: uuid)
             try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "boot", uuid])
@@ -293,7 +319,7 @@ extension DeviceService {
 
 // MARK: Android Methods
 extension DeviceService {
-    static func launchDevice(name: String, additionalArguments: [String] = []) throws {
+    private static func launchDevice(name: String, additionalArguments: [String] = []) throws {
         let emulatorPath = try ADB.getEmulatorPath()
         var arguments = ["@\(name)"]
         let formattedArguments = additionalArguments.filter({ !$0.isEmpty }).map {
