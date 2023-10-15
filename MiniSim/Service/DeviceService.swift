@@ -31,6 +31,7 @@ protocol DeviceServiceProtocol {
 
 class DeviceService: DeviceServiceProtocol {
     
+    private static let queue = DispatchQueue(label: "com.MiniSim.DeviceService", qos: .utility)
     private static let deviceBootedError = "Unable to boot device in current state: Booted"
     
     private static let derivedDataLocation = "~/Library/Developer/Xcode/DerivedData"
@@ -90,7 +91,7 @@ class DeviceService: DeviceServiceProtocol {
     }
     
     static func focusDevice(_ device: Device) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        queue.async {
             
             let runningApps = NSWorkspace.shared.runningApplications.filter({$0.activationPolicy == .regular})
             
@@ -159,7 +160,7 @@ class DeviceService: DeviceServiceProtocol {
         completionQueue: DispatchQueue = .main,
         completion: @escaping ([Device], Error?) -> ()
     ) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        queue.async {
             do {
                 var devicesArray: [Device] = []
                 if android {
@@ -299,7 +300,7 @@ extension DeviceService {
             if !NSAlert.showQuestionDialog(title: "Are you sure?", message: "Are you sure you want to delete this Simulator?") {
                 return
             }
-            DispatchQueue.global(qos: .userInitiated).async {
+            queue.async {
                 do {
                     try DeviceService.deleteSimulator(uuid: deviceID)
                     DeviceService.showSuccessMessage(title: "Simulator deleted!", message: deviceID)
@@ -312,7 +313,7 @@ extension DeviceService {
             guard let command = DeviceService.getCustomCommand(platform: .ios, commandName: itemName) else {
                 return
             }
-            DispatchQueue.global(qos: .userInitiated).async {
+            queue.async {
                 do {
                     try DeviceService.runCustomCommand(device, command: command)
                 } catch {
