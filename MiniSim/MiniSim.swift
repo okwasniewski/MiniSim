@@ -149,13 +149,14 @@ class MiniSim: NSObject {
                     return
                 }
 
-                DeviceService.clearDerivedData() { amountCleared, error in
-                    guard error == nil else {
-                        NSAlert.showError(message: error?.localizedDescription ?? "Failed to clear derived  data.")
-                        return
+                Task {
+                    do {
+                        let amountCleared = try await DeviceService.clearDerivedData()
+                        UNUserNotificationCenter.showNotification(title: "Derived data has been cleared!", body: "Removed \(amountCleared) of data")
+                        NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
+                    } catch {
+                        await NSAlert.showError(message: error.localizedDescription)
                     }
-                    UNUserNotificationCenter.showNotification(title: "Derived data has been cleared!", body: "Removed \(amountCleared) of data")
-                    NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
                 }
             default:
                 break

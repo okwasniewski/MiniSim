@@ -27,7 +27,9 @@ class ExecuteCommand: NSScriptCommand {
         
         if platform == .android {
             if let menuItem = AndroidSubMenuItem(rawValue: rawTag) {
-                DeviceService.handleAndroidAction(device: device, commandTag: menuItem, itemName: commandName)
+                Task {
+                    try? await DeviceService.handleAndroidAction(device: device, commandTag: menuItem, itemName: commandName)
+                }
             }
             
             return nil;
@@ -35,7 +37,9 @@ class ExecuteCommand: NSScriptCommand {
         
         
         if let menuItem = IOSSubMenuItem(rawValue: rawTag) {
-            DeviceService.handleiOSAction(device: device, commandTag: menuItem, itemName: commandName)
+            Task {
+                try? await DeviceService.handleiOSAction(device: device, commandTag: menuItem, itemName: commandName)
+            }
         }
         
         

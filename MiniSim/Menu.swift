@@ -41,15 +41,17 @@ class Menu: NSMenu {
             return
         }
 
-        DeviceService.getAllDevices(
-            android: userDefaults.enableAndroidEmulators && userDefaults.androidHome != nil,
-            iOS: userDefaults.enableiOSSimulators
-        ) { devices, error in
-            if let error = error {
-                NSAlert.showError(message: error.localizedDescription)
-                return
+        Task {
+            do {
+                let userDefaults = UserDefaults.standard
+                let devices = try await DeviceService.getAllDevices(
+                    androidIsEnabled:userDefaults.enableAndroidEmulators && userDefaults.androidHome != nil,
+                    iOSIsEnabled: userDefaults.enableiOSSimulators
+                )
+                self.devices = devices
+            } catch {
+                await NSAlert.showError(message: error.localizedDescription)
             }
-            self.devices = devices
         }
     }
     
@@ -65,28 +67,45 @@ class Menu: NSMenu {
     @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
         guard let tag = AndroidSubMenuItem(rawValue: sender.tag) else { return }
         guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
-        
-        DeviceService.handleAndroidAction(device: device, commandTag: tag, itemName: sender.title)
+        let itemName = sender.title
+        Task {
+            do {
+                try await DeviceService.handleAndroidAction(device: device, commandTag: tag, itemName: itemName)
+            } catch {
+                await NSAlert.showError(message: error.localizedDescription)
+            }
+        }
     }
     
     @objc private func IOSSubMenuClick(_ sender: NSMenuItem) {
         guard let tag = IOSSubMenuItem(rawValue: sender.tag) else { return }
         guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
-        
-        DeviceService.handleiOSAction(device: device, commandTag: tag, itemName: sender.title)
+        let itemName = sender.title
+        Task {
+            do {
+                try await DeviceService.handleiOSAction(device: device, commandTag: tag, itemName: itemName)
+
+            } catch {
+                await NSAlert.showError(message: error.localizedDescription)
+            }
+        }
     }
     
     @objc private func deviceItemClick(_ sender: NSMenuItem) {
         guard let device = getDeviceByName(name: sender.title) else { return }
-    
-        if device.booted {
-            DeviceService.focusDevice(device)
-            return
-        }        
         
-        DeviceService.launch(device: device) { error in
-            if let error = error {
-                NSAlert.showError(message: error.localizedDescription)
+        if device.booted {
+            Task {
+                await DeviceService.focusDevice(device)
+            }
+            return
+        }
+        
+        Task {
+            do {
+                try await DeviceService.launch(device: device)
+            } catch {
+                await NSAlert.showError(message: error.localizedDescription)
             }
         }
     }

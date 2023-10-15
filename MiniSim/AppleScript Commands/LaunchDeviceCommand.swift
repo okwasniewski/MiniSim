@@ -26,11 +26,15 @@ class LaunchDeviceCommand: NSScriptCommand {
             }
             
             if device.booted {
-                DeviceService.focusDevice(device)
+                Task {
+                    await DeviceService.focusDevice(device)
+                }
                 return nil
             }
             
-            DeviceService.launch(device: device) { _ in }
+            Task {
+                try? await DeviceService.launch(device: device)
+            }
             return nil
         } catch {
             scriptErrorNumber = NSInternalScriptError;

@@ -14,15 +14,12 @@ protocol DeviceServiceProtocol {
     static func getIOSDevices() throws -> [Device]
     static func checkXcodeSetup() -> Bool
     static func deleteSimulator(uuid: String) throws
-    static func handleiOSAction(device: Device, commandTag: IOSSubMenuItem, itemName: String)
     
     static func toggleA11y(device: Device) throws
     static func getAndroidDevices() throws -> [Device]
     static func sendText(device: Device, text: String) throws
     static func checkAndroidSetup() throws -> String
-    static func handleAndroidAction(device: Device, commandTag: AndroidSubMenuItem, itemName: String)
     
-    static func focusDevice(_ device: Device)
     static func runCustomCommand(_ device: Device, command: Command) throws
     static func getCustomCommands(platform: Platform) -> [Command]
     static func getCustomCommand(platform: Platform, commandName: String) -> Command?
@@ -31,7 +28,6 @@ protocol DeviceServiceProtocol {
 
 class DeviceService: DeviceServiceProtocol {
     
-    private static let queue = DispatchQueue(label: "com.MiniSim.DeviceService", qos: .utility)
     private static let deviceBootedError = "Unable to boot device in current state: Booted"
     
     private static let derivedDataLocation = "~/Library/Developer/Xcode/DerivedData"
@@ -90,41 +86,37 @@ class DeviceService: DeviceServiceProtocol {
         }
     }
     
-    static func focusDevice(_ device: Device) {
-        queue.async {
-            
-            let runningApps = NSWorkspace.shared.runningApplications.filter({$0.activationPolicy == .regular})
-            
-            if let uuid = device.ID, device.platform == .ios {
-                try? Self.launchSimulatorApp(uuid: uuid)
+    static func focusDevice(_ device: Device) async {
+        let runningApps = NSWorkspace.shared.runningApplications.filter({$0.activationPolicy == .regular})
+        
+        if let uuid = device.ID, device.platform == .ios {
+            try? Self.launchSimulatorApp(uuid: uuid)
+        }
+        
+        for app in runningApps {
+            guard
+                let bundleURL = app.bundleURL?.absoluteString,
+                (bundleURL.contains(BundleURL.simulator.rawValue) || bundleURL.contains(BundleURL.emulator.rawValue)) else {
+                continue
             }
+            let isAndroid = bundleURL.contains(BundleURL.emulator.rawValue)
             
-            for app in runningApps {
-                guard
-                    let bundleURL = app.bundleURL?.absoluteString,
-                    (bundleURL.contains(BundleURL.simulator.rawValue) || bundleURL.contains(BundleURL.emulator.rawValue)) else {
+            for window in AccessibilityElement.allWindowsForPID(app.processIdentifier) {
+                guard let windowTitle = window.attribute(key: .title, type: String.self), !windowTitle.isEmpty else {
                     continue
                 }
-                let isAndroid = bundleURL.contains(BundleURL.emulator.rawValue)
                 
-                for window in AccessibilityElement.allWindowsForPID(app.processIdentifier) {
-                    guard let windowTitle = window.attribute(key: .title, type: String.self), !windowTitle.isEmpty else {
-                        continue
-                    }
-                    
-                    if !Self.matchDeviceTitle(windowTitle: windowTitle, device: device) {
-                        continue
-                    }
-                    
-                    if isAndroid {
-                        AccessibilityElement.forceFocus(pid: app.processIdentifier)
-                    } else {
-                        window.performAction(key: kAXRaiseAction)
-                        app.activate(options: [.activateIgnoringOtherApps])
-                    }
+                if !Self.matchDeviceTitle(windowTitle: windowTitle, device: device) {
+                    continue
+                }
+                
+                if isAndroid {
+                    AccessibilityElement.forceFocus(pid: app.processIdentifier)
+                } else {
+                    window.performAction(key: kAXRaiseAction)
+                    app.activate(options: [.activateIgnoringOtherApps])
                 }
             }
-            
         }
     }
     
@@ -154,57 +146,23 @@ class DeviceService: DeviceServiceProtocol {
         NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
     }
     
-    static func getAllDevices(
-        android: Bool,
-        iOS: Bool,
-        completionQueue: DispatchQueue = .main,
-        completion: @escaping ([Device], Error?) -> ()
-    ) {
-        queue.async {
-            do {
-                var devicesArray: [Device] = []
-                if android {
-                    try devicesArray.append(contentsOf: getAndroidDevices())
-                }
-                if iOS {
-                    try devicesArray.append(contentsOf: getIOSDevices())
-                }
-                completionQueue.async {
-                    completion(devicesArray, nil)
-                }
-            } catch {
-                completionQueue.async {
-                    completion([], error)
-                }
-            }
+    static func getAllDevices(androidIsEnabled: Bool, iOSIsEnabled: Bool) async throws -> [Device] {
+        var devicesArray: [Device] = []
+        if androidIsEnabled {
+            try devicesArray.append(contentsOf: getAndroidDevices())
         }
+        if iOSIsEnabled {
+            try devicesArray.append(contentsOf: getIOSDevices())
+        }
+        return devicesArray
     }
-    
-    private static func launch(device: Device) throws {
+
+    static func launch(device: Device) async throws {
         switch device.platform {
         case .ios:
             try launchDevice(uuid: device.ID)
         case .android:
             try launchDevice(name: device.name)
-        }
-    }
-    
-    static func launch(device: Device, completionQueue: DispatchQueue = .main, completion: @escaping (Error?) -> Void) {
-        self.queue.async {
-            do {
-                try self.launch(device: device)
-                completionQueue.async {
-                    completion(nil)
-                }
-            }
-            catch {
-                guard error.localizedDescription.contains(deviceBootedError) else {
-                    return
-                }
-                completionQueue.async {
-                    completion(error)
-                }
-            }
         }
     }
 }
@@ -234,21 +192,10 @@ extension DeviceService {
         return devices
     }
     
-    static func clearDerivedData(completionQueue: DispatchQueue = .main, completion: @escaping (String, Error?) -> Void) {
-        self.queue.async {
-            do {
-                let amountCleared = try? shellOut(to: "du -sh \(derivedDataLocation)").match(###"\d+\.?\d+\w+"###).first?.first
-                try shellOut(to: "rm -rf \(derivedDataLocation)")
-                completionQueue.async {
-                    completion(amountCleared ?? "", nil)
-                }
-            }
-            catch {
-                completionQueue.async {
-                    completion("", error)
-                }
-            }
-        }
+    static func clearDerivedData() async throws -> String {
+        let amountCleared = try? shellOut(to: "du -sh \(derivedDataLocation)").match(###"\d+\.?\d+\w+"###).first?.first
+        try shellOut(to: "rm -rf \(derivedDataLocation)")
+        return amountCleared ?? ""
     }
     
     static func getIOSDevices() throws -> [Device] {
@@ -269,7 +216,10 @@ extension DeviceService {
         }
     }
     
-    private static func launchDevice(uuid: String) throws {
+    private static func launchDevice(uuid: String?) throws {
+        guard let uuid = uuid else {
+            return
+        }
         do {
             try self.launchSimulatorApp(uuid: uuid)
             try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "boot", uuid])
@@ -284,8 +234,7 @@ extension DeviceService {
         try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "delete", uuid])
     }
     
-    static func handleiOSAction(device: Device, commandTag: IOSSubMenuItem, itemName: String) {
-        
+    static func handleiOSAction(device: Device, commandTag: IOSSubMenuItem, itemName: String) async throws {
         switch commandTag {
         case .copyName:
             NSPasteboard.general.copyToPasteboard(text: device.name)
@@ -296,35 +245,27 @@ extension DeviceService {
                 DeviceService.showSuccessMessage(title: "Device ID copied to clipboard!", message: deviceID)
             }
         case .deleteSim:
-            guard let deviceID = device.ID else { return }
-            if !NSAlert.showQuestionDialog(title: "Are you sure?", message: "Are you sure you want to delete this Simulator?") {
-                return
-            }
-            queue.async {
-                do {
-                    try DeviceService.deleteSimulator(uuid: deviceID)
-                    DeviceService.showSuccessMessage(title: "Simulator deleted!", message: deviceID)
-                    NotificationCenter.default.post(name: .deviceDeleted, object: nil)
-                } catch {
-                    NSAlert.showError(message: error.localizedDescription)
-                }
-            }
+            try handleDelete(simulator: device)
         case .customCommand:
             guard let command = DeviceService.getCustomCommand(platform: .ios, commandName: itemName) else {
                 return
             }
-            queue.async {
-                do {
-                    try DeviceService.runCustomCommand(device, command: command)
-                } catch {
-                    NSAlert.showError(message: error.localizedDescription)
-                }
-            }
+            try DeviceService.runCustomCommand(device, command: command)
         default:
             break
         }
     }
     
+    static func handleDelete(simulator device: Device) throws {
+        guard let deviceID = device.ID else { return }
+        if !NSAlert.showQuestionDialog(title: "Are you sure?", message: "Are you sure you want to delete this Simulator?") {
+            return
+        }
+        
+        try DeviceService.deleteSimulator(uuid: deviceID)
+        DeviceService.showSuccessMessage(title: "Simulator deleted!", message: deviceID)
+        NotificationCenter.default.post(name: .deviceDeleted, object: nil)
+    }
 }
 
 
@@ -397,45 +338,38 @@ extension DeviceService {
         try shellOut(to: "\(adbPath) -s \(deviceId) shell input text \"\(formattedText)\"")
     }
     
-    static func handleAndroidAction(device: Device, commandTag: AndroidSubMenuItem, itemName: String) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                switch commandTag {
-                case .coldBootAndroid:
-                    try DeviceService.launchDevice(name: device.name, additionalArguments:["-no-snapshot"])
-                    
-                case .androidNoAudio:
-                    try DeviceService.launchDevice(name: device.name, additionalArguments:["-no-audio"])
-                    
-                case .toggleA11yAndroid:
-                    try DeviceService.toggleA11y(device: device)
-                    
-                case .copyAdbId:
-                    if let deviceId = device.ID {
-                        NSPasteboard.general.copyToPasteboard(text: deviceId)
-                        DeviceService.showSuccessMessage(title: "Device ID copied to clipboard!", message: deviceId)
-                    }
-                    
-                case .copyName:
-                    NSPasteboard.general.copyToPasteboard(text: device.name)
-                    DeviceService.showSuccessMessage(title: "Device name copied to clipboard!", message: device.name)
-                    
-                case .pasteToEmulator:
-                    guard let clipboard = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { break }
-                    try DeviceService.sendText(device: device, text: clipboard)
-                    
-                case .customCommand:
-                    if let command = DeviceService.getCustomCommand(platform: .android, commandName: itemName) {
-                        try DeviceService.runCustomCommand(device, command: command)
-                    }
-                    
-                default:
-                    break
-                }
+    static func handleAndroidAction(device: Device, commandTag: AndroidSubMenuItem, itemName: String) async throws {
+        switch commandTag {
+        case .coldBootAndroid:
+            try DeviceService.launchDevice(name: device.name, additionalArguments:["-no-snapshot"])
+            
+        case .androidNoAudio:
+            try DeviceService.launchDevice(name: device.name, additionalArguments:["-no-audio"])
+            
+        case .toggleA11yAndroid:
+            try DeviceService.toggleA11y(device: device)
+            
+        case .copyAdbId:
+            if let deviceId = device.ID {
+                NSPasteboard.general.copyToPasteboard(text: deviceId)
+                DeviceService.showSuccessMessage(title: "Device ID copied to clipboard!", message: deviceId)
             }
-            catch {
-                NSAlert.showError(message: error.localizedDescription)
+            
+        case .copyName:
+            NSPasteboard.general.copyToPasteboard(text: device.name)
+            DeviceService.showSuccessMessage(title: "Device name copied to clipboard!", message: device.name)
+            
+        case .pasteToEmulator:
+            guard let clipboard = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { break }
+            try DeviceService.sendText(device: device, text: clipboard)
+            
+        case .customCommand:
+            if let command = DeviceService.getCustomCommand(platform: .android, commandName: itemName) {
+                try DeviceService.runCustomCommand(device, command: command)
             }
+            
+        default:
+            break
         }
     }
 }
