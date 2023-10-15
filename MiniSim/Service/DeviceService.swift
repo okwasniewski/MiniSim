@@ -14,7 +14,6 @@ protocol DeviceServiceProtocol {
     static func getIOSDevices() throws -> [Device]
     static func checkXcodeSetup() -> Bool
     static func deleteSimulator(uuid: String) throws
-    static func clearDerivedData() throws -> String
     static func handleiOSAction(device: Device, commandTag: IOSSubMenuItem, itemName: String)
     
     static func toggleA11y(device: Device) throws
@@ -234,10 +233,21 @@ extension DeviceService {
         return devices
     }
     
-    static func clearDerivedData() throws -> String {
-        let amountCleared = try? shellOut(to: "du -sh \(derivedDataLocation)").match(###"\d+\.?\d+\w+"###).first?.first
-        try shellOut(to: "rm -rf \(derivedDataLocation)")
-        return amountCleared ?? ""
+    static func clearDerivedData(completionQueue: DispatchQueue = .main, completion: @escaping (String, Error?) -> Void) {
+        self.queue.async {
+            do {
+                let amountCleared = try? shellOut(to: "du -sh \(derivedDataLocation)").match(###"\d+\.?\d+\w+"###).first?.first
+                try shellOut(to: "rm -rf \(derivedDataLocation)")
+                completionQueue.async {
+                    completion(amountCleared ?? "", nil)
+                }
+            }
+            catch {
+                completionQueue.async {
+                    completion("", error)
+                }
+            }
+        }
     }
     
     static func getIOSDevices() throws -> [Device] {
