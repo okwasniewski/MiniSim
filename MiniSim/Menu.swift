@@ -34,16 +34,13 @@ class Menu: NSMenu {
     }
     
     func getDevices() {
-        if UserDefaults.standard.enableAndroidEmulators && UserDefaults.standard.androidHome == nil {
-            return
-        }
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 var devicesArray: [Device] = []
-                if (UserDefaults.standard.enableiOSSimulators) {
+                if UserDefaults.standard.enableiOSSimulators {
                     try devicesArray.append(contentsOf: DeviceService.getIOSDevices())
                 }
-                if (UserDefaults.standard.enableAndroidEmulators) {
+                if UserDefaults.standard.enableAndroidEmulators && UserDefaults.standard.androidHome != nil {
                     try devicesArray.append(contentsOf: DeviceService.getAndroidDevices())
                 }
                 self.devices = devicesArray
