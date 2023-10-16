@@ -163,12 +163,15 @@ class DeviceService: DeviceServiceProtocol {
         queue.async {
             do {
                 var devicesArray: [Device] = []
+                
                 if android {
                     try devicesArray.append(contentsOf: getAndroidDevices())
                 }
+                
                 if iOS {
                     try devicesArray.append(contentsOf: getIOSDevices())
                 }
+                
                 completionQueue.async {
                     completion(devicesArray, nil)
                 }

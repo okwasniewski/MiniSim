@@ -35,12 +35,6 @@ class Menu: NSMenu {
     
     func getDevices() {
         let userDefaults = UserDefaults.standard
-        guard userDefaults.enableiOSSimulators,
-              userDefaults.enableAndroidEmulators,
-              userDefaults.androidHome != nil else {
-            return
-        }
-
         DeviceService.getAllDevices(
             android: userDefaults.enableAndroidEmulators && userDefaults.androidHome != nil,
             iOS: userDefaults.enableiOSSimulators
