@@ -15,6 +15,7 @@ extension UserDefaults {
         static let isOnboardingFinished = "isOnboardingFinished"
         static let enableiOSSimulators = "enableiOSSimulators"
         static let enableAndroidEmulators = "enableAndroidEmulators"
+        static let menuImage = "menu_icon_1"
     }
     
     @objc dynamic public var androidHome: String? {
@@ -25,6 +26,11 @@ extension UserDefaults {
     @objc dynamic public var isOnboardingFinished: Bool {
         get { bool(forKey: Keys.isOnboardingFinished) }
         set { set(newValue, forKey: Keys.isOnboardingFinished) }
+    }
+    
+    @objc dynamic public var menuImage: String {
+        get { string(forKey: Keys.menuImage) ?? "menu_icon_1" }
+        set { set(newValue, forKey: Keys.menuImage) }
     }
     
     public var parameters: Data? {
