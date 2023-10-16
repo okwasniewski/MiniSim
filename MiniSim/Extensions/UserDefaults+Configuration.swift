@@ -13,6 +13,8 @@ extension UserDefaults {
         static let commands = "commands"
         static let androidHome = "androidHome"
         static let isOnboardingFinished = "isOnboardingFinished"
+        static let enableiOSSimulators = "enableiOSSimulators"
+        static let enableAndroidEmulators = "enableAndroidEmulators"
     }
     
     @objc dynamic public var androidHome: String? {
@@ -33,5 +35,15 @@ extension UserDefaults {
     public var commands: Data? {
         get { object(forKey: Keys.commands) as? Data }
         set { set(newValue, forKey: Keys.commands) }
+    }
+    
+    public var enableiOSSimulators: Bool {
+        get { bool(forKey: Keys.enableiOSSimulators) }
+        set { set(newValue, forKey: Keys.enableiOSSimulators) }
+    }
+    
+    public var enableAndroidEmulators: Bool {
+        get { bool(forKey: Keys.enableAndroidEmulators) }
+        set { set(newValue, forKey: Keys.enableAndroidEmulators) }
     }
 }

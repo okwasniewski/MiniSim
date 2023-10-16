@@ -33,6 +33,17 @@ enum MenuSections: Int, CaseIterable {
         return item
     }
     
+    var attachItem: Bool {
+        switch self {
+        case .iOSHeader, .separator1, .clearDerrivedData:
+            return UserDefaults.standard.enableiOSSimulators
+        case .androidHeader, .separator2:
+            return UserDefaults.standard.enableAndroidEmulators
+        default:
+            return true
+        }
+    }
+    
     var keyEquivalent: String {
         switch self {
         case .quit:

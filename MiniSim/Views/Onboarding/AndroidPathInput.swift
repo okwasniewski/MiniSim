@@ -32,7 +32,6 @@ struct AndroidPathInput: View {
         } catch {
             if let onSave { onSave(false) }
             androidHomeError = error
-            print(error.localizedDescription)
         }
     }
     
