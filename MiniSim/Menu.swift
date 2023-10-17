@@ -105,7 +105,9 @@ class Menu: NSMenu {
     private func assignKeyEquivalent(devices: [NSMenuItem]) {
         for (index, item) in devices.enumerated() {
             if index > maxKeyEquivalent {
-                item.keyEquivalent = ""
+                DispatchQueue.main.async {
+                    item.keyEquivalent = ""
+                }
                 continue
             }
             
@@ -127,9 +129,13 @@ class Menu: NSMenu {
         for (index, device) in sortedDevices.enumerated() {
             let isAndroid = device.platform == .android
             if let itemIndex = items.firstIndex(where: { $0.title == device.displayName }) {
-                let item = self.items.get(at: itemIndex)
-                item?.state = device.booted ? .on : .off
-                item?.submenu = isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu(booted: device.booted)
+                DispatchQueue.main.async {
+                    let item = self.items.get(at: itemIndex)
+                    item?.state = device.booted ? .on : .off
+                    item?.submenu = isAndroid ?
+                    self.populateAndroidSubMenu(booted: device.booted) :
+                    self.populateIOSSubMenu(booted: device.booted)
+                }
                 continue
             }
             
