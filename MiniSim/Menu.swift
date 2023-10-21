@@ -39,7 +39,7 @@ class Menu: NSMenu {
             android: userDefaults.enableAndroidEmulators && userDefaults.androidHome != nil,
             iOS: userDefaults.enableiOSSimulators
         ) { devices, error in
-            if let error = error {
+            if let error {
                 NSAlert.showError(message: error.localizedDescription)
                 return
             }
@@ -79,7 +79,7 @@ class Menu: NSMenu {
         }
         
         DeviceService.launch(device: device) { error in
-            if let error = error {
+            if let error {
                 NSAlert.showError(message: error.localizedDescription)
             }
         }
@@ -118,7 +118,9 @@ class Menu: NSMenu {
             }
             
             if self.items.contains(item) {
-                item.keyEquivalent = keyEquivalent
+                DispatchQueue.main.async {
+                    item.keyEquivalent = keyEquivalent
+                }
             }
         }
     }
