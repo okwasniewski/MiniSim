@@ -30,19 +30,11 @@ class LaunchDeviceCommand: NSScriptCommand {
                 return nil
             }
             
-            DispatchQueue.global(qos: .userInitiated).async {
-                if device.platform == .android {
-                    try? DeviceService.launchDevice(name: device.name)
-                } else {
-                    try? DeviceService.launchDevice(uuid: device.ID ?? "")
-                }
-            }
-            
+            DeviceService.launch(device: device) { _ in }
             return nil
         } catch {
             scriptErrorNumber = NSInternalScriptError;
             return nil
         }
-        
     }
 }
