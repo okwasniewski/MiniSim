@@ -15,7 +15,7 @@ extension UserDefaults {
         static let isOnboardingFinished = "isOnboardingFinished"
         static let enableiOSSimulators = "enableiOSSimulators"
         static let enableAndroidEmulators = "enableAndroidEmulators"
-        static let menuImage = "menu_icon_1"
+        static let menuImage = "menuImage"
     }
     
     @objc dynamic public var androidHome: String? {
@@ -29,7 +29,7 @@ extension UserDefaults {
     }
     
     @objc dynamic public var menuImage: String {
-        get { string(forKey: Keys.menuImage) ?? "menu_icon_1" }
+        get { string(forKey: Keys.menuImage) ?? "iphone" }
         set { set(newValue, forKey: Keys.menuImage) }
     }
     

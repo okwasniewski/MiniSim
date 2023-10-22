@@ -11,22 +11,20 @@ import KeyboardShortcuts
 import LaunchAtLogin
 
 struct Preferences: View {
-    var menuImages = [ "menu_icon_1", "menu_icon_2", "menu_icon_3" ]
-    @State var menuImageSelected = 0
+    @State var menuImageSelected: String = "iphone"
     
     var body: some View {
         Settings.Container(contentWidth: 400) {
             Settings.Section(title: "Icon:") {
                 Picker("", selection: $menuImageSelected) {
-                    ForEach(0 ..< menuImages.count, id: \.self) { image in
-                        Image(menuImages[image])
-                            .renderingMode(.template)
-                            .tag(image)
+                    ForEach(MenuImage.allCases, id: \.self) { image in
+                        Image(nsImage: NSImage(imageLiteralResourceName: image.rawValue))
+                            .tag(image.rawValue)
                     }
                 }
-                .pickerStyle(.radioGroup)
+                .fixedSize(horizontal: true, vertical: false)
                 .onChange(of: menuImageSelected) { _ in
-                    UserDefaults.standard.menuImage = menuImages[menuImageSelected]
+                    UserDefaults.standard.menuImage = menuImageSelected
                 }
                 Text("The icon displayed in the Menu Bar.")
                     .descriptionText()
@@ -50,9 +48,9 @@ struct Preferences: View {
         }
         .frame(minWidth: 650, minHeight: 450)
         .onAppear {
-            for image in 0 ..< menuImages.count {
-                if (UserDefaults.standard.menuImage == menuImages[image]) {
-                    menuImageSelected = image
+            MenuImage.allCases.forEach { image in
+                if (UserDefaults.standard.menuImage == image.rawValue) {
+                    menuImageSelected = image.rawValue
                 }
             }
         }

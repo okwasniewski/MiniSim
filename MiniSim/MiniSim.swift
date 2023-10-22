@@ -19,8 +19,6 @@ class MiniSim: NSObject {
     private var isOnboardingFinishedObserver: NSKeyValueObservation?
     private var menuImageObserver: NSKeyValueObservation?
     
-    private var menuImagesObserved: [String] = []
-    
     private lazy var onboarding = Onboarding()
     
     override init() {
@@ -87,6 +85,7 @@ class MiniSim: NSObject {
         }
         menu = Menu()
         statusItem.menu = menu
+        configureMenuImages()
         setMenuImage()
         populateSections()
         
@@ -113,18 +112,21 @@ class MiniSim: NSObject {
             UserDefaults.Keys.enableiOSSimulators: true
         ])
     }
+   
+    private func configureMenuImages() {
+        MenuImage.allCases.forEach { image in
+            let itemImage = NSImage(imageLiteralResourceName: image.rawValue)
+            itemImage.size = NSSize(
+                width:  (itemImage.size.width)  * 0.78,
+                height: (itemImage.size.height) * 0.78)
+            itemImage.isTemplate = true
+        }
+    }
     
     private func setMenuImage() {
         if let button = statusItem.button {
             button.toolTip = "MiniSim"
             let itemImage = NSImage(named: UserDefaults.standard.menuImage)
-            if (!menuImagesObserved.contains(UserDefaults.standard.menuImage)) {
-                itemImage?.size = NSSize(
-                    width:  (itemImage?.size.width  ?? 16) * 0.78,
-                    height: (itemImage?.size.height ?? 16) * 0.78)
-                menuImagesObserved.append(UserDefaults.standard.menuImage)
-            }
-            itemImage?.isTemplate = true
             button.image = itemImage
         }
     }
