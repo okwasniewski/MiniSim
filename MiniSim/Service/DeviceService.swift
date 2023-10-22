@@ -11,14 +11,11 @@ import AppKit
 import UserNotifications
 
 protocol DeviceServiceProtocol {
-    static func launchDevice(uuid: String) throws
     static func getIOSDevices() throws -> [Device]
     static func checkXcodeSetup() -> Bool
     static func deleteSimulator(uuid: String) throws
-    static func clearDerivedData() throws -> String
     static func handleiOSAction(device: Device, commandTag: IOSSubMenuItem, itemName: String)
     
-    static func launchDevice(name: String, additionalArguments: [String]) throws
     static func toggleA11y(device: Device) throws
     static func getAndroidDevices() throws -> [Device]
     static func sendText(device: Device, text: String) throws
@@ -34,6 +31,7 @@ protocol DeviceServiceProtocol {
 
 class DeviceService: DeviceServiceProtocol {
     
+    private static let queue = DispatchQueue(label: "com.MiniSim.DeviceService", qos: .userInteractive)
     private static let deviceBootedError = "Unable to boot device in current state: Booted"
     
     private static let derivedDataLocation = "~/Library/Developer/Xcode/DerivedData"
@@ -93,7 +91,7 @@ class DeviceService: DeviceServiceProtocol {
     }
     
     static func focusDevice(_ device: Device) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        queue.async {
             
             let runningApps = NSWorkspace.shared.runningApplications.filter({$0.activationPolicy == .regular})
             
@@ -155,6 +153,63 @@ class DeviceService: DeviceServiceProtocol {
         UNUserNotificationCenter.showNotification(title: title, body: message)
         NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
     }
+    
+    static func getAllDevices(
+        android: Bool,
+        iOS: Bool,
+        completionQueue: DispatchQueue = .main,
+        completion: @escaping ([Device], Error?) -> ()
+    ) {
+        queue.async {
+            do {
+                var devicesArray: [Device] = []
+                
+                if android {
+                    try devicesArray.append(contentsOf: getAndroidDevices())
+                }
+                
+                if iOS {
+                    try devicesArray.append(contentsOf: getIOSDevices())
+                }
+                
+                completionQueue.async {
+                    completion(devicesArray, nil)
+                }
+            } catch {
+                completionQueue.async {
+                    completion([], error)
+                }
+            }
+        }
+    }
+    
+    private static func launch(device: Device) throws {
+        switch device.platform {
+        case .ios:
+            try launchDevice(uuid: device.ID ?? "")
+        case .android:
+            try launchDevice(name: device.name)
+        }
+    }
+    
+    static func launch(device: Device, completionQueue: DispatchQueue = .main, completion: @escaping (Error?) -> Void) {
+        self.queue.async {
+            do {
+                try self.launch(device: device)
+                completionQueue.async {
+                    completion(nil)
+                }
+            }
+            catch {
+                guard error.localizedDescription.contains(deviceBootedError) else {
+                    return
+                }
+                completionQueue.async {
+                    completion(error)
+                }
+            }
+        }
+    }
 }
 
 // MARK: iOS Methods
@@ -182,10 +237,21 @@ extension DeviceService {
         return devices
     }
     
-    static func clearDerivedData() throws -> String {
-        let amountCleared = try? shellOut(to: "du -sh \(derivedDataLocation)").match(###"\d+\.?\d+\w+"###).first?.first
-        try shellOut(to: "rm -rf \(derivedDataLocation)")
-        return amountCleared ?? ""
+    static func clearDerivedData(completionQueue: DispatchQueue = .main, completion: @escaping (String, Error?) -> Void) {
+        self.queue.async {
+            do {
+                let amountCleared = try? shellOut(to: "du -sh \(derivedDataLocation)").match(###"\d+\.?\d+\w+"###).first?.first
+                try shellOut(to: "rm -rf \(derivedDataLocation)")
+                completionQueue.async {
+                    completion(amountCleared ?? "", nil)
+                }
+            }
+            catch {
+                completionQueue.async {
+                    completion("", error)
+                }
+            }
+        }
     }
     
     static func getIOSDevices() throws -> [Device] {
@@ -206,7 +272,7 @@ extension DeviceService {
         }
     }
     
-    static func launchDevice(uuid: String) throws {
+    private static func launchDevice(uuid: String) throws {
         do {
             try self.launchSimulatorApp(uuid: uuid)
             try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "boot", uuid])
@@ -237,7 +303,7 @@ extension DeviceService {
             if !NSAlert.showQuestionDialog(title: "Are you sure?", message: "Are you sure you want to delete this Simulator?") {
                 return
             }
-            DispatchQueue.global(qos: .userInitiated).async {
+            queue.async {
                 do {
                     try DeviceService.deleteSimulator(uuid: deviceID)
                     DeviceService.showSuccessMessage(title: "Simulator deleted!", message: deviceID)
@@ -250,7 +316,7 @@ extension DeviceService {
             guard let command = DeviceService.getCustomCommand(platform: .ios, commandName: itemName) else {
                 return
             }
-            DispatchQueue.global(qos: .userInitiated).async {
+            queue.async {
                 do {
                     try DeviceService.runCustomCommand(device, command: command)
                 } catch {
@@ -267,7 +333,7 @@ extension DeviceService {
 
 // MARK: Android Methods
 extension DeviceService {
-    static func launchDevice(name: String, additionalArguments: [String] = []) throws {
+    private static func launchDevice(name: String, additionalArguments: [String] = []) throws {
         let emulatorPath = try ADB.getEmulatorPath()
         var arguments = ["@\(name)"]
         let formattedArguments = additionalArguments.filter({ !$0.isEmpty }).map {
