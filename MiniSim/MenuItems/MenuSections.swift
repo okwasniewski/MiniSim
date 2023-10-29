@@ -22,6 +22,12 @@ enum MenuSections: Int, CaseIterable {
         switch self {
         case .separator1, .separator2:
             item = NSMenuItem.separator()
+        case .iOSHeader, .androidHeader:
+            if #available(macOS 14.0, *) {
+                item = NSMenuItem.sectionHeader(title: "")
+            } else {
+                item = NSMenuItem()
+            }
         default:
             item = NSMenuItem()
         }
