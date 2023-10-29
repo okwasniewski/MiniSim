@@ -25,20 +25,22 @@ class ExecuteCommand: NSScriptCommand {
         let device = Device(name: deviceName, ID: deviceId, platform: platform)
         let rawTag = Int(tag) ?? 0
         
-        if platform == .android {
-            if let menuItem = AndroidSubMenuItem(rawValue: rawTag) {
-                DeviceService.handleAndroidAction(device: device, commandTag: menuItem, itemName: commandName)
-            }
-            
-            return nil;
+        guard  let menuItem = SubMenuItems.Tags(rawValue: rawTag) else {
+            return nil
         }
         
+        platform == .android ?
+        DeviceService.handleAndroidAction(
+            device: device,
+            commandTag: menuItem,
+            itemName: commandName
+        ) :
+        DeviceService.handleiOSAction(
+            device: device,
+            commandTag: menuItem,
+            itemName: commandName
+        )
         
-        if let menuItem = IOSSubMenuItem(rawValue: rawTag) {
-            DeviceService.handleiOSAction(device: device, commandTag: menuItem, itemName: commandName)
-        }
-        
-        
-        return nil;
+        return Never.self;
     }
 }

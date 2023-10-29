@@ -14,13 +14,11 @@ protocol DeviceServiceProtocol {
     static func getIOSDevices() throws -> [Device]
     static func checkXcodeSetup() -> Bool
     static func deleteSimulator(uuid: String) throws
-    static func handleiOSAction(device: Device, commandTag: IOSSubMenuItem, itemName: String)
     
     static func toggleA11y(device: Device) throws
     static func getAndroidDevices() throws -> [Device]
     static func sendText(device: Device, text: String) throws
     static func checkAndroidSetup() throws -> String
-    static func handleAndroidAction(device: Device, commandTag: AndroidSubMenuItem, itemName: String)
     
     static func focusDevice(_ device: Device)
     static func runCustomCommand(_ device: Device, command: Command) throws
@@ -287,18 +285,17 @@ extension DeviceService {
         try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "delete", uuid])
     }
     
-    static func handleiOSAction(device: Device, commandTag: IOSSubMenuItem, itemName: String) {
-        
+    static func handleiOSAction(device: Device, commandTag: SubMenuItems.Tags, itemName: String) {
         switch commandTag {
         case .copyName:
             NSPasteboard.general.copyToPasteboard(text: device.name)
             DeviceService.showSuccessMessage(title: "Device name copied to clipboard!", message: device.name)
-        case .copyUDID:
+        case .copyID:
             if let deviceID = device.ID {
                 NSPasteboard.general.copyToPasteboard(text: deviceID)
                 DeviceService.showSuccessMessage(title: "Device ID copied to clipboard!", message: deviceID)
             }
-        case .deleteSim:
+        case .delete:
             guard let deviceID = device.ID else { return }
             if !NSAlert.showQuestionDialog(title: "Are you sure?", message: "Are you sure you want to delete this Simulator?") {
                 return
@@ -400,20 +397,20 @@ extension DeviceService {
         try shellOut(to: "\(adbPath) -s \(deviceId) shell input text \"\(formattedText)\"")
     }
     
-    static func handleAndroidAction(device: Device, commandTag: AndroidSubMenuItem, itemName: String) {
-        DispatchQueue.global(qos: .userInitiated).async {
+    static func handleAndroidAction(device: Device, commandTag: SubMenuItems.Tags, itemName: String) {
+        queue.async {
             do {
                 switch commandTag {
-                case .coldBootAndroid:
+                case .coldBoot:
                     try DeviceService.launchDevice(name: device.name, additionalArguments:["-no-snapshot"])
                     
-                case .androidNoAudio:
+                case .noAudio:
                     try DeviceService.launchDevice(name: device.name, additionalArguments:["-no-audio"])
                     
-                case .toggleA11yAndroid:
+                case .toggleA11y:
                     try DeviceService.toggleA11y(device: device)
                     
-                case .copyAdbId:
+                case .copyID:
                     if let deviceId = device.ID {
                         NSPasteboard.general.copyToPasteboard(text: deviceId)
                         DeviceService.showSuccessMessage(title: "Device ID copied to clipboard!", message: deviceId)
@@ -423,7 +420,7 @@ extension DeviceService {
                     NSPasteboard.general.copyToPasteboard(text: device.name)
                     DeviceService.showSuccessMessage(title: "Device name copied to clipboard!", message: device.name)
                     
-                case .pasteToEmulator:
+                case .paste:
                     guard let clipboard = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { break }
                     try DeviceService.sendText(device: device, text: clipboard)
                     
@@ -431,7 +428,6 @@ extension DeviceService {
                     if let command = DeviceService.getCustomCommand(platform: .android, commandName: itemName) {
                         try DeviceService.runCustomCommand(device, command: command)
                     }
-                    
                 default:
                     break
                 }

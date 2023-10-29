@@ -57,14 +57,14 @@ class Menu: NSMenu {
     }
     
     @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
-        guard let tag = AndroidSubMenuItem(rawValue: sender.tag) else { return }
+        guard let tag = SubMenuItems.Tags(rawValue: sender.tag) else { return }
         guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
         
         DeviceService.handleAndroidAction(device: device, commandTag: tag, itemName: sender.title)
     }
     
     @objc private func IOSSubMenuClick(_ sender: NSMenuItem) {
-        guard let tag = IOSSubMenuItem(rawValue: sender.tag) else { return }
+        guard let tag = SubMenuItems.Tags(rawValue: sender.tag) else { return }
         guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
         
         DeviceService.handleiOSAction(device: device, commandTag: tag, itemName: sender.title)
@@ -206,21 +206,22 @@ class Menu: NSMenu {
         isDeviceBooted: Bool,
         callback: Selector
     ) -> [NSMenuItem] {
-        subMenuItems.filter { item in
-            if item.needBootedDevice && !isDeviceBooted {
-                return false
-            }
-            
-            if item.bootsDevice && isDeviceBooted {
-                return false
-            }
-            
-            return true
-        }.map { item in
-            if item.isSeparator {
+        subMenuItems.compactMap { item in
+            if item is SubMenuItems.Separator {
                 return NSMenuItem.separator()
             }
-            return NSMenuItem(menuItem: item, target: self, action: callback)
+            else if let item = item as? SubMenuActionItem {
+                if item.needBootedDevice && !isDeviceBooted {
+                    return nil
+                }
+                
+                if item.bootsDevice && isDeviceBooted {
+                    return nil
+                }
+                
+                return NSMenuItem(menuItem: item, target: self, action: callback)
+            }
+            return nil
         }
     }
     
@@ -273,22 +274,9 @@ extension Platform {
     var subMenuItems: [SubMenuItem] {
         switch self {
         case .android:
-            return [
-                AndroidSubMenuItem.copyName,
-                AndroidSubMenuItem.copyAdbId,
-                AndroidSubMenuItem.separator,
-                AndroidSubMenuItem.coldBootAndroid,
-                AndroidSubMenuItem.androidNoAudio,
-                AndroidSubMenuItem.toggleA11yAndroid,
-                AndroidSubMenuItem.pasteToEmulator
-            ]
+            return SubMenuItems.android
         case .ios:
-            return [
-                IOSSubMenuItem.copyName,
-                IOSSubMenuItem.copyUDID,
-                IOSSubMenuItem.separator,
-                IOSSubMenuItem.deleteSim
-            ]
+            return SubMenuItems.ios
         }
     }
 }

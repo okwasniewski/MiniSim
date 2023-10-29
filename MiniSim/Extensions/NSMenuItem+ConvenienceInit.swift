@@ -16,7 +16,7 @@ extension NSMenuItem {
     }
     
     convenience init(
-        menuItem: SubMenuItem,
+        menuItem: SubMenuActionItem,
         target: AnyObject,
         action: Selector
     ) {
