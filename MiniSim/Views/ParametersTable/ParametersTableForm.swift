@@ -32,9 +32,7 @@ struct ParametersTableForm: View {
                 )
                 .cornerRadius(6)
             }
-            Toggle(isOn: $viewModel.enabled, label: {
-                Text("Enabled")
-            })
+            Toggle("Enabled", isOn: $viewModel.enabled)
             .help("Determines if command is enabled.")
             .toggleStyle(.switch)
             

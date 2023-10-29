@@ -29,7 +29,7 @@ extension ParametersTable {
             }
         }
         
-        func deleteParameters(item: Parameter.ID?) {
+        func deleteParameter(item: Parameter.ID?) {
             parameters.removeAll(where: { $0.id == item })
             saveData()
         }
@@ -38,11 +38,8 @@ extension ParametersTable {
             guard let index = parameters.firstIndex(where: { $0.id == item }) else {
                 return
             }
-            guard var parameter = parameters.first(where: { $0.id == item }) else {
-                return
-            }
-            parameters.removeAll(where: { $0.id == item })
-            parameter.enabled = !parameter.enabled
+            var parameter = parameters.remove(at: index)
+            parameter.enabled.toggle()
             parameters.insert(parameter, at: index)
             saveData()
         }

@@ -10,25 +10,6 @@ import SwiftUI
 struct ParametersTable: View {
     @State private var parameters: [Parameter] = [.init(title: "", command: "", enabled: false)]
     
-    func saveData() {
-        let data = try? JSONEncoder().encode(parameters)
-        UserDefaults.standard.parameters = data
-    }
-    
-    func loadData() {
-        guard let paramData = UserDefaults.standard.parameters else { return }
-        if let decodedData = try? JSONDecoder().decode([Parameter].self, from: paramData) {
-            parameters = decodedData
-        }
-    }
-    
-    func deleteParameter(_ parameter: Parameter) {
-        NSApp.keyWindow?.makeFirstResponder(nil)
-        if let index = parameters.firstIndex(of: parameter)  {
-            parameters.remove(at: index)
-        }
-    }
-    
     @StateObject private var viewModel: ViewModel = ViewModel()
     
     var body: some View {
@@ -56,7 +37,7 @@ struct ParametersTable: View {
                     }
                     Divider()
                     Button("Delete") {
-                        viewModel.deleteParameters(item: viewModel.selection)
+                        viewModel.deleteParameter(item: viewModel.selection)
                     }
                 }
             }
@@ -66,8 +47,9 @@ struct ParametersTable: View {
                 Button("Add New") {
                     viewModel.selection = nil
                     viewModel.showForm.toggle()
-                }.buttonStyle(.borderedProminent)
-                    .keyboardShortcut("n", modifiers: .command)
+                }
+                .buttonStyle(.borderedProminent)
+                .keyboardShortcut("n", modifiers: .command)
             }
         }
         .onAppear {
