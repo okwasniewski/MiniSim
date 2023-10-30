@@ -10,10 +10,10 @@ import Cocoa
 enum IOSSubMenuItem: Int, CaseIterable, SubMenuItem {
     
     case copyName = 100
-    case copyUDID = 101
-    case separator = 102
-    case deleteSim = 103
-    case customCommand = 1000
+    case copyUDID
+    case separator
+    case deleteSim
+    case customCommand = 200
     
     var needBootedDevice: Bool { false }
     

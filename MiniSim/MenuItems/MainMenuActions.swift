@@ -8,7 +8,7 @@
 import Foundation
 
 enum MainMenuActions: Int, CaseIterable {
-    case clearDerrivedData = 1000
+    case clearDerrivedData = 200
     case preferences
     case quit
     

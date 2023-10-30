@@ -10,13 +10,13 @@ import Cocoa
 enum AndroidSubMenuItem: Int, CaseIterable, SubMenuItem {
     
     case copyName = 100
-    case copyAdbId = 101
-    case separator = 102
-    case coldBootAndroid = 103
-    case androidNoAudio = 104
-    case toggleA11yAndroid = 105
-    case pasteToEmulator = 106
-    case customCommand = 1000
+    case copyAdbId
+    case separator
+    case coldBootAndroid
+    case androidNoAudio
+    case toggleA11yAndroid
+    case pasteToEmulator
+    case customCommand = 200
     
     var needBootedDevice: Bool {
         switch self {
