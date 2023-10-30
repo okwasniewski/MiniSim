@@ -201,7 +201,7 @@ class DeviceService: DeviceServiceProtocol {
                 }
             }
             catch {
-                guard error.localizedDescription.contains(deviceBootedError) else {
+                if error.localizedDescription.contains(deviceBootedError) {
                     return
                 }
                 completionQueue.async {
