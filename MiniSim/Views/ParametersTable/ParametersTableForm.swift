@@ -62,7 +62,7 @@ struct ParametersTableForm: View {
             .padding(.top)
         }
         .padding()
-        .frame(minWidth: 550, minHeight: 400)
+        .frame(minWidth: 550, minHeight: 250)
         .onAppear {
             if let parameter {
                 viewModel.onAppear(

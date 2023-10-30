@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-struct ParametersTable: View {
-    @State private var parameters: [Parameter] = [.init(title: "", command: "", enabled: false)]
-    
+struct ParametersTable: View {    
     @StateObject private var viewModel: ViewModel = ViewModel()
     
     var body: some View {
