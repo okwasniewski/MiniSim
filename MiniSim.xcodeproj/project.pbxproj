@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		52B363EA2AEC0D3D006F515C /* ParametersTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363E92AEC0D3D006F515C /* ParametersTableViewModel.swift */; };
-		52B363EC2AEC10A3006F515C /* ParametersTableForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363EB2AEC10A3006F515C /* ParametersTableForm.swift */; };
-		52B363EE2AEC10B3006F515C /* ParametersTableFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363ED2AEC10B3006F515C /* ParametersTableFormViewModel.swift */; };
 		4AFACC742AD730BE00EC369F /* SubMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFACC732AD730BE00EC369F /* SubMenuItem.swift */; };
 		4AFACC762AD73D7900EC369F /* NSMenuItem+ConvenienceInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFACC752AD73D7900EC369F /* NSMenuItem+ConvenienceInit.swift */; };
 		4AFACC782AD74E9000EC369F /* DeviceListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFACC772AD74E9000EC369F /* DeviceListSection.swift */; };
+		52B363EA2AEC0D3D006F515C /* ParametersTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363E92AEC0D3D006F515C /* ParametersTableViewModel.swift */; };
+		52B363EC2AEC10A3006F515C /* ParametersTableForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363EB2AEC10A3006F515C /* ParametersTableForm.swift */; };
+		52B363EE2AEC10B3006F515C /* ParametersTableFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363ED2AEC10B3006F515C /* ParametersTableFormViewModel.swift */; };
 		76059BF52AD4361C0008D38B /* SetupPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF42AD4361C0008D38B /* SetupPreferences.swift */; };
 		76059BF72AD449DC0008D38B /* OnboardingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF62AD449DC0008D38B /* OnboardingHeader.swift */; };
 		76059BF92AD558C30008D38B /* SetupItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF82AD558C30008D38B /* SetupItemView.swift */; };
@@ -83,12 +83,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		52B363E92AEC0D3D006F515C /* ParametersTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableViewModel.swift; sourceTree = "<group>"; };
-		52B363EB2AEC10A3006F515C /* ParametersTableForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableForm.swift; sourceTree = "<group>"; };
-		52B363ED2AEC10B3006F515C /* ParametersTableFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableFormViewModel.swift; sourceTree = "<group>"; };
 		4AFACC732AD730BE00EC369F /* SubMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubMenuItem.swift; sourceTree = "<group>"; };
 		4AFACC752AD73D7900EC369F /* NSMenuItem+ConvenienceInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMenuItem+ConvenienceInit.swift"; sourceTree = "<group>"; };
 		4AFACC772AD74E9000EC369F /* DeviceListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListSection.swift; sourceTree = "<group>"; };
+		52B363E92AEC0D3D006F515C /* ParametersTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableViewModel.swift; sourceTree = "<group>"; };
+		52B363EB2AEC10A3006F515C /* ParametersTableForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableForm.swift; sourceTree = "<group>"; };
+		52B363ED2AEC10B3006F515C /* ParametersTableFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableFormViewModel.swift; sourceTree = "<group>"; };
 		76059BF42AD4361C0008D38B /* SetupPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPreferences.swift; sourceTree = "<group>"; };
 		76059BF62AD449DC0008D38B /* OnboardingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHeader.swift; sourceTree = "<group>"; };
 		76059BF82AD558C30008D38B /* SetupItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupItemView.swift; sourceTree = "<group>"; };
@@ -374,6 +374,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4A78928A2AF1A9A3004D3FC8 /* PBXTargetDependency */,
 			);
 			name = MiniSim;
 			packageProductDependencies = (
@@ -421,6 +422,7 @@
 				768F8EC629954C8A00DFBCDB /* XCRemoteSwiftPackageReference "Sparkle" */,
 				76AC9AF72A0EB50800864A8B /* XCRemoteSwiftPackageReference "SymbolPicker" */,
 				763EEB112A26896B008428F1 /* XCRemoteSwiftPackageReference "CodeEditor" */,
+				4A7892862AF1A767004D3FC8 /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			productRefGroup = 766BD2312981628A0042261B /* Products */;
 			projectDirPath = "";
@@ -538,6 +540,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4A78928A2AF1A9A3004D3FC8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 4A7892892AF1A9A3004D3FC8 /* SwiftLintPlugin */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		766BD23D2981628C0042261B /* Debug */ = {
@@ -754,6 +763,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4A7892862AF1A767004D3FC8 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:realm/SwiftLint.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.53.0;
+			};
+		};
 		7630B25F29853EF400D8B57D /* XCRemoteSwiftPackageReference "Preferences" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Preferences";
@@ -813,6 +830,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4A7892892AF1A9A3004D3FC8 /* SwiftLintPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4A7892862AF1A767004D3FC8 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintPlugin";
+		};
 		7630B26029853EF400D8B57D /* Preferences */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7630B25F29853EF400D8B57D /* XCRemoteSwiftPackageReference "Preferences" */;
