@@ -33,6 +33,39 @@ class Menu: NSMenu {
         self.delegate = self
     }
     
+    func populateDefaultMenu() {
+        var sections: [DeviceListSection] = []
+        if UserDefaults.standard.enableiOSSimulators {
+            sections.append(.iOS)
+        }
+        
+        if UserDefaults.standard.enableAndroidEmulators {
+            sections.append(.android)
+        }
+    
+        guard !sections.isEmpty else {
+            return
+        }
+        
+        var menuItems: [NSMenuItem] = []
+        
+        sections.forEach { section in
+            var menuItem: NSMenuItem
+            if #available(macOS 14.0, *) {
+                menuItem = NSMenuItem.sectionHeader(title: "")
+            } else {
+                menuItem = NSMenuItem()
+            }
+            menuItem.tag = section.rawValue
+            menuItem.title = section.title
+            menuItem.toolTip = section.title
+            
+            menuItems.append(menuItem)
+            menuItems.append(NSMenuItem.separator())
+        }
+        self.items = menuItems
+    }
+
     func updateDevicesList() {
         let userDefaults = UserDefaults.standard
         DeviceService.getAllDevices(
@@ -52,7 +85,8 @@ class Menu: NSMenu {
     }
     
     private func removeMenuItems(removedDevices: Set<String>) {
-        self.items.filter({ removedDevices.contains($0.title) })
+        self.items
+            .filter({ removedDevices.contains($0.title) })
             .forEach(safeRemoveItem)
     }
     
@@ -154,14 +188,12 @@ class Menu: NSMenu {
             return
         }
         
-        var count = 0
-        items.forEach { menuItem in
-            count += 1
+        for (index, menuItem) in items.enumerated() {
             if let itemIndex = self.items.firstIndex(where: { $0.title == menuItem.title }) {
                 self.replaceMenuItem(at: itemIndex, with: menuItem)
-                return
+                continue
             }
-            self.safeInsertItem(menuItem, at: startIndex + count)
+            self.safeInsertItem(menuItem, at: startIndex + index + 1)
         }
     }
 
@@ -174,7 +206,7 @@ class Menu: NSMenu {
         )
         
         menuItem.target = self
-        menuItem.keyEquivalentModifierMask = [.command]
+        menuItem.keyEquivalentModifierMask = device.platform == .android ? [.option] : [.command]
         menuItem.submenu = buildSubMenu(for: device)
         menuItem.state = device.booted ? .on : .off
         return menuItem
@@ -210,7 +242,8 @@ class Menu: NSMenu {
             if item is SubMenuItems.Separator {
                 return NSMenuItem.separator()
             }
-            else if let item = item as? SubMenuActionItem {
+             
+            if let item = item as? SubMenuActionItem {
                 if item.needBootedDevice && !isDeviceBooted {
                     return nil
                 }
@@ -221,6 +254,7 @@ class Menu: NSMenu {
                 
                 return NSMenuItem(menuItem: item, target: self, action: callback)
             }
+            
             return nil
         }
     }

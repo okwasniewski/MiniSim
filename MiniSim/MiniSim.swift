@@ -85,12 +85,10 @@ class MiniSim: NSObject {
         statusItem.menu = menu
         setMenuImage()
         
-        guard menu.items.isEmpty else {
-            menu.updateDevicesList()
-            return
+        if menu.items.isEmpty {
+            menu.populateDefaultMenu()
+            menu.items += mainMenu
         }
-        
-        (devicesListHeaders + mainMenu).forEach { menu.addItem($0) }
         menu.updateDevicesList()
     }
     
@@ -164,39 +162,6 @@ class MiniSim: NSObject {
                 }
             }
         }
-    }
-    
-    private var devicesListHeaders: [NSMenuItem] {
-        var sections: [DeviceListSection] = []
-        if UserDefaults.standard.enableiOSSimulators {
-            sections.append(.iOS)
-        }
-        
-        if UserDefaults.standard.enableAndroidEmulators {
-            sections.append(.android)
-        }
-    
-        guard sections.count > 1 else {
-            return []
-        }
-        
-        var menuItems: [NSMenuItem] = []
-        
-        sections.forEach { section in
-            var menuItem: NSMenuItem
-            if #available(macOS 14.0, *) {
-                menuItem = NSMenuItem.sectionHeader(title: "")
-            } else {
-                menuItem = NSMenuItem()
-            }
-            menuItem.tag = section.rawValue
-            menuItem.title = section.title
-            menuItem.toolTip = section.title
-            
-            menuItems.append(menuItem)
-            menuItems.append(NSMenuItem.separator())
-        }
-        return menuItems
     }
     
     private var mainMenu: [NSMenuItem] {

@@ -33,10 +33,10 @@ enum SubMenuItems {
     struct Separator: SubMenuItem { }
     
     struct CopyName: SubMenuActionItem {
-        let title: String = NSLocalizedString("Copy name", comment: "")
-        let tag: Int = Tags.copyName.rawValue
-        let bootsDevice: Bool = false
-        let needBootedDevice: Bool = false
+        let title = NSLocalizedString("Copy name", comment: "")
+        let tag = Tags.copyName.rawValue
+        let bootsDevice = false
+        let needBootedDevice = false
         let image = NSImage(
             systemSymbolName: "square.and.arrow.up",
             accessibilityDescription: "Copy name"
@@ -44,10 +44,10 @@ enum SubMenuItems {
     }
     
     struct CopyID: SubMenuActionItem {
-        let title: String = NSLocalizedString("Copy ID", comment: "")
-        let tag: Int = Tags.copyID.rawValue
-        let bootsDevice: Bool = false
-        let needBootedDevice: Bool = true
+        let title = NSLocalizedString("Copy ID", comment: "")
+        let tag = Tags.copyID.rawValue
+        let bootsDevice = false
+        let needBootedDevice = true
         let image = NSImage(
             systemSymbolName: "doc.on.doc",
             accessibilityDescription: "Copy ID"
@@ -55,10 +55,10 @@ enum SubMenuItems {
     }
     
     struct CopyUDID: SubMenuActionItem {
-        let title: String = NSLocalizedString("Copy UDID", comment: "")
-        let tag: Int = Tags.copyID.rawValue
-        let bootsDevice: Bool = false
-        let needBootedDevice: Bool = false
+        let title = NSLocalizedString("Copy UDID", comment: "")
+        let tag = Tags.copyID.rawValue
+        let bootsDevice = false
+        let needBootedDevice = false
         let image = NSImage(
             systemSymbolName: "doc.on.doc",
             accessibilityDescription: "Copy UDID"
@@ -66,10 +66,10 @@ enum SubMenuItems {
     }
     
     struct ColdBoot: SubMenuActionItem {
-        let title: String = NSLocalizedString("Cold boot", comment: "")
-        let tag: Int = Tags.coldBoot.rawValue
-        let bootsDevice: Bool = true
-        let needBootedDevice: Bool = false
+        let title = NSLocalizedString("Cold boot", comment: "")
+        let tag = Tags.coldBoot.rawValue
+        let bootsDevice = true
+        let needBootedDevice = false
         let image = NSImage(
             systemSymbolName: "sunrise.fill",
             accessibilityDescription: "Cold boot"
@@ -77,10 +77,10 @@ enum SubMenuItems {
     }
     
     struct NoAudio: SubMenuActionItem {
-        let title: String = NSLocalizedString("Run without audio", comment: "")
-        let tag: Int = Tags.noAudio.rawValue
-        let bootsDevice: Bool = true
-        let needBootedDevice: Bool = false
+        let title = NSLocalizedString("Run without audio", comment: "")
+        let tag = Tags.noAudio.rawValue
+        let bootsDevice = true
+        let needBootedDevice = false
         let image = NSImage(
             systemSymbolName: "speaker.slash.fill",
             accessibilityDescription: "Run without audio"
@@ -88,10 +88,10 @@ enum SubMenuItems {
     }
     
     struct ToggleA11y: SubMenuActionItem {
-        let title: String = NSLocalizedString("Toggle accessibility", comment: "")
-        let tag: Int = Tags.toggleA11y.rawValue
-        let bootsDevice: Bool = false
-        let needBootedDevice: Bool = true
+        let title = NSLocalizedString("Toggle accessibility", comment: "")
+        let tag = Tags.toggleA11y.rawValue
+        let bootsDevice = false
+        let needBootedDevice = true
         let image = NSImage(
             systemSymbolName: "figure.walk.circle.fill",
             accessibilityDescription: "Toggle accessibility"
@@ -99,10 +99,10 @@ enum SubMenuItems {
     }
     
     struct Paste: SubMenuActionItem {
-        let title: String = NSLocalizedString("Paste clipboard to device", comment: "")
-        let tag: Int = Tags.paste.rawValue
-        let bootsDevice: Bool = false
-        let needBootedDevice: Bool = true
+        let title = NSLocalizedString("Paste clipboard to device", comment: "")
+        let tag = Tags.paste.rawValue
+        let bootsDevice = false
+        let needBootedDevice = true
         let image = NSImage(
             systemSymbolName: "keyboard",
             accessibilityDescription: "Keyboard"
@@ -110,10 +110,10 @@ enum SubMenuItems {
     }
     
     struct Delete: SubMenuActionItem {
-        let title: String = NSLocalizedString("Delete simulator", comment: "")
-        let tag: Int = Tags.paste.rawValue
-        let bootsDevice: Bool = false
-        let needBootedDevice: Bool = false
+        let title = NSLocalizedString("Delete simulator", comment: "")
+        let tag = Tags.paste.rawValue
+        let bootsDevice = false
+        let needBootedDevice = false
         let image = NSImage(
             systemSymbolName: "trash",
             accessibilityDescription: "Delete simulator"

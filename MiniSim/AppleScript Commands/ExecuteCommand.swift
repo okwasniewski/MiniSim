@@ -19,28 +19,30 @@ class ExecuteCommand: NSScriptCommand {
             let deviceId = self.property(forKey: "deviceId") as? String
         else {
             scriptErrorNumber = NSRequiredArgumentsMissingScriptError;
-            return nil;
+            return nil
         }
         
         let device = Device(name: deviceName, ID: deviceId, platform: platform)
         let rawTag = Int(tag) ?? 0
         
-        guard  let menuItem = SubMenuItems.Tags(rawValue: rawTag) else {
+        guard let menuItem = SubMenuItems.Tags(rawValue: rawTag) else {
             return nil
         }
         
-        platform == .android ?
-        DeviceService.handleAndroidAction(
-            device: device,
-            commandTag: menuItem,
-            itemName: commandName
-        ) :
-        DeviceService.handleiOSAction(
-            device: device,
-            commandTag: menuItem,
-            itemName: commandName
-        )
-        
-        return Never.self;
+        switch platform {
+        case .android:
+            DeviceService.handleAndroidAction(
+                device: device,
+                commandTag: menuItem,
+                itemName: commandName
+            )
+        case .ios:
+            DeviceService.handleiOSAction(
+                device: device,
+                commandTag: menuItem,
+                itemName: commandName
+            )
+        }
+        return nil
     }
 }
