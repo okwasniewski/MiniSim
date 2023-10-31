@@ -17,7 +17,7 @@ class GetCommands: NSScriptCommand {
             scriptErrorNumber = NSRequiredArgumentsMissingScriptError
             return nil
         }
-        
+
         let commands = platform.subMenuItems
             .compactMap { $0 as? SubMenuActionItem }
             .map { $0.commandItem }
@@ -34,7 +34,7 @@ class GetCommands: NSScriptCommand {
                     tag: SubMenuItems.Tags.customCommand.rawValue
                 )
             }
-        
+
         do {
             return try self.encode(commands + customCommands)
         } catch {

@@ -9,17 +9,16 @@ import SwiftUI
 import SymbolPicker
 import CodeEditor
 
-
 struct CustomCommandForm: View {
     var command: Command?
     var allCommands: [Command]
     var onSubmit: (_ command: Command, _ prevCommand: Command?) -> Void
-    
+
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
-    
+
     @StateObject private var viewModel: ViewModel = ViewModel()
-    
+
     var body: some View {
         Form {
             TextField("Name", text: $viewModel.commandName)
@@ -56,9 +55,9 @@ struct CustomCommandForm: View {
             HStack {
                 Text("Icon")
                 Spacer()
-                Button(action: {
+                Button {
                     viewModel.iconPickerPresented = true
-                }) {
+                } label: {
                     Image(systemName: viewModel.icon)
                         .resizable()
                         .scaledToFit()
@@ -72,21 +71,21 @@ struct CustomCommandForm: View {
                 Text("iOS").tag(Platform.ios)
                 Text("Android").tag(Platform.android)
             }
-            
+
             Toggle(isOn: $viewModel.needsBootedDevice, label: {
                 Text("Needs booted device")
             })
             .help("Determines if command needs a booted device to execute.")
             .toggleStyle(.switch)
             .disabled(viewModel.bootsDevice)
-            
+
             Toggle(isOn: $viewModel.bootsDevice, label: {
                 Text("Boots device")
             })
             .help("Determines if executed command boots device. This command will be hidden on booted devices.")
             .toggleStyle(.switch)
             .disabled(viewModel.needsBootedDevice)
-            
+
             HStack {
                 HStack {
                     Button("Cancel") {

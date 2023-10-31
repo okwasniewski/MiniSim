@@ -14,19 +14,19 @@ class GetDevicesCommand: NSScriptCommand {
             let argument = self.property(forKey: "platform") as? String,
             let platform = Platform(rawValue: argument)
         else {
-            scriptErrorNumber = NSRequiredArgumentsMissingScriptError;
-            return nil;
+            scriptErrorNumber = NSRequiredArgumentsMissingScriptError
+            return nil
         }
-        
+
         do {
             if platform == .android {
                 return try self.encode(DeviceService.getAndroidDevices())
             } else {
                 return try self.encode(DeviceService.getIOSDevices())
             }
-            
+
         } catch {
-            scriptErrorNumber = NSInternalScriptError;
+            scriptErrorNumber = NSInternalScriptError
             return nil
         }
     }

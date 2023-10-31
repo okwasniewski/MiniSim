@@ -11,7 +11,7 @@ enum AndroidHomeError: Error {
      Throw when path is not found.
      */
     case pathNotFound
-    
+
     /*
      Throw when provided path is not correct.
      */

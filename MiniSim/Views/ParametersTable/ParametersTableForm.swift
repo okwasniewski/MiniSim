@@ -9,17 +9,16 @@ import SwiftUI
 import SymbolPicker
 import CodeEditor
 
-
 struct ParametersTableForm: View {
     var parameter: Parameter?
     var allParameters: [Parameter]
     var onSubmit: (_ parameter: Parameter, _ prevParameter: Parameter?) -> Void
-    
+
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
-    
+
     @StateObject private var viewModel: ViewModel = ViewModel()
-    
+
     var body: some View {
         Form {
             TextField("Title", text: $viewModel.title)
@@ -35,7 +34,7 @@ struct ParametersTableForm: View {
             Toggle("Enabled", isOn: $viewModel.enabled)
             .help("Determines if command is enabled.")
             .toggleStyle(.switch)
-            
+
             HStack {
                 HStack {
                     Button("Cancel") {

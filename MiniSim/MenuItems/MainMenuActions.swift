@@ -11,7 +11,7 @@ enum MainMenuActions: Int, CaseIterable {
     case clearDerrivedData = 200
     case preferences
     case quit
-    
+
     var keyEquivalent: String {
         switch self {
         case .quit:
@@ -22,7 +22,7 @@ enum MainMenuActions: Int, CaseIterable {
             return ""
         }
     }
-    
+
     var title: String {
         switch self {
         case .quit:

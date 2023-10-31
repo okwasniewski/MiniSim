@@ -11,17 +11,17 @@ struct AndroidPathInput: View {
     @State private var androidPath = ""
     @State private var androidHomeError: Error?
     var onSave: ((_ isPathCorrect: Bool) -> Void)?
-    
+
     init(_ onSave: ((_ isPathCorrect: Bool) -> Void)? = nil) {
         self.onSave = onSave
     }
-    
+
     func onAppear() {
         if let androidHome = try? ADB.getAndroidHome() {
             androidPath = androidHome
         }
     }
-    
+
     func savePath() {
         do {
             if try ADB.checkAndroidHome(path: androidPath) {
@@ -34,7 +34,7 @@ struct AndroidPathInput: View {
             androidHomeError = error
         }
     }
-    
+
     var body: some View {
         VStack {
             TextField("Android path", text: $androidPath)
@@ -45,7 +45,7 @@ struct AndroidPathInput: View {
                     .font(.caption)
                     .foregroundColor(.red)
             }
-            
+
             HStack {
                 Spacer()
                 Button("Save path") {

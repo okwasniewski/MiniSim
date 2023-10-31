@@ -32,9 +32,12 @@ struct Preferences: View {
         }
         .frame(minWidth: 650, minHeight: 450)
     }
-    
+
     func resetDefaults() {
-        let shouldReset = NSAlert.showQuestionDialog(title: "Are you sure?", message: "This will reset cache and quit the app.")
+        let shouldReset = NSAlert.showQuestionDialog(
+            title: "Are you sure?",
+            message: "This will reset cache and quit the app."
+        )
         if shouldReset {
             let defaults = UserDefaults.standard
             let dictionary = defaults.dictionaryRepresentation()

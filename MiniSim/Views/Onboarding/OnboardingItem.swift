@@ -11,7 +11,7 @@ struct OnboardingItem: View {
     var image: String
     var title: String
     var description: String
-    
+
     var body: some View {
         HStack {
             Image(systemName: image)
@@ -32,6 +32,10 @@ struct OnboardingItem: View {
 
 struct OnboardingItem_Previews: PreviewProvider {
     static var previews: some View {
-        OnboardingItem(image: "sparkles", title: "And more useful utilities", description: "Like: Paste clipboard to emulator, Cold boot and more!")
+        OnboardingItem(
+            image: "sparkles",
+            title: "And more useful utilities",
+            description: "Like: Paste clipboard to emulator, Cold boot and more!"
+        )
     }
 }

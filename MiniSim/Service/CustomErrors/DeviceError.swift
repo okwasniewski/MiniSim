@@ -9,17 +9,16 @@ import Foundation
 enum DeviceError: Error {
     // Throw when device was not found
     case deviceNotFound
-    
+
     // Throw when there was an error with xcode command / configuration
-    case XCodeError
-    
+    case xcodeError
+
     // Throw when there was an error with Android command / configuration
-    case AndroidStudioError
+    case androidStudioError
 
     // Throw in all other cases
     case unexpected(code: Int)
 }
-
 
 extension DeviceError: LocalizedError {
     public var errorDescription: String? {
@@ -29,14 +28,24 @@ extension DeviceError: LocalizedError {
                     "Selected device was not found, please make sure it's running.",
                     comment: "Simulator not found"
                 )
-            case .XCodeError:
+            case .xcodeError:
                 return NSLocalizedString(
-                    "There was an error with your XCode developer tools command, make sure you have everything set up properly.",
+                    """
+                    There was an error with your XCode developer tools command,
+                    make sure you have everything set up properly.
+                    """,
                     comment: "XCode error"
                 )
-            case .AndroidStudioError:
-                return NSLocalizedString("There was an error with your Android Studio configuration, make sure you have everything set up properly. Make sure ANDROID_HOME environment variable is in PATH.", comment: "Android Studio error")
-            case .unexpected(_):
+            case .androidStudioError:
+                return NSLocalizedString(
+                    """
+                    There was an error with your Android Studio
+                    configuration, make sure you have everything
+                    set up properly. Make sure ANDROID_HOME
+                    environment variable is in PATH.
+                    """,
+                    comment: "Android Studio error")
+            case .unexpected:
                 return NSLocalizedString(
                     "An unexpected error occurred.",
                     comment: "Unexpected Error"

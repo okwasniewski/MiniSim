@@ -7,14 +7,17 @@
 
 import SwiftUI
 
-struct ParametersTable: View {    
+struct ParametersTable: View {
     @StateObject private var viewModel: ViewModel = ViewModel()
-    
+
     var body: some View {
         VStack {
             SectionHeader(
                 title: "Android additional launch parameters",
-                subTitle: "These parameters are passed to every android launch command. \nFor example: Cold boot, Run without audio etc."
+                subTitle: """
+                          These parameters are passed to every android launch command.
+                          \nFor example: Cold boot, Run without audio etc.
+                          """
             )
             Table(viewModel.parameters, selection: $viewModel.selection) {
                 TableColumn("Title", value: \.title)
@@ -54,7 +57,11 @@ struct ParametersTable: View {
             viewModel.loadData()
         }
         .sheet(isPresented: $viewModel.showForm) {
-            ParametersTableForm(parameter: viewModel.selectedParameter, allParameters: viewModel.parameters, onSubmit: viewModel.handleForm)
+            ParametersTableForm(
+                parameter: viewModel.selectedParameter,
+                allParameters: viewModel.parameters,
+                onSubmit: viewModel.handleForm
+            )
         }
     }
 }

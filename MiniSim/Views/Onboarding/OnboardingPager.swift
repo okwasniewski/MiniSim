@@ -12,7 +12,7 @@ enum OnboardingPages: CaseIterable {
     case setupPreferences
     case setup
     case permissions
-    
+
     @ViewBuilder
     func view(goToNextPage: @escaping () -> Void) -> some View {
         switch self {
@@ -33,24 +33,24 @@ struct OnboardingPager: View {
     var pageIndex: Int {
         OnboardingPages.allCases.firstIndex(of: currentPage) ?? 0
     }
-    
+
     func goToNextPage() {
         let allPages = OnboardingPages.allCases
         if let index = allPages.firstIndex(of: currentPage), index + 1 < allPages.count {
             currentPage = allPages[index + 1]
         }
     }
-    
+
     func goToPreviousPage() {
         let allPages = OnboardingPages.allCases
         if let index = allPages.firstIndex(of: currentPage), index > 0 {
             currentPage = allPages[index - 1]
         }
     }
-    
+
     var body: some View {
         ZStack {
-            if (pageIndex > 0) {
+            if pageIndex > 0 {
                 Button("Go Back") {
                     goToPreviousPage()
                 }

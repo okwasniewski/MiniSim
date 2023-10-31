@@ -7,7 +7,6 @@
 
 import AppKit
 
-
 extension NSPasteboard {
     func copyToPasteboard(text: String) {
         let pasteboard = NSPasteboard.general

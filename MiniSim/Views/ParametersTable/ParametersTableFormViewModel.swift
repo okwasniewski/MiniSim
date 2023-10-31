@@ -12,26 +12,29 @@ extension ParametersTableForm {
         @Published var title = ""
         @Published var command = ""
         @Published var enabled = true
-        
+
         var allParameters: [Parameter] = []
         var isUpdating: Bool = false
-        
+
         func onAppear(title: String = "", command: String = "", enabled: Bool = true) {
             self.title = title
             self.command = command
             self.enabled = enabled
         }
-        
+
         func onAppear(allCommands: [Parameter], isUpdating: Bool = false) {
             self.allParameters = allCommands
             self.isUpdating = isUpdating
         }
-        
+
         var disableForm: Bool {
-            let hasDuplicatedName = !isUpdating && allParameters.contains(where: { $0.title.lowercased() == title.lowercased() })
+            let containsParam = allParameters
+                .map { $0.title.lowercased() }
+                .contains(where: { $0 == title.lowercased() })
+            let hasDuplicatedName = !isUpdating && containsParam
             return title.isEmpty || command.isEmpty || hasDuplicatedName
         }
-        
+
         func clearForm() {
             title = ""
             command = ""
