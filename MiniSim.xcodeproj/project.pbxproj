@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		52B363EA2AEC0D3D006F515C /* ParametersTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363E92AEC0D3D006F515C /* ParametersTableViewModel.swift */; };
+		52B363EC2AEC10A3006F515C /* ParametersTableForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363EB2AEC10A3006F515C /* ParametersTableForm.swift */; };
+		52B363EE2AEC10B3006F515C /* ParametersTableFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363ED2AEC10B3006F515C /* ParametersTableFormViewModel.swift */; };
 		76059BF52AD4361C0008D38B /* SetupPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF42AD4361C0008D38B /* SetupPreferences.swift */; };
 		76059BF72AD449DC0008D38B /* OnboardingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF62AD449DC0008D38B /* OnboardingHeader.swift */; };
 		76059BF92AD558C30008D38B /* SetupItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF82AD558C30008D38B /* SetupItemView.swift */; };
@@ -79,6 +82,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		52B363E92AEC0D3D006F515C /* ParametersTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableViewModel.swift; sourceTree = "<group>"; };
+		52B363EB2AEC10A3006F515C /* ParametersTableForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableForm.swift; sourceTree = "<group>"; };
+		52B363ED2AEC10B3006F515C /* ParametersTableFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableFormViewModel.swift; sourceTree = "<group>"; };
 		76059BF42AD4361C0008D38B /* SetupPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPreferences.swift; sourceTree = "<group>"; };
 		76059BF62AD449DC0008D38B /* OnboardingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHeader.swift; sourceTree = "<group>"; };
 		76059BF82AD558C30008D38B /* SetupItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupItemView.swift; sourceTree = "<group>"; };
@@ -164,6 +170,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		52B363E82AEC0AFD006F515C /* ParametersTable */ = {
+			isa = PBXGroup;
+			children = (
+				76630F0D29BDE7EB00FB64F9 /* ParametersTable.swift */,
+				52B363EB2AEC10A3006F515C /* ParametersTableForm.swift */,
+				52B363E92AEC0D3D006F515C /* ParametersTableViewModel.swift */,
+				52B363ED2AEC10B3006F515C /* ParametersTableFormViewModel.swift */,
+			);
+			path = ParametersTable;
+			sourceTree = "<group>";
+		};
 		762CF1E12981DDD400099999 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,13 +214,13 @@
 		7630B2642985C43300D8B57D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				52B363E82AEC0AFD006F515C /* ParametersTable */,
 				7631218C2A12B3A900EE7F48 /* CustomCommands */,
 				7677999629C25865009030F8 /* Onboarding */,
 				76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */,
 				7630B2652985C44A00D8B57D /* Preferences.swift */,
 				7630B2672985C4CF00D8B57D /* About.swift */,
 				76630F0B29BDD0C000FB64F9 /* Devices.swift */,
-				76630F0D29BDE7EB00FB64F9 /* ParametersTable.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -472,6 +489,7 @@
 				76E4451429D4403F00039025 /* NSNotificationName.swift in Sources */,
 				76630F0E29BDE7EB00FB64F9 /* ParametersTable.swift in Sources */,
 				7677999829C25894009030F8 /* OnboardingPager.swift in Sources */,
+				52B363EC2AEC10A3006F515C /* ParametersTableForm.swift in Sources */,
 				7630B2682985C4CF00D8B57D /* About.swift in Sources */,
 				76630F0C29BDD0C000FB64F9 /* Devices.swift in Sources */,
 				767C761F29B26ED3009B9AEC /* AccessibilityElement.swift in Sources */,
@@ -491,6 +509,7 @@
 				76F2A914299050F9002D4EF6 /* UserDefaults+Configuration.swift in Sources */,
 				76059BF72AD449DC0008D38B /* OnboardingHeader.swift in Sources */,
 				763121902A12B45000EE7F48 /* CustomCommandFormViewModel.swift in Sources */,
+				52B363EE2AEC10B3006F515C /* ParametersTableFormViewModel.swift in Sources */,
 				7630B2772986D65800D8B57D /* Bundle+appName.swift in Sources */,
 				763121892A12AF9C00EE7F48 /* Command.swift in Sources */,
 				767DDF6829D32ABC005E6F32 /* ReadyPopOver.swift in Sources */,
@@ -498,6 +517,7 @@
 				76059BF92AD558C30008D38B /* SetupItemView.swift in Sources */,
 				76630F2929BE09D800FB64F9 /* Parameter.swift in Sources */,
 				7630B27C2987207200D8B57D /* Menu.swift in Sources */,
+				52B363EA2AEC0D3D006F515C /* ParametersTableViewModel.swift in Sources */,
 				762CF1E02981968F00099999 /* String+match.swift in Sources */,
 				76F2A9172991B7B6002D4EF6 /* ViewModifiers.swift in Sources */,
 				763121872A12AF3400EE7F48 /* CustomCommandForm.swift in Sources */,
