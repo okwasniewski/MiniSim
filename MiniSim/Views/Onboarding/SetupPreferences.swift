@@ -9,8 +9,8 @@ import SwiftUI
 
 struct SetupPreferences: View {
     var goToNextPage: () -> Void
-    @AppStorage(UserDefaults.Keys.enableiOSSimulators, store: .standard) var enableiOSSimulators: Bool = true
-    @AppStorage(UserDefaults.Keys.enableAndroidEmulators, store: .standard) var enableAndroidEmulators: Bool = true
+    @AppStorage(UserDefaults.Keys.enableiOSSimulators, store: .standard) var enableiOSSimulators = true
+    @AppStorage(UserDefaults.Keys.enableAndroidEmulators, store: .standard) var enableAndroidEmulators = true
 
     var body: some View {
         VStack {
@@ -46,5 +46,5 @@ struct SetupPreferences: View {
 }
 
 #Preview {
-    SetupPreferences(goToNextPage: {})
+    SetupPreferences {}
 }

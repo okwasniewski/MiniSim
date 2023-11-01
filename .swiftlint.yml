@@ -1,0 +1,83 @@
+opt_in_rules:
+  - anonymous_argument_in_multiline_closure
+  - array_init
+  - closure_end_indentation
+  - closure_spacing
+  - collection_alignment
+  - comma_inheritance
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
+  - contains_over_first_not_nil
+  - contains_over_range_nil_comparison
+  - convenience_type
+  - direct_return
+  - discarded_notification_center_observer
+  - discouraged_none_name
+  - discouraged_object_literal
+  #- discouraged_optional_boolean # needs code change
+  - empty_collection_literal
+  - empty_count
+  - empty_string
+  - enum_case_associated_values_count
+  - expiring_todo
+  - explicit_init
+  # - explicit_type_interface # nice to have
+  - fallthrough
+  - fatal_error_message
+  - file_name_no_space
+  - first_where
+  - flatmap_over_map_reduce
+  # - force_unwrapping # nice to have
+  - identical_operands
+  - implicit_return
+  # - implicitly_unwrapped_optional # nice to have
+  - joined_default_parameter
+  - last_where
+  - legacy_multiple
+  - legacy_objc_type
+  - literal_expression_end_indentation
+  - local_doc_comment
+  - modifier_order
+  - multiline_arguments
+  - multiline_arguments_brackets
+  - multiline_function_chains
+  - multiline_literal_brackets
+  - multiline_parameters
+  - multiline_parameters_brackets
+  # - no_grouping_extension # nice to have
+  # - no_magic_numbers # nice to have
+  # - nslocalizedstring_key # nice to have
+  - number_separator
+  - operator_usage_whitespace
+  - optional_enum_case_matching
+  - overridden_super_call
+  - prefer_self_type_over_type_of_self
+  - reduce_into
+  - redundant_nil_coalescing
+  - redundant_self_in_closure
+  - redundant_type_annotation
+  - return_value_from_void_function
+  - self_binding
+  - shorthand_optional_binding
+  - sorted_first_last
+  - sorted_imports
+  - strict_fileprivate
+  - superfluous_else
+  - switch_case_on_newline
+  - toggle_bool
+  - trailing_closure
+  - unavailable_function
+  - unhandled_throwing_task
+  - unneeded_parentheses_in_closure_argument
+  - unowned_variable_capture
+  - untyped_error_in_catch
+  - vertical_parameter_alignment_on_call
+  - vertical_whitespace_closing_braces
+  - vertical_whitespace_opening_braces
+  - weak_delegate
+  - yoda_condition
+  
+identifier_name:
+  excluded: # excluded via string array
+    - id
+    - ID

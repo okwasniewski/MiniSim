@@ -49,10 +49,9 @@ class AccessibilityElement {
     }
 
     static func hasA11yAccess(prompt: Bool = true) -> Bool {
-        let checkOptPrompt = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString
+        let checkOptPrompt = kAXTrustedCheckOptionPrompt.takeUnretainedValue()
         let options = [checkOptPrompt: prompt]
-        let accessEnabled = AXIsProcessTrustedWithOptions(options as CFDictionary?)
-        return accessEnabled
+        return AXIsProcessTrustedWithOptions(options as CFDictionary?)
     }
 
     static func allWindowsForPID(_ pid: pid_t) -> [AccessibilityElement] {
@@ -62,6 +61,6 @@ class AccessibilityElement {
             return []
         }
 
-        return windows.map({AccessibilityElement($0)})
+        return windows.map { AccessibilityElement($0) }
     }
 }

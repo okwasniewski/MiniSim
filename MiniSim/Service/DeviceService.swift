@@ -5,9 +5,9 @@
 //  Created by Oskar Kwaśniewski on 26/01/2023.
 //
 
+import AppKit
 import Foundation
 import ShellOut
-import AppKit
 import UserNotifications
 
 protocol DeviceServiceProtocol {
@@ -28,7 +28,6 @@ protocol DeviceServiceProtocol {
 }
 
 class DeviceService: DeviceServiceProtocol {
-
     private static let queue = DispatchQueue(label: "com.MiniSim.DeviceService", qos: .userInteractive)
     private static let deviceBootedError = "Unable to boot device in current state: Booted"
 
@@ -50,12 +49,12 @@ class DeviceService: DeviceServiceProtocol {
             return []
         }
 
-        return commands.filter({ $0.platform == platform })
+        return commands.filter { $0.platform == platform }
     }
 
     static func getCustomCommand(platform: Platform, commandName: String) -> Command? {
         let commands = getCustomCommands(platform: platform)
-        return commands.first(where: { $0.name == commandName })
+        return commands.first { $0.name == commandName }
     }
 
     static func runCustomCommand(_ device: Device, command: Command) throws {
@@ -69,7 +68,6 @@ class DeviceService: DeviceServiceProtocol {
                 .replacingOccurrences(of: Variables.adbPath.rawValue, with: ADB.getAdbPath())
                 .replacingOccurrences(of: Variables.adbId.rawValue, with: deviceID)
                 .replacingOccurrences(of: Variables.androidHomePath.rawValue, with: ADB.getAndroidHome())
-
         } else {
             commandToExecute = commandToExecute
                 .replacingOccurrences(of: Variables.uuid.rawValue, with: deviceID)
@@ -89,8 +87,7 @@ class DeviceService: DeviceServiceProtocol {
 
     static func focusDevice(_ device: Device) {
         queue.async {
-
-            let runningApps = NSWorkspace.shared.runningApplications.filter({$0.activationPolicy == .regular})
+            let runningApps = NSWorkspace.shared.runningApplications.filter { $0.activationPolicy == .regular }
 
             if let uuid = device.identifier, device.platform == .ios {
                 try? Self.launchSimulatorApp(uuid: uuid)
@@ -123,7 +120,6 @@ class DeviceService: DeviceServiceProtocol {
                     }
                 }
             }
-
         }
     }
 
@@ -139,7 +135,7 @@ class DeviceService: DeviceServiceProtocol {
     }
 
     static func checkXcodeSetup() -> Bool {
-        return FileManager.default.fileExists(atPath: ProcessPaths.xcrun.rawValue)
+        FileManager.default.fileExists(atPath: ProcessPaths.xcrun.rawValue)
     }
 
     static func checkAndroidSetup() throws -> String {
@@ -212,12 +208,11 @@ class DeviceService: DeviceServiceProtocol {
 
 // MARK: iOS Methods
 extension DeviceService {
-
-    static private func parseIOSDevices(result: [String]) -> [Device] {
+    private static func parseIOSDevices(result: [String]) -> [Device] {
         var devices: [Device] = []
         var osVersion = ""
         result.forEach { line in
-            if let currentOs = line.match("-- (.*?) --").first, currentOs.count > 0 {
+            if let currentOs = line.match("-- (.*?) --").first, !currentOs.isEmpty {
                 osVersion = currentOs[1]
             }
             if let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\) (\\(.*?)\\)").first {
@@ -267,13 +262,14 @@ extension DeviceService {
 
     static func launchSimulatorApp(uuid: String) throws {
         let isSimulatorRunning = NSWorkspace.shared.runningApplications
-            .contains(where: {$0.bundleIdentifier == "com.apple.iphonesimulator"})
+            .contains { $0.bundleIdentifier == "com.apple.iphonesimulator" }
 
         if !isSimulatorRunning {
             guard let activeDeveloperDir = try? shellOut(
                 to: ProcessPaths.xcodeSelect.rawValue,
-                arguments: ["-p"]).trimmingCharacters(in: .whitespacesAndNewlines
-                ) else {
+                arguments: ["-p"]
+            )
+                .trimmingCharacters(in: .whitespacesAndNewlines) else {
                 throw DeviceError.xcodeError
             }
             try shellOut(
@@ -339,7 +335,6 @@ extension DeviceService {
             break
         }
     }
-
 }
 
 // MARK: Android Methods
@@ -347,12 +342,9 @@ extension DeviceService {
     private static func launchDevice(name: String, additionalArguments: [String] = []) throws {
         let emulatorPath = try ADB.getEmulatorPath()
         var arguments = ["@\(name)"]
-        let formattedArguments = additionalArguments.filter({ !$0.isEmpty }).map {
-            if $0.hasPrefix("-") {
-                return $0
-            }
-            return "-\($0)"
-        }
+        let formattedArguments = additionalArguments
+            .filter { !$0.isEmpty }
+            .map { $0.hasPrefix("-") ? $0 : "-\($0)" }
         arguments.append(contentsOf: getAndroidLaunchParams())
         arguments.append(contentsOf: formattedArguments)
         do {
@@ -372,7 +364,8 @@ extension DeviceService {
             return []
         }
 
-        return parameters.filter({ $0.enabled }).map({ $0.command })
+        return parameters.filter { $0.enabled }
+            .map { $0.command }
     }
 
     static func getAndroidDevices() throws -> [Device] {
@@ -381,10 +374,12 @@ extension DeviceService {
         let output = try shellOut(to: emulatorPath, arguments: ["-list-avds"])
         let splitted = output.components(separatedBy: "\n")
 
-        return splitted.filter({ !$0.isEmpty }).map {
-            let adbId = try? ADB.getAdbId(for: $0, adbPath: adbPath)
-            return Device(name: $0, identifier: adbId, booted: adbId != nil, platform: .android)
-        }
+        return splitted
+            .filter { !$0.isEmpty }
+            .map { deviceName in
+                let adbId = try? ADB.getAdbId(for: deviceName, adbPath: adbPath)
+                return Device(name: deviceName, identifier: adbId, booted: adbId != nil, platform: .android)
+            }
     }
 
     static func toggleA11y(device: Device) throws {
@@ -394,7 +389,7 @@ extension DeviceService {
         }
 
         let a11yIsEnabled = ADB.isAccesibilityOn(deviceId: adbId, adbPath: adbPath)
-        let value = a11yIsEnabled ? ADB.talkbackOff  : ADB.talkbackOn
+        let value = a11yIsEnabled ? ADB.talkbackOff : ADB.talkbackOn
         let shellCmd = "\(adbPath) -s \(adbId) shell settings put secure enabled_accessibility_services \(value)"
         _ = try? shellOut(to: shellCmd)
     }

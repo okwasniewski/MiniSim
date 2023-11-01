@@ -5,9 +5,9 @@
 //  Created by Oskar Kwaśniewski on 15/05/2023.
 //
 
+import CodeEditor
 import SwiftUI
 import SymbolPicker
-import CodeEditor
 
 struct CustomCommandForm: View {
     var command: Command?
@@ -17,7 +17,7 @@ struct CustomCommandForm: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
 
-    @StateObject private var viewModel: ViewModel = ViewModel()
+    @StateObject private var viewModel = ViewModel()
 
     var body: some View {
         Form {
@@ -72,16 +72,16 @@ struct CustomCommandForm: View {
                 Text("Android").tag(Platform.android)
             }
 
-            Toggle(isOn: $viewModel.needsBootedDevice, label: {
+            Toggle(isOn: $viewModel.needsBootedDevice) {
                 Text("Needs booted device")
-            })
+            }
             .help("Determines if command needs a booted device to execute.")
             .toggleStyle(.switch)
             .disabled(viewModel.bootsDevice)
 
-            Toggle(isOn: $viewModel.bootsDevice, label: {
+            Toggle(isOn: $viewModel.bootsDevice) {
                 Text("Boots device")
-            })
+            }
             .help("Determines if executed command boots device. This command will be hidden on booted devices.")
             .toggleStyle(.switch)
             .disabled(viewModel.needsBootedDevice)

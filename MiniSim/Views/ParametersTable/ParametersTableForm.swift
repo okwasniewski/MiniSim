@@ -5,9 +5,9 @@
 //  Created by Jan Jaworski on 27/10/2023.
 //
 
+import CodeEditor
 import SwiftUI
 import SymbolPicker
-import CodeEditor
 
 struct ParametersTableForm: View {
     var parameter: Parameter?
@@ -17,7 +17,7 @@ struct ParametersTableForm: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
 
-    @StateObject private var viewModel: ViewModel = ViewModel()
+    @StateObject private var viewModel = ViewModel()
 
     var body: some View {
         Form {

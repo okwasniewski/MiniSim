@@ -20,15 +20,15 @@ enum Variables: String {
     case xcrunPath = "$xcrun_path"
 
     static var common: [Variables] {
-        return [deviceName]
+        [deviceName]
     }
 
     static var android: [Variables] {
-        return [androidHomePath, adbPath]
+        [androidHomePath, adbPath]
     }
 
     static var ios: [Variables] {
-        return [uuid, xcrunPath]
+        [uuid, xcrunPath]
     }
 
     var description: String {

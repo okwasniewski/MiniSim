@@ -5,8 +5,8 @@
 //  Created by Oskar Kwasniewski on 18/06/2023.
 //
 
-import Foundation
 import Cocoa
+import Foundation
 
 extension NSScriptCommand {
     func property(forKey key: String) -> Any? {

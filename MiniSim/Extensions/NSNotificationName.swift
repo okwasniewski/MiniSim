@@ -7,9 +7,9 @@
 
 import Foundation
 
-extension NSNotification.Name {
-    static let menuWillOpen = NSNotification.Name("menuWillOpen")
-    static let menuDidClose = NSNotification.Name("menuDidClose")
-    static let deviceDeleted = NSNotification.Name("deviceDeleted")
-    static let commandDidSucceed = NSNotification.Name("commandDidSucceed")
+extension Notification.Name {
+    static let menuWillOpen = Notification.Name("menuWillOpen")
+    static let menuDidClose = Notification.Name("menuDidClose")
+    static let deviceDeleted = Notification.Name("deviceDeleted")
+    static let commandDidSucceed = Notification.Name("commandDidSucceed")
 }

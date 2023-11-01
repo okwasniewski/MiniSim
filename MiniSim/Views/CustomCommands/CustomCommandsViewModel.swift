@@ -10,16 +10,16 @@ import Foundation
 extension CustomCommands {
     class ViewModel: ObservableObject {
         @Published var commands: [Command] = []
-        @Published var selectedPlatform: Platform = Platform.android
+        @Published var selectedPlatform = Platform.android
         @Published var showForm = false
         @Published var selection: Command.ID?
 
         var selectedCommand: Command? {
-            commands.first(where: { $0.id == selection })
+            commands.first { $0.id == selection }
         }
 
         var filteredCommands: [Command] {
-            commands.filter({ $0.platform == selectedPlatform })
+            commands.filter { $0.platform == selectedPlatform }
         }
 
         func saveData() {
@@ -35,7 +35,7 @@ extension CustomCommands {
         }
 
         func deleteCommands(item: Command.ID?) {
-            commands.removeAll(where: { $0.id == item })
+            commands.removeAll { $0.id == item }
             saveData()
         }
 

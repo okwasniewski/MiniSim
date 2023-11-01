@@ -5,8 +5,8 @@
 //  Created by Oskar Kwasniewski on 12/03/2023.
 //
 
-import SwiftUI
 import Preferences
+import SwiftUI
 
 struct Devices: View {
     var body: some View {

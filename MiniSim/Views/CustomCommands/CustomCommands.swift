@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomCommands: View {
-    @StateObject private var viewModel: ViewModel = ViewModel()
+    @StateObject private var viewModel = ViewModel()
 
     var body: some View {
         VStack {
@@ -33,7 +33,6 @@ struct CustomCommands: View {
                 TableColumn("Command") { command in
                     Text(command.command)
                         .font(.system(.body, design: .monospaced))
-
                 }
             }
             .contextMenu {

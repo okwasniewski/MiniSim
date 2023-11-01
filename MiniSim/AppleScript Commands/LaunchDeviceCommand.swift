@@ -5,8 +5,8 @@
 //  Created by Oskar Kwasniewski on 09/07/2023.
 //
 
-import Foundation
 import Cocoa
+import Foundation
 
 class LaunchDeviceCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {

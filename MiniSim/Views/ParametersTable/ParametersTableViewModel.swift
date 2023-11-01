@@ -14,7 +14,7 @@ extension ParametersTable {
         @Published var selection: Parameter.ID?
 
         var selectedParameter: Parameter? {
-            parameters.first(where: { $0.id == selection })
+            parameters.first { $0.id == selection }
         }
 
         func saveData() {
@@ -30,7 +30,7 @@ extension ParametersTable {
         }
 
         func deleteParameter(item: Parameter.ID?) {
-            parameters.removeAll(where: { $0.id == item })
+            parameters.removeAll { $0.id == item }
             saveData()
         }
 

@@ -18,8 +18,8 @@ class Menu: NSMenu {
             assignKeyEquivalents()
         }
         willSet {
-            let deviceNames = Set(devices.map({ $0.displayName }))
-            let updatedDeviceNames = Set(newValue.map({ $0.displayName }))
+            let deviceNames = Set(devices.map { $0.displayName })
+            let updatedDeviceNames = Set(newValue.map { $0.displayName })
             removeMenuItems(removedDevices: deviceNames.subtracting(updatedDeviceNames))
         }
     }
@@ -81,12 +81,12 @@ class Menu: NSMenu {
     }
 
     private func getDeviceByName(name: String) -> Device? {
-        return devices.first { $0.displayName == name }
+        devices.first { $0.displayName == name }
     }
 
     private func removeMenuItems(removedDevices: Set<String>) {
         self.items
-            .filter({ removedDevices.contains($0.title) })
+            .filter { removedDevices.contains($0.title) }
             .forEach(safeRemoveItem)
     }
 
@@ -120,14 +120,14 @@ class Menu: NSMenu {
     }
 
     private func getKeyKequivalent(index: Int) -> String {
-        return Character(UnicodeScalar(0x0030+index)!).lowercased()
+        Character(UnicodeScalar(0x0030 + index)!).lowercased()
     }
 
     private func assignKeyEquivalents() {
-        let sections = DeviceListSection.allCases.map {$0.title}
+        let sections = DeviceListSection.allCases.map { $0.title }
         let deviceItems = items.filter { !sections.contains($0.title) }
-        let iosDeviceNames = devices.filter({ $0.platform == Platform.ios }).map { $0.displayName }
-        let androidDeviceNames = devices.filter({ $0.platform == Platform.android }).map { $0.displayName }
+        let iosDeviceNames = devices.filter { $0.platform == Platform.ios }.map { $0.displayName }
+        let androidDeviceNames = devices.filter { $0.platform == Platform.android }.map { $0.displayName }
 
         let iosDevices = deviceItems.filter { iosDeviceNames.contains($0.title) }
         let androidDevices = deviceItems.filter { androidDeviceNames.contains($0.title) }
@@ -160,7 +160,7 @@ class Menu: NSMenu {
         let platformSections: [DeviceListSection] = sections
         for section in platformSections {
             let sectionDevices = filter(devices: devices, for: section)
-                .sorted(by: { $0.name < $1.name })
+                .sorted { $0.name < $1.name }
             let menuItems = sectionDevices.map { createMenuItem(for: $0) }
             self.updateSection(with: menuItems, section: section)
         }
@@ -225,11 +225,13 @@ class Menu: NSMenu {
         let actionsSubMenu = createActionsSubMenu(
             for: platform.subMenuItems,
             isDeviceBooted: device.booted,
-            callback: callback)
+            callback: callback
+        )
         let customCommandSubMenu = createCustomCommandsMenu(
             for: platform,
             isDeviceBooted: device.booted,
-            callback: callback)
+            callback: callback
+        )
         (actionsSubMenu + customCommandSubMenu).forEach { subMenu.addItem($0) }
         return subMenu
     }
@@ -275,7 +277,8 @@ class Menu: NSMenu {
     }
 
    private func safeInsertItem(_ item: NSMenuItem, at index: Int) {
-        guard !items.contains(where: {$0.title == item.title}), index <= items.count else {
+        guard !items.contains(where: { $0.title == item.title }),
+              index <= items.count else {
             return
         }
 
@@ -283,8 +286,7 @@ class Menu: NSMenu {
     }
 
     private func safeRemoveItem(_ item: NSMenuItem?) {
-        guard let item = item,
-              items.contains(item) else {
+        guard let item, items.contains(item) else {
             return
         }
 

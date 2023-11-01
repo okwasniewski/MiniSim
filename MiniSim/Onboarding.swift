@@ -5,8 +5,8 @@
 //  Created by Oskar Kwaśniewski on 29/03/2023.
 //
 
-import Foundation
 import AppKit
+import Foundation
 import SwiftUI
 
 class Onboarding: NSObject {

@@ -5,8 +5,8 @@
 //  Created by Oskar Kwasniewski on 15/08/2023.
 //
 
-import Foundation
 import Cocoa
+import Foundation
 
 class ExecuteCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {

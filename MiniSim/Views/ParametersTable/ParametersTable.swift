@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ParametersTable: View {
-    @StateObject private var viewModel: ViewModel = ViewModel()
+    @StateObject private var viewModel = ViewModel()
 
     var body: some View {
         VStack {
@@ -23,8 +23,8 @@ struct ParametersTable: View {
                 TableColumn("Title", value: \.title)
                     .width(80)
                 TableColumn("Command", value: \.command)
-                TableColumn("Enabled") {
-                    Text("\(String($0.enabled))")
+                TableColumn("Enabled") { toggle in
+                    Text("\(String(toggle.enabled))")
                 }
             }
             .contextMenu {

@@ -28,7 +28,6 @@ extension NSMenuItem {
                 let imageName = self.getSystemImageFromName(name: title)
                 self.image = NSImage(systemSymbolName: imageName, accessibilityDescription: title)
             }
-
         }
 
         self.tag = type.rawValue

@@ -44,7 +44,8 @@ extension DeviceError: LocalizedError {
                     set up properly. Make sure ANDROID_HOME
                     environment variable is in PATH.
                     """,
-                    comment: "Android Studio error")
+                    comment: "Android Studio error"
+                )
             case .unexpected:
                 return NSLocalizedString(
                     "An unexpected error occurred.",

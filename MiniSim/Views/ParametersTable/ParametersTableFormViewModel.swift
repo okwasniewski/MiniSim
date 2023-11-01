@@ -14,7 +14,7 @@ extension ParametersTableForm {
         @Published var enabled = true
 
         var allParameters: [Parameter] = []
-        var isUpdating: Bool = false
+        var isUpdating = false
 
         func onAppear(title: String = "", command: String = "", enabled: Bool = true) {
             self.title = title
@@ -30,7 +30,7 @@ extension ParametersTableForm {
         var disableForm: Bool {
             let containsParam = allParameters
                 .map { $0.title.lowercased() }
-                .contains(where: { $0 == title.lowercased() })
+                .contains { $0 == title.lowercased() }
             let hasDuplicatedName = !isUpdating && containsParam
             return title.isEmpty || command.isEmpty || hasDuplicatedName
         }

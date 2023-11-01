@@ -14,13 +14,13 @@ extension CustomCommandForm {
         @Published var command = ""
         @Published var needsBootedDevice = false
         @Published var bootsDevice = false
-        @Published var platform: Platform = Platform.android
+        @Published var platform = Platform.android
         @Published var icon = "info"
 
         @Published var iconPickerPresented = false
 
         var allCommands: [Command] = []
-        var isUpdating: Bool = false
+        var isUpdating = false
 
         func onAppear(
             commandName: String = "",
@@ -49,7 +49,7 @@ extension CustomCommandForm {
         var disableForm: Bool {
             let containsCommand = allCommands
                 .map { $0.name.lowercased() }
-                .contains(where: { $0 == commandName.lowercased() })
+                .contains { $0 == commandName.lowercased() }
             let hasDuplicatedName = !isUpdating && containsCommand
             return commandName.isEmpty || command.isEmpty || hasDuplicatedName
         }

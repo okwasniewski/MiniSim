@@ -9,7 +9,7 @@ struct Device: Hashable, Codable {
     var name: String
     var version: String?
     var identifier: String?
-    var booted: Bool = false
+    var booted: Bool
     var platform: Platform
 
     var displayName: String {

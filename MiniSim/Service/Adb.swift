@@ -17,7 +17,6 @@ protocol ADBProtocol {
 }
 
 final class ADB: ADBProtocol {
-
     static let talkbackOn = "com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService"
     static let talkbackOff = "com.android.talkback/com.google.android.marvin.talkback.TalkBackService"
 
@@ -45,7 +44,7 @@ final class ADB: ADBProtocol {
     }
 
     static func getAdbPath() throws -> String {
-        return try getAndroidHome() + Paths.adb.rawValue
+        try getAndroidHome() + Paths.adb.rawValue
     }
 
     /**
@@ -65,7 +64,7 @@ final class ADB: ADBProtocol {
     }
 
     static func getEmulatorPath() throws -> String {
-        return try getAndroidHome() + Paths.emulator.rawValue
+        try getAndroidHome() + Paths.emulator.rawValue
     }
 
     static func getAdbId(for deviceName: String, adbPath: String) throws -> String {
