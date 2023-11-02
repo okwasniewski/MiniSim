@@ -111,7 +111,7 @@ enum SubMenuItems {
     
     struct Delete: SubMenuActionItem {
         let title = NSLocalizedString("Delete simulator", comment: "")
-        let tag = Tags.paste.rawValue
+        let tag = Tags.delete.rawValue
         let bootsDevice = false
         let needBootedDevice = false
         let image = NSImage(

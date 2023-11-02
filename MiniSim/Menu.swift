@@ -162,7 +162,7 @@ class Menu: NSMenu {
         for section in platformSections {
             let devices = filter(devices: sortedDevices, for: section)
             let menuItems = devices.map { createMenuItem(for: $0) }
-            self.updateSection(with: Array(menuItems), section: section)
+            self.updateSection(with: menuItems, section: section)
         }
     }
     
