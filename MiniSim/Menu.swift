@@ -43,7 +43,7 @@ class Menu: NSMenu {
             sections.append(.android)
         }
     
-        guard !sections.isEmpty else {
+        if sections.isEmpty {
             return
         }
         
