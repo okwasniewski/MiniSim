@@ -14,7 +14,7 @@ class Menu: NSMenu {
     
     var devices: [Device] = [] {
         didSet {
-            populateDevices()
+            populateDevicesMenu(devices)
             assignKeyEquivalents()
         }
         willSet {
@@ -156,12 +156,12 @@ class Menu: NSMenu {
     }
     
     // MARK: Populate sections
-    private func populateDevices() {
-        let sortedDevices = devices.sorted(by: { $0.platform == .android && $1.platform == .ios })
+    private func populateDevicesMenu(_ devices: [Device]) {
         let platformSections: [DeviceListSection] = sections
         for section in platformSections {
-            let devices = filter(devices: sortedDevices, for: section)
-            let menuItems = devices.map { createMenuItem(for: $0) }
+            let sectionDevices = filter(devices: devices, for: section)
+                .sorted(by: { $0.name < $1.name })
+            let menuItems = sectionDevices.map { createMenuItem(for: $0) }
             self.updateSection(with: menuItems, section: section)
         }
     }
@@ -188,12 +188,12 @@ class Menu: NSMenu {
             return
         }
         
-        for (index, menuItem) in items.enumerated() {
+        for menuItem in items.reversed() {
             if let itemIndex = self.items.firstIndex(where: { $0.title == menuItem.title }) {
                 self.replaceMenuItem(at: itemIndex, with: menuItem)
                 continue
             }
-            self.safeInsertItem(menuItem, at: startIndex + index + 1)
+            self.safeInsertItem(menuItem, at: startIndex + 1)
         }
     }
 
