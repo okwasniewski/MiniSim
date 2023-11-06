@@ -14,7 +14,7 @@ class Menu: NSMenu {
     
     var devices: [Device] = [] {
         didSet {
-            populateDevices(isFirst: oldValue.isEmpty)
+            populateDevicesMenu(devices)
             assignKeyEquivalents()
         }
         willSet {
@@ -33,7 +33,40 @@ class Menu: NSMenu {
         self.delegate = self
     }
     
-    func getDevices() {
+    func populateDefaultMenu() {
+        var sections: [DeviceListSection] = []
+        if UserDefaults.standard.enableiOSSimulators {
+            sections.append(.iOS)
+        }
+        
+        if UserDefaults.standard.enableAndroidEmulators {
+            sections.append(.android)
+        }
+    
+        if sections.isEmpty {
+            return
+        }
+        
+        var menuItems: [NSMenuItem] = []
+        
+        sections.forEach { section in
+            var menuItem: NSMenuItem
+            if #available(macOS 14.0, *) {
+                menuItem = NSMenuItem.sectionHeader(title: "")
+            } else {
+                menuItem = NSMenuItem()
+            }
+            menuItem.tag = section.rawValue
+            menuItem.title = section.title
+            menuItem.toolTip = section.title
+            
+            menuItems.append(menuItem)
+            menuItems.append(NSMenuItem.separator())
+        }
+        self.items = menuItems
+    }
+
+    func updateDevicesList() {
         let userDefaults = UserDefaults.standard
         DeviceService.getAllDevices(
             android: userDefaults.enableAndroidEmulators && userDefaults.androidHome != nil,
@@ -52,19 +85,20 @@ class Menu: NSMenu {
     }
     
     private func removeMenuItems(removedDevices: Set<String>) {
-        let itemsToRemove = self.items.filter({ removedDevices.contains($0.title) })
-        itemsToRemove.forEach(safeRemoveItem)
+        self.items
+            .filter({ removedDevices.contains($0.title) })
+            .forEach(safeRemoveItem)
     }
     
     @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
-        guard let tag = AndroidSubMenuItem(rawValue: sender.tag) else { return }
+        guard let tag = SubMenuItems.Tags(rawValue: sender.tag) else { return }
         guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
         
         DeviceService.handleAndroidAction(device: device, commandTag: tag, itemName: sender.title)
     }
     
     @objc private func IOSSubMenuClick(_ sender: NSMenuItem) {
-        guard let tag = IOSSubMenuItem(rawValue: sender.tag) else { return }
+        guard let tag = SubMenuItems.Tags(rawValue: sender.tag) else { return }
         guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
         
         DeviceService.handleiOSAction(device: device, commandTag: tag, itemName: sender.title)
@@ -90,7 +124,7 @@ class Menu: NSMenu {
     }
     
     private func assignKeyEquivalents() {
-        let sections = MenuSections.allCases.map {$0.title}
+        let sections = DeviceListSection.allCases.map {$0.title}
         let deviceItems = items.filter { !sections.contains($0.title) }
         let iosDeviceNames = devices.filter({ $0.platform == Platform.ios }).map { $0.displayName }
         let androidDeviceNames = devices.filter({ $0.platform == Platform.android }).map { $0.displayName }
@@ -121,103 +155,125 @@ class Menu: NSMenu {
         }
     }
     
-    
-    private func populateDevices(isFirst: Bool) {
-        let sortedDevices = devices.sorted(by: { $0.platform == .android && $1.platform == .ios })
-        for (index, device) in sortedDevices.enumerated() {
-            let isAndroid = device.platform == .android
-            if let itemIndex = items.firstIndex(where: { $0.title == device.displayName }) {
-                let item = self.items.get(at: itemIndex)
-                item?.state = device.booted ? .on : .off
-                item?.submenu = isAndroid ?
-                self.populateAndroidSubMenu(booted: device.booted) :
-                self.populateIOSSubMenu(booted: device.booted)
-                continue
-            }
-            
-            let menuItem = NSMenuItem(
-                title: device.displayName,
-                action: #selector(deviceItemClick),
-                keyEquivalent: "",
-                type: isAndroid ? .launchAndroid : .launchIOS
-            )
-            
-            menuItem.target = self
-            menuItem.keyEquivalentModifierMask = isAndroid ? [.option] : [.command]
-            menuItem.submenu = isAndroid ? populateAndroidSubMenu(booted: device.booted) : populateIOSSubMenu(booted: device.booted)
-            menuItem.state = device.booted ? .on : .off
-            
-            let iosDevicesCount = self.devices.filter({ $0.platform == .ios }).count
-            self.safeInsertItem(menuItem, at: isAndroid && UserDefaults.standard.enableiOSSimulators ? (isFirst ? index : iosDevicesCount) + 3 : 1)
+    // MARK: Populate sections
+    private func populateDevicesMenu(_ devices: [Device]) {
+        let platformSections: [DeviceListSection] = sections
+        for section in platformSections {
+            let sectionDevices = filter(devices: devices, for: section)
+                .sorted(by: { $0.name < $1.name })
+            let menuItems = sectionDevices.map { createMenuItem(for: $0) }
+            self.updateSection(with: menuItems, section: section)
         }
     }
     
-    private func populateAndroidSubMenu(booted: Bool) -> NSMenu {
-        let subMenu = NSMenu()
-        for item in AndroidSubMenuItem.allCases {
-            if item == AndroidSubMenuItem.customCommand {
-                continue
-            }
-            
-            let menuItem = item.menuItem
-            menuItem.target = self
-            menuItem.action = #selector(androidSubMenuClick)
-            if item.needBootedDevice && !booted {
-                continue
-            }
-            if item.bootsDevice && booted {
-                continue
-            }
-            subMenu.addItem(menuItem)
+    var sections: [DeviceListSection] {
+        var sections: [DeviceListSection] = []
+        if UserDefaults.standard.enableAndroidEmulators {
+            sections.append(.android)
+        }
+        if UserDefaults.standard.enableiOSSimulators {
+            sections.append(.iOS)
+        }
+        return sections
+    }
+    
+    private func filter(devices: [Device], for section: DeviceListSection) -> [Device] {
+        let platform: Platform = section == .iOS ? .ios : .android
+        return devices.filter { $0.platform == platform }
+    }
+    
+    private func updateSection(with items: [NSMenuItem], section: DeviceListSection) {
+        guard let header = self.items.first(where: { $0.tag == section.rawValue }),
+              let startIndex = self.items.firstIndex(of: header) else {
+            return
         }
         
-        for item in DeviceService.getCustomCommands(platform: .android) {
-            let menuItem = AndroidSubMenuItem.customCommand.menuItem
-            menuItem.target = self
-            menuItem.action = #selector(androidSubMenuClick)
-            if item.needBootedDevice && !booted {
+        for menuItem in items.reversed() {
+            if let itemIndex = self.items.firstIndex(where: { $0.title == menuItem.title }) {
+                self.replaceMenuItem(at: itemIndex, with: menuItem)
                 continue
             }
-            if item.bootsDevice ?? false && booted {
-                continue
-            }
-            menuItem.image = NSImage(systemSymbolName: item.icon, accessibilityDescription: item.name)
-            menuItem.title = item.name
-            subMenu.addItem(menuItem)
+            self.safeInsertItem(menuItem, at: startIndex + 1)
         }
-        return subMenu
     }
-    
-    private func populateIOSSubMenu(booted: Bool) -> NSMenu {
-        let subMenu = NSMenu()
-        for item in IOSSubMenuItem.allCases {
-            if item == IOSSubMenuItem.customCommand {
-                continue
-            }
-            let menuItem = item.menuItem
-            menuItem.target = self
-            menuItem.action = #selector(IOSSubMenuClick)
-            subMenu.addItem(menuItem)
-        }
+
+    private func createMenuItem(for device: Device) -> NSMenuItem {
+        let menuItem = NSMenuItem(
+            title: device.displayName,
+            action: #selector(deviceItemClick),
+            keyEquivalent: "",
+            type: device.platform == .ios ? .launchIOS : .launchAndroid
+        )
         
-        for item in DeviceService.getCustomCommands(platform: .ios) {
-            let menuItem = IOSSubMenuItem.customCommand.menuItem
-            menuItem.target = self
-            menuItem.action = #selector(IOSSubMenuClick)
-            if item.needBootedDevice && !booted {
-                continue
-            }
-            if item.bootsDevice ?? false && booted {
-                continue
-            }
-            menuItem.image = NSImage(systemSymbolName: item.icon, accessibilityDescription: item.name)
-            menuItem.title = item.name
-            subMenu.addItem(menuItem)
-        }
-        return subMenu
+        menuItem.target = self
+        menuItem.keyEquivalentModifierMask = device.platform == .android ? [.option] : [.command]
+        menuItem.submenu = buildSubMenu(for: device)
+        menuItem.state = device.booted ? .on : .off
+        return menuItem
     }
     
-    private func safeInsertItem(_ item: NSMenuItem, at index: Int) {
+    private func replaceMenuItem(at index: Int, with newItem: NSMenuItem) {
+        self.removeItem(at: index)
+        self.insertItem(newItem, at: index)
+    }
+    
+    func buildSubMenu(for device: Device) -> NSMenu {
+        let subMenu = NSMenu()
+        let platform = device.platform
+        let callback = platform == .android ? #selector(androidSubMenuClick) : #selector(IOSSubMenuClick)
+        let actionsSubMenu = createActionsSubMenu(
+            for: platform.subMenuItems,
+            isDeviceBooted: device.booted,
+            callback: callback)
+        let customCommandSubMenu = createCustomCommandsMenu(
+            for: platform,
+            isDeviceBooted: device.booted,
+            callback: callback)
+        (actionsSubMenu + customCommandSubMenu).forEach { subMenu.addItem($0) }
+        return subMenu
+    }
+
+    func createActionsSubMenu(
+        for subMenuItems: [SubMenuItem],
+        isDeviceBooted: Bool,
+        callback: Selector
+    ) -> [NSMenuItem] {
+        subMenuItems.compactMap { item in
+            if item is SubMenuItems.Separator {
+                return NSMenuItem.separator()
+            }
+             
+            if let item = item as? SubMenuActionItem {
+                if item.needBootedDevice && !isDeviceBooted {
+                    return nil
+                }
+                
+                if item.bootsDevice && isDeviceBooted {
+                    return nil
+                }
+                
+                return NSMenuItem(menuItem: item, target: self, action: callback)
+            }
+            
+            return nil
+        }
+    }
+    
+    func createCustomCommandsMenu(for platform: Platform, isDeviceBooted: Bool, callback: Selector) -> [NSMenuItem] {
+        DeviceService.getCustomCommands(platform: platform)
+            .filter {  item in
+                if item.needBootedDevice && !isDeviceBooted {
+                    return false
+                }
+                if item.bootsDevice ?? false && isDeviceBooted {
+                    return false
+                }
+                return true
+            }
+            .map { NSMenuItem(command: $0, target: self, action: callback) }
+    }
+    
+   private func safeInsertItem(_ item: NSMenuItem, at index: Int) {
         guard !items.contains(where: {$0.title == item.title}), index <= items.count else {
             return
         }
@@ -238,12 +294,23 @@ class Menu: NSMenu {
 extension Menu: NSMenuDelegate {
     func menuWillOpen(_ menu: NSMenu) {
         NotificationCenter.default.post(name: .menuWillOpen, object: nil)
-        self.getDevices()
+        self.updateDevicesList()
         KeyboardShortcuts.disable(.toggleMiniSim)
     }
     
     func menuDidClose(_ menu: NSMenu) {
         NotificationCenter.default.post(name: .menuDidClose, object: nil)
         KeyboardShortcuts.enable(.toggleMiniSim)
+    }
+}
+
+extension Platform {
+    var subMenuItems: [SubMenuItem] {
+        switch self {
+        case .android:
+            return SubMenuItems.android
+        case .ios:
+            return SubMenuItems.ios
+        }
     }
 }

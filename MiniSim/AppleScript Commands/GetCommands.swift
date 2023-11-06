@@ -14,34 +14,46 @@ class GetCommands: NSScriptCommand {
             let argument = self.property(forKey: "platform") as? String,
             let platform = Platform(rawValue: argument)
         else {
-            scriptErrorNumber = NSRequiredArgumentsMissingScriptError;
-            return nil;
-        }
-        
-        do {
-            var commands: [Command] = []
-            
-            switch platform {
-            case .android:
-                commands = AndroidSubMenuItem.allCases.compactMap { $0.CommandItem }
-            case .ios:
-                commands = IOSSubMenuItem.allCases.compactMap { $0.CommandItem }
-            }
-            
-            let customCommandTag = platform == .android ? AndroidSubMenuItem.customCommand.rawValue : IOSSubMenuItem.customCommand.rawValue
-            
-            let customCommands = DeviceService.getCustomCommands(platform: platform).map({
-                Command(id: $0.id, name: $0.name, command: $0.command, icon: $0.icon, platform: $0.platform, needBootedDevice: $0.needBootedDevice, bootsDevice: $0.bootsDevice, tag: customCommandTag)
-            })
-            
-            commands.append(contentsOf: customCommands)
-            
-            return try self.encode(commands)
-            
-        } catch {
-            scriptErrorNumber = NSInternalScriptError;
+            scriptErrorNumber = NSRequiredArgumentsMissingScriptError
             return nil
         }
         
+        let commands = platform.subMenuItems
+            .compactMap { $0 as? SubMenuActionItem }
+            .map { $0.commandItem }
+        let customCommands = DeviceService.getCustomCommands(platform: platform)
+            .map { command in
+                Command(
+                    id: command.id,
+                    name: command.name,
+                    command: command.command,
+                    icon: command.icon,
+                    platform: command.platform,
+                    needBootedDevice: command.needBootedDevice,
+                    bootsDevice: command.bootsDevice,
+                    tag: SubMenuItems.Tags.customCommand.rawValue
+                )
+            }
+        
+        do {
+            return try self.encode(commands + customCommands)
+        } catch {
+            scriptErrorNumber = NSInternalScriptError
+            return nil
+        }
+    }
+}
+
+extension SubMenuActionItem {
+    var commandItem: Command {
+        Command(
+            name: self.title,
+            command: "",
+            icon: "",
+            platform: Platform.android,
+            needBootedDevice: needBootedDevice,
+            bootsDevice: self.bootsDevice,
+            tag: self.tag
+        )
     }
 }

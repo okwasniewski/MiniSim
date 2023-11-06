@@ -84,9 +84,12 @@ class MiniSim: NSObject {
         menu = Menu()
         statusItem.menu = menu
         setMenuImage()
-        populateSections()
         
-        menu.getDevices()
+        if menu.items.isEmpty {
+            menu.populateDefaultMenu()
+            menu.items += mainMenu
+        }
+        menu.updateDevicesList()
     }
     
     private func initObservers() {
@@ -133,11 +136,11 @@ class MiniSim: NSObject {
     }
     
     @objc private func handleDeviceDeleted() {
-        menu.getDevices()
+        menu.updateDevicesList()
     }
     
     @objc func menuItemAction(_ sender: NSMenuItem) {
-        if let tag = MenuSections(rawValue: sender.tag) {
+        if let tag = MainMenuActions(rawValue: sender.tag) {
             switch tag {
             case .preferences:
                 settingsController.show()
@@ -157,29 +160,17 @@ class MiniSim: NSObject {
                     UNUserNotificationCenter.showNotification(title: "Derived data has been cleared!", body: "Removed \(amountCleared) of data")
                     NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
                 }
-            default:
-                break
             }
         }
     }
     
-    private func populateSections() {
-        if !menu.items.isEmpty {
-            return
-        }
-        MenuSections.allCases.forEach { item in
-            if (!item.attachItem) {
-                return
-            }
-            
-            let menuItem = item.menuItem
-            if menuItem.tag >= MenuSections.clearDerrivedData.rawValue {
-                menuItem.action = #selector(menuItemAction)
-                menuItem.target = self
-            } else {
-                menuItem.isEnabled = false
-            }
-            menu.addItem(menuItem)
+    private var mainMenu: [NSMenuItem] {
+        MainMenuActions.allCases.map { item in
+            NSMenuItem(
+                mainMenuItem: item,
+                target: self,
+                action: #selector(menuItemAction)
+            )
         }
     }
 }
