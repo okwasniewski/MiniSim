@@ -6,21 +6,23 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>0.7.0</title>
+      <title>0.8.0</title>
       <description>
       <![CDATA[ <ul>
-      <li><b>New: add AppleScript support</b></li>
-      <li>Feat: allow custom commands to boot devices</li>
-      <li>Fix: update quality of service when running background tasks</li>
+      <li><b>New: Allow for iOS / Android only usage</b></li>
+      <li>Refactor: device service methods</li>
+      <li>Feat: use MacOS Sonoma separators</li>
+      <li>Refactor: use Table component in Devices tab</li>
+      <li>Refactor: new menu building flow</li>
       </ul> ]]>
       </description>
-      <pubDate>2023-08-26</pubDate>
-      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.7.0</releaseNotesLink>
+      <pubDate>2023-11-13</pubDate>
+      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.8.0</releaseNotesLink>
       <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
       <enclosure
-        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.7.0/MiniSim.app.zip"
-        sparkle:version="12"
-        sparkle:shortVersionString="0.7.0"
+        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.8.0/MiniSim.app.zip"
+        sparkle:version="13"
+        sparkle:shortVersionString="0.8.0"
         length="0"
         type="application/octet-stream"
       />
