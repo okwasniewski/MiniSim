@@ -14,9 +14,10 @@ import UserNotifications
 class MiniSim: NSObject {
     private var menu: Menu!
     
-    @objc let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    @objc var statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     private var isOnboardingFinishedObserver: NSKeyValueObservation?
+    private var menuImageObserver: NSKeyValueObservation?
     
     private lazy var onboarding = Onboarding()
     
@@ -33,6 +34,7 @@ class MiniSim: NSObject {
     
     deinit {
         isOnboardingFinishedObserver?.invalidate()
+        menuImageObserver?.invalidate()
         NotificationCenter.default.removeObserver(self, name: .commandDidSucceed, object: nil)
         NotificationCenter.default.removeObserver(self, name: .deviceDeleted, object: nil)
     }
@@ -83,6 +85,7 @@ class MiniSim: NSObject {
         }
         menu = Menu()
         statusItem.menu = menu
+        configureMenuImages()
         setMenuImage()
         
         if menu.items.isEmpty {
@@ -99,6 +102,9 @@ class MiniSim: NSObject {
                 self.onboarding.showPopOver(button: self.statusItem.button)
             }
         }
+        menuImageObserver = UserDefaults.standard.observe(\.menuImage, options: .new) { _,_ in
+            self.setMenuImage()
+        }
         NotificationCenter.default.addObserver(self, selector: #selector(toggleSuccessCheckmark), name: .commandDidSucceed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleDeviceDeleted), name: .deviceDeleted, object: nil)
     }
@@ -109,13 +115,21 @@ class MiniSim: NSObject {
             UserDefaults.Keys.enableiOSSimulators: true
         ])
     }
+   
+    private func configureMenuImages() {
+        MenuImage.allCases.forEach { image in
+            let itemImage = NSImage(imageLiteralResourceName: image.rawValue)
+            itemImage.size = NSSize(
+                width:  (itemImage.size.width)  * 0.78,
+                height: (itemImage.size.height) * 0.78)
+            itemImage.isTemplate = true
+        }
+    }
     
     private func setMenuImage() {
         if let button = statusItem.button {
             button.toolTip = "MiniSim"
-            let itemImage = NSImage(named: "menu_icon")
-            itemImage?.size = NSSize(width: 9, height: 16)
-            itemImage?.isTemplate = true
+            let itemImage = NSImage(named: UserDefaults.standard.menuImage)
             button.image = itemImage
         }
     }
