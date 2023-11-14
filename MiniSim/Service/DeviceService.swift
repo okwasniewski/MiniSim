@@ -208,6 +208,30 @@ class DeviceService: DeviceServiceProtocol {
             }
         }
     }
+    
+    static func togglePinned(device: Device) {
+        var pinnedDevices: [String]?
+        switch device.platform {
+        case .android:
+            pinnedDevices = UserDefaults.standard.pinnedAndroidEmulators
+            var dedupedPinnedDevices = Set(pinnedDevices ?? [])
+            if dedupedPinnedDevices.contains(device.name) {
+                dedupedPinnedDevices.remove(device.name)
+            } else {
+                dedupedPinnedDevices.insert(device.name)
+            }
+            UserDefaults.standard.pinnedAndroidEmulators = Array(dedupedPinnedDevices)
+        case .ios:
+            pinnedDevices = UserDefaults.standard.pinnediOSSimulators
+            var dedupedPinnedDevices = Set(pinnedDevices ?? [])
+            if dedupedPinnedDevices.contains(device.name) {
+                dedupedPinnedDevices.remove(device.name)
+            } else {
+                dedupedPinnedDevices.insert(device.name)
+            }
+            UserDefaults.standard.pinnediOSSimulators = Array(dedupedPinnedDevices)
+        }
+    }
 }
 
 // MARK: iOS Methods
@@ -216,18 +240,21 @@ extension DeviceService {
     static private func parseIOSDevices(result: [String]) -> [Device] {
         var devices: [Device] = []
         var osVersion = ""
+        let pinnediOSSimulators: [String] = UserDefaults.standard.pinnediOSSimulators ?? []
         result.forEach { line in
             if let currentOs = line.match("-- (.*?) --").first, currentOs.count > 0 {
                 osVersion = currentOs[1]
             }
             if let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\) (\\(.*?)\\)").first {
+                let deviceName = device[1].trimmingCharacters(in: .whitespacesAndNewlines)
                 devices.append(
                     Device(
-                        name: device[1].trimmingCharacters(in: .whitespacesAndNewlines),
+                        name: deviceName,
                         version: osVersion,
                         ID: device[4],
                         booted: device[5].contains("Booted"),
-                        platform: .ios
+                        platform: .ios,
+                        pinned: pinnediOSSimulators.contains(deviceName)
                     )
                 )
             }
@@ -295,6 +322,9 @@ extension DeviceService {
                 NSPasteboard.general.copyToPasteboard(text: deviceID)
                 DeviceService.showSuccessMessage(title: "Device ID copied to clipboard!", message: deviceID)
             }
+        case .togglePinned:
+            DeviceService.togglePinned(device: device)
+            
         case .delete:
             guard let deviceID = device.ID else { return }
             if !NSAlert.showQuestionDialog(title: "Are you sure?", message: "Are you sure you want to delete this Simulator?") {
@@ -366,10 +396,11 @@ extension DeviceService {
         let adbPath = try ADB.getAdbPath()
         let output = try shellOut(to: emulatorPath, arguments: ["-list-avds"])
         let splitted = output.components(separatedBy: "\n")
+        let pinnedAndroidEmulators: [String] = UserDefaults.standard.pinnedAndroidEmulators ?? []
         
         return splitted.filter({ !$0.isEmpty }).map {
             let adbId = try? ADB.getAdbId(for: $0, adbPath: adbPath)
-            return Device(name: $0, ID: adbId, booted: adbId != nil, platform: .android)
+            return Device(name: $0, ID: adbId, booted: adbId != nil, platform: .android, pinned: pinnedAndroidEmulators.contains($0))
         }
     }
     
