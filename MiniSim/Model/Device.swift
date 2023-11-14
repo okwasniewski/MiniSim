@@ -11,30 +11,33 @@ struct Device: Hashable, Codable {
     var ID: String?
     var booted: Bool = false
     var platform: Platform
+    var pinned: Bool
     
     var displayName: String {
+        let pinIcon = pinned ? " 📌" : ""
         switch platform {
         case .ios:
             if let version {
-                return "\(name) - (\(version))"
+                return "\(name) - (\(version))" + pinIcon
             }
-            return name
+            return name + pinIcon
             
         case .android:
-            return name
+            return name + pinIcon
         }
     }
     
     enum CodingKeys: String, CodingKey {
-        case name, version, ID, booted, platform, displayName
+        case name, version, ID, booted, platform, displayName, pinned
     }
     
-    init(name: String, version: String? = nil, ID: String?, booted: Bool = false, platform: Platform) {
+    init(name: String, version: String? = nil, ID: String?, booted: Bool = false, platform: Platform, pinned: Bool = false) {
         self.name = name
         self.version = version
         self.ID = ID
         self.booted = booted
         self.platform = platform
+        self.pinned = pinned
     }
     
     init(from decoder: Decoder) throws {
@@ -44,6 +47,7 @@ struct Device: Hashable, Codable {
         ID = try values.decode(String.self, forKey: .ID)
         booted = try values.decode(Bool.self, forKey: .booted)
         platform = try values.decode(Platform.self, forKey: .platform)
+        pinned = try values.decode(Bool.self, forKey: .pinned)
     }
     
     func encode(to encoder: Encoder) throws {
