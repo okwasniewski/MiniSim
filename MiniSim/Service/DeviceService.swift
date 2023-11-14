@@ -451,6 +451,9 @@ extension DeviceService {
                     NSPasteboard.general.copyToPasteboard(text: device.name)
                     DeviceService.showSuccessMessage(title: "Device name copied to clipboard!", message: device.name)
                     
+                case .togglePinned:
+                    DeviceService.togglePinned(device: device)
+                    
                 case .paste:
                     guard let clipboard = NSPasteboard.general.pasteboardItems?.first?.string(forType: .string) else { break }
                     try DeviceService.sendText(device: device, text: clipboard)
