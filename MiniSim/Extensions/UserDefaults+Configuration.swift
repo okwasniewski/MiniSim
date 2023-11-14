@@ -15,6 +15,8 @@ extension UserDefaults {
         static let isOnboardingFinished = "isOnboardingFinished"
         static let enableiOSSimulators = "enableiOSSimulators"
         static let enableAndroidEmulators = "enableAndroidEmulators"
+        static let pinnediOSSimulators = "pinnediOSSimulators"
+        static let pinnedAndroidEmulators = "pinnedAndroidEmulators"
     }
     
     @objc dynamic public var androidHome: String? {
@@ -46,4 +48,15 @@ extension UserDefaults {
         get { bool(forKey: Keys.enableAndroidEmulators) }
         set { set(newValue, forKey: Keys.enableAndroidEmulators) }
     }
+    
+    public var pinnediOSSimulators: [String]? {
+        get { array(forKey: Keys.pinnediOSSimulators) as? [String] }
+        set { set(newValue, forKey: Keys.pinnediOSSimulators) }
+    }
+    
+    public var pinnedAndroidEmulators: [String]? {
+        get { array(forKey: Keys.pinnedAndroidEmulators) as? [String] }
+        set { set(newValue, forKey: Keys.pinnedAndroidEmulators) }
+    }
+
 }
