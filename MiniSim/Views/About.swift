@@ -21,6 +21,9 @@ struct About: View {
     }
 
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+    private let bottomPadding: Double = 10
+    private let minFrameWidth: Double = 650
+    private let minFrameHeight: Double = 450
 
     var body: some View {
         VStack {
@@ -29,14 +32,14 @@ struct About: View {
                 .font(.title)
             if let appVersion {
                 Text("Version: \(appVersion)")
-                    .padding(.bottom, 10)
+                    .padding(.bottom, bottomPadding)
             }
             Button {
                 updaterController.updater.checkForUpdates()
             } label: {
                 Label("Check for updates", systemImage: "gear")
             }
-            .padding(.bottom, 10)
+            .padding(.bottom, bottomPadding)
 
             HStack {
                 Button("GitHub") {
@@ -49,6 +52,6 @@ struct About: View {
             Link("Created by Oskar Kwaśniewski", destination: URL(string: "https://github.com/okwasniewski")!)
                 .font(.caption)
         }
-        .frame(minWidth: 650, minHeight: 450)
+        .frame(minWidth: minFrameWidth, minHeight: minFrameHeight)
     }
 }

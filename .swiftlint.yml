@@ -14,14 +14,12 @@ opt_in_rules:
   - discarded_notification_center_observer
   - discouraged_none_name
   - discouraged_object_literal
-  #- discouraged_optional_boolean # needs code change
   - empty_collection_literal
   - empty_count
   - empty_string
   - enum_case_associated_values_count
   - expiring_todo
   - explicit_init
-  # - explicit_type_interface # nice to have
   - fallthrough
   - fatal_error_message
   - file_name_no_space
@@ -44,9 +42,8 @@ opt_in_rules:
   - multiline_literal_brackets
   - multiline_parameters
   - multiline_parameters_brackets
-  # - no_grouping_extension # nice to have
   # - no_magic_numbers # nice to have
-  # - nslocalizedstring_key # nice to have
+  - nslocalizedstring_key
   - number_separator
   - operator_usage_whitespace
   - optional_enum_case_matching

@@ -210,18 +210,22 @@ class DeviceService: DeviceServiceProtocol {
 extension DeviceService {
     private static func parseIOSDevices(result: [String]) -> [Device] {
         var devices: [Device] = []
+        let currentOSIdx = 1
+        let deviceNameIdx = 1
+        let identifierIdx = 4
+        let deviceStateIdx = 5
         var osVersion = ""
         result.forEach { line in
             if let currentOs = line.match("-- (.*?) --").first, !currentOs.isEmpty {
-                osVersion = currentOs[1]
+                osVersion = currentOs[currentOSIdx]
             }
             if let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\) (\\(.*?)\\)").first {
                 devices.append(
                     Device(
-                        name: device[1].trimmingCharacters(in: .whitespacesAndNewlines),
+                        name: device[deviceNameIdx].trimmingCharacters(in: .whitespacesAndNewlines),
                         version: osVersion,
-                        identifier: device[4],
-                        booted: device[5].contains("Booted"),
+                        identifier: device[identifierIdx],
+                        booted: device[deviceStateIdx].contains("Booted"),
                         platform: .ios
                     )
                 )

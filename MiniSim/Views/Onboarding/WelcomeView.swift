@@ -47,6 +47,6 @@ struct WelcomeView: View {
 struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         WelcomeView {}
-            .frame(width: 400, height: 600)
+            .frame(width: OnboardingPages.contentWidth, height: OnboardingWindow.height)
     }
 }

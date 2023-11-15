@@ -9,6 +9,11 @@ import AppKit
 import Foundation
 import SwiftUI
 
+enum OnboardingWindow {
+    static let width: Double = 450
+    static let height: Double = 550
+}
+
 class Onboarding: NSObject {
     private let window = NSWindow(contentRect: .zero, styleMask: [.closable, .titled], backing: .buffered, defer: false)
     private lazy var popover = NSPopover()

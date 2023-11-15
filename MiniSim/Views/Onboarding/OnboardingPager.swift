@@ -26,6 +26,8 @@ enum OnboardingPages: CaseIterable {
             PermissionsView()
         }
     }
+
+    static let contentWidth: Double = 350
 }
 
 struct OnboardingPager: View {
@@ -61,13 +63,19 @@ struct OnboardingPager: View {
                 ForEach(OnboardingPages.allCases, id: \.self) { page in
                     if currentPage == page {
                         page.view(goToNextPage: goToNextPage)
-                            .frame(maxWidth: 350, alignment: .center)
+                            .frame(
+                                maxWidth: OnboardingPages.contentWidth,
+                                alignment: .center
+                            )
                     }
                 }
             }
         }
-        .frame(minWidth: 450, minHeight: 550)
-        .background(BlurredView())
+        .frame(
+            width: OnboardingWindow.width,
+            height: OnboardingWindow.height
+        )
+        .background(alignment: .trailing) { BlurredView() }
     }
 }
 

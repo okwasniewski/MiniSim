@@ -19,6 +19,14 @@ struct CustomCommandForm: View {
 
     @StateObject private var viewModel = ViewModel()
 
+    private let codeEditorCornerRadius: Double = 6
+    private let variablesOpacity: Double = 0.9
+    private let iconPickerImageFrameWidth: Double = 20
+    private let iconPickerImagePadding: Double = 3
+    private let iconPickerButtonCornerRadious: Double = 12
+    private let formMinWidth: Double = 550
+    private let formMinHeight: Double = 400
+
     var body: some View {
         Form {
             TextField("Name", text: $viewModel.commandName)
@@ -29,7 +37,7 @@ struct CustomCommandForm: View {
                     theme: colorScheme == .dark ? .atelierSavannaDark : .atelierSavannaLight,
                     flags: [.selectable, .editable, .smartIndent]
                 )
-                .cornerRadius(6)
+                .cornerRadius(codeEditorCornerRadius)
                 GroupBox("Variables") {
                     VStack(alignment: .leading) {
                         ForEach(viewModel.availableVariables, id: \.self) { variable in
@@ -37,7 +45,7 @@ struct CustomCommandForm: View {
                                 NSPasteboard.general.copyToPasteboard(text: variable.rawValue)
                             }
                             .buttonStyle(.plain)
-                            .opacity(0.9)
+                            .opacity(variablesOpacity)
                             .font(.system(.caption, design: .monospaced))
                             .help(variable.description + " - click to copy.")
                             .padding(.vertical, 1)
@@ -61,11 +69,11 @@ struct CustomCommandForm: View {
                     Image(systemName: viewModel.icon)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 20)
-                        .padding(3)
+                        .frame(width: iconPickerImageFrameWidth)
+                        .padding(iconPickerImagePadding)
                 }
                 .background(.regularMaterial)
-                .cornerRadius(12)
+                .cornerRadius(iconPickerButtonCornerRadious)
             }
             Picker("Platform", selection: $viewModel.platform) {
                 Text("iOS").tag(Platform.ios)
@@ -115,7 +123,7 @@ struct CustomCommandForm: View {
             .padding(.top)
         }
         .padding()
-        .frame(minWidth: 550, minHeight: 400)
+        .frame(minWidth: formMinWidth, minHeight: formMinHeight)
         .sheet(isPresented: $viewModel.iconPickerPresented) {
             SymbolPicker(symbol: $viewModel.icon)
         }
