@@ -12,12 +12,12 @@ struct PermissionsView: View {
     @State private var hasA11yAccess = false
     @State private var hasNotificationsAccess = false
     @Environment(\.controlActiveState) var controlActiveState
-    
+
     func requestNotifications() async -> Bool {
         let center = UNUserNotificationCenter.current()
         return (try? await center.requestAuthorization()) ?? false
     }
-    
+
     var body: some View {
         VStack {
             Spacer()
@@ -25,14 +25,17 @@ struct PermissionsView: View {
                 title: "Permissions",
                 subTitle: "MiniSim needs access to system APIs that require your permission."
             )
-            
+
             Spacer()
-            VStack (alignment: .leading) {
+            VStack(alignment: .leading) {
                 Label("Accessibility", systemImage: "figure.roll")
                     .font(.headline)
                     .padding(.bottom, 2)
                 HStack {
-                    Text("App uses accessibility api in order to focus devices instead of trying to open them one more time")
+                    Text("""
+                         App uses accessibility api in order to focus devices instead of
+                         trying to open them one more time
+                         """)
                         .fixedSize(horizontal: false, vertical: true)
                     Spacer()
                     if !hasA11yAccess {
@@ -50,8 +53,8 @@ struct PermissionsView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .onboardingContainer()
-            
-            VStack (alignment: .leading) {
+
+            VStack(alignment: .leading) {
                 Label("Notifications", systemImage: "bell.fill")
                     .font(.headline)
                     .padding(.bottom, 2)
@@ -76,7 +79,7 @@ struct PermissionsView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .onboardingContainer()
-            
+
             Spacer()
             OnboardingButton("Start using MiniSim!") {
                 NSApplication.shared.mainWindow?.close()
@@ -91,7 +94,7 @@ struct PermissionsView: View {
             if newValue != .key {
                 return
             }
-            
+
             hasA11yAccess = AccessibilityElement.hasA11yAccess(prompt: false)
             Task {
                 hasNotificationsAccess = await requestNotifications()

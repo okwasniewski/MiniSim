@@ -10,33 +10,32 @@ import Preferences
 import SwiftUI
 import UserNotifications
 
-
 class MiniSim: NSObject {
     private var menu: Menu!
-    
+
     @objc let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-    
+
     private var isOnboardingFinishedObserver: NSKeyValueObservation?
-    
+
     private lazy var onboarding = Onboarding()
-    
+
     override init() {
         super.init()
-        
+
         settingsController.window?.delegate = self
-        
+
         setDefaultValues()
         initObservers()
-        
+
         setup()
     }
-    
+
     deinit {
         isOnboardingFinishedObserver?.invalidate()
         NotificationCenter.default.removeObserver(self, name: .commandDidSucceed, object: nil)
         NotificationCenter.default.removeObserver(self, name: .deviceDeleted, object: nil)
     }
-    
+
     private lazy var settingsController = SettingsWindowController(
         panes: [
             Settings.Pane(
@@ -71,11 +70,11 @@ class MiniSim: NSObject {
         style: .toolbarItems,
         animated: false
     )
-    
+
     func open() {
         self.statusItem.button?.performClick(self)
     }
-    
+
     private func setup() {
         if !UserDefaults.standard.isOnboardingFinished {
             onboarding.show()
@@ -84,14 +83,14 @@ class MiniSim: NSObject {
         menu = Menu()
         statusItem.menu = menu
         setMenuImage()
-        
+
         if menu.items.isEmpty {
             menu.populateDefaultMenu()
             menu.items += mainMenu
         }
         menu.updateDevicesList()
     }
-    
+
     private func initObservers() {
         isOnboardingFinishedObserver = UserDefaults.standard.observe(\.isOnboardingFinished, options: .new) { _, _ in
             if UserDefaults.standard.isOnboardingFinished == true {
@@ -99,17 +98,28 @@ class MiniSim: NSObject {
                 self.onboarding.showPopOver(button: self.statusItem.button)
             }
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(toggleSuccessCheckmark), name: .commandDidSucceed, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleDeviceDeleted), name: .deviceDeleted, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(toggleSuccessCheckmark),
+            name: .commandDidSucceed,
+            object: nil
+        )
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(handleDeviceDeleted),
+            name: .deviceDeleted,
+            object: nil
+        )
     }
-    
+
     private func setDefaultValues() {
         UserDefaults.standard.register(defaults: [
             UserDefaults.Keys.enableAndroidEmulators: true,
             UserDefaults.Keys.enableiOSSimulators: true
         ])
     }
-    
+
     private func setMenuImage() {
         if let button = statusItem.button {
             button.toolTip = "MiniSim"
@@ -119,7 +129,7 @@ class MiniSim: NSObject {
             button.image = itemImage
         }
     }
-    
+
     @objc private func toggleSuccessCheckmark() {
         DispatchQueue.main.async {
             if let button = self.statusItem.button {
@@ -129,16 +139,16 @@ class MiniSim: NSObject {
                 button.image = itemImage
             }
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
             self.setMenuImage()
         }
     }
-    
+
     @objc private func handleDeviceDeleted() {
         menu.updateDevicesList()
     }
-    
+
     @objc func menuItemAction(_ sender: NSMenuItem) {
         if let tag = MainMenuActions(rawValue: sender.tag) {
             switch tag {
@@ -147,23 +157,29 @@ class MiniSim: NSObject {
             case .quit:
                 NSApp.terminate(sender)
             case .clearDerrivedData:
-                let shouldDelete = NSAlert.showQuestionDialog(title: "Are you sure?", message: "This action will delete derived data from your computer.")
+                let shouldDelete = NSAlert.showQuestionDialog(
+                    title: "Are you sure?",
+                    message: "This action will delete derived data from your computer."
+                )
                 if !shouldDelete {
                     return
                 }
 
-                DeviceService.clearDerivedData() { amountCleared, error in
+                DeviceService.clearDerivedData { amountCleared, error in
                     guard error == nil else {
                         NSAlert.showError(message: error?.localizedDescription ?? "Failed to clear derived  data.")
                         return
                     }
-                    UNUserNotificationCenter.showNotification(title: "Derived data has been cleared!", body: "Removed \(amountCleared) of data")
+                    UNUserNotificationCenter.showNotification(
+                        title: "Derived data has been cleared!",
+                        body: "Removed \(amountCleared) of data"
+                    )
                     NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
                 }
             }
         }
     }
-    
+
     private var mainMenu: [NSMenuItem] {
         MainMenuActions.allCases.map { item in
             NSMenuItem(
@@ -175,12 +191,11 @@ class MiniSim: NSObject {
     }
 }
 
-
 extension MiniSim: NSWindowDelegate {
     func windowDidBecomeKey(_ notification: Notification) {
         NSApplication.shared.setActivationPolicy(.regular)
     }
-    
+
     func windowWillClose(_ notification: Notification) {
         NSApplication.shared.setActivationPolicy(.accessory)
     }

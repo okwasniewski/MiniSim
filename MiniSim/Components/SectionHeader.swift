@@ -10,7 +10,7 @@ import SwiftUI
 struct SectionHeader: View {
     var title: String
     var subTitle: String
-    
+
     var body: some View {
         HStack {
             VStack(alignment: .leading) {

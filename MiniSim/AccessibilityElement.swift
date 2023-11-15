@@ -10,33 +10,33 @@ import ShellOut
 
 class AccessibilityElement {
     private let underlyingElement: AXUIElement
-    
+
     required init(_ axUIElement: AXUIElement) {
         self.underlyingElement = axUIElement
     }
-    
+
     @discardableResult func performAction(key: String) -> AXError {
         AXUIElementPerformAction(underlyingElement, key as CFString)
     }
-    
+
     func attribute<T>(key: NSAccessibility.Attribute, type: T.Type) -> T? {
         var value: AnyObject?
         let result = AXUIElementCopyAttributeValue(underlyingElement, key as CFString, &value)
-        
+
         guard
             result == .success,
             let typedValue = value as? T
         else {
             return nil
         }
-        
+
         return typedValue
     }
-    
+
     func setAttribute(key: String, value: CFTypeRef) {
-        AXUIElementSetAttributeValue(underlyingElement, key as CFString, value);
+        AXUIElementSetAttributeValue(underlyingElement, key as CFString, value)
     }
-    
+
     static func forceFocus(pid: pid_t) {
         DispatchQueue.global(qos: .userInitiated).async {
             let script = """
@@ -47,21 +47,20 @@ class AccessibilityElement {
             _ = try? shellOut(to: script)
         }
     }
-    
+
     static func hasA11yAccess(prompt: Bool = true) -> Bool {
-        let checkOptPrompt = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString
+        let checkOptPrompt = kAXTrustedCheckOptionPrompt.takeUnretainedValue()
         let options = [checkOptPrompt: prompt]
-        let accessEnabled = AXIsProcessTrustedWithOptions(options as CFDictionary?)
-        return accessEnabled
+        return AXIsProcessTrustedWithOptions(options as CFDictionary?)
     }
-    
+
     static func allWindowsForPID(_ pid: pid_t) -> [AccessibilityElement] {
         let app = AccessibilityElement(AXUIElementCreateApplication(pid))
         let windows = app.attribute(key: .windows, type: [AXUIElement].self)
         guard let windows else {
             return []
         }
-        
-        return windows.map({AccessibilityElement($0)})
+
+        return windows.map { AccessibilityElement($0) }
     }
 }

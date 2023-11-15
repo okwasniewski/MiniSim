@@ -5,8 +5,8 @@
 //  Created by Oskar Kwasniewski on 09/07/2023.
 //
 
-import Foundation
 import Cocoa
+import Foundation
 
 class GetDevicesCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
@@ -14,19 +14,19 @@ class GetDevicesCommand: NSScriptCommand {
             let argument = self.property(forKey: "platform") as? String,
             let platform = Platform(rawValue: argument)
         else {
-            scriptErrorNumber = NSRequiredArgumentsMissingScriptError;
-            return nil;
+            scriptErrorNumber = NSRequiredArgumentsMissingScriptError
+            return nil
         }
-        
+
         do {
-            if platform == .android {
+            switch platform {
+            case .android:
                 return try self.encode(DeviceService.getAndroidDevices())
-            } else {
+            case .ios:
                 return try self.encode(DeviceService.getIOSDevices())
             }
-            
         } catch {
-            scriptErrorNumber = NSInternalScriptError;
+            scriptErrorNumber = NSInternalScriptError
             return nil
         }
     }

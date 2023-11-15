@@ -8,9 +8,15 @@
 import AppKit
 
 extension NSMenuItem {
-    convenience init(title: String, action: Selector?, keyEquivalent: String, type: DeviceMenuItem, image: NSImage? = nil) {
+    convenience init(
+        title: String,
+        action: Selector?,
+        keyEquivalent: String,
+        type: DeviceMenuItem,
+        image: NSImage? = nil
+    ) {
         self.init(title: title, action: action, keyEquivalent: keyEquivalent)
-        
+
         if let image {
             self.image = image
         } else {
@@ -22,9 +28,8 @@ extension NSMenuItem {
                 let imageName = self.getSystemImageFromName(name: title)
                 self.image = NSImage(systemSymbolName: imageName, accessibilityDescription: title)
             }
-            
         }
-        
+
         self.tag = type.rawValue
     }
 
@@ -32,20 +37,19 @@ extension NSMenuItem {
         if name.contains("Apple TV") {
             return "appletv.fill"
         }
-        
-        if (name.contains("iPad") || name.contains("Tablet")) {
+
+        if name.contains("iPad") || name.contains("Tablet") {
             return "ipad.landscape"
         }
-        
+
         if name.contains("Watch") {
             return "applewatch"
         }
-        
+
         if name.contains("TV") {
             return "tv"
         }
-        
+
         return "iphone"
     }
 }
-

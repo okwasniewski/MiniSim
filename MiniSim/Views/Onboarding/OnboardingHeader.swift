@@ -10,7 +10,7 @@ import SwiftUI
 struct OnboardingHeader: View {
     var title: String
     var subTitle: String
-    
+
     var body: some View {
         Text(title)
             .font(.largeTitle)

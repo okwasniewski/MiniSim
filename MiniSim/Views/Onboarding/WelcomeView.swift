@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WelcomeView: View {
     var goToNextPage: () -> Void
-    
+
     var body: some View {
         VStack {
             if let appIcon = NSImage(named: "AppIcon") {
@@ -19,7 +19,7 @@ struct WelcomeView: View {
                 title: "Welcome to MiniSim!",
                 subTitle: "Thanks for downloading the app"
             )
-            
+
             OnboardingItem(
                 image: "iphone",
                 title: "Easily open emulators",
@@ -36,7 +36,7 @@ struct WelcomeView: View {
                 title: "And more useful utilities",
                 description: "Like: Paste clipboard to emulator, Cold boot and more!"
             )
-            
+
             OnboardingButton("Continue") {
                 goToNextPage()
             }
@@ -46,7 +46,7 @@ struct WelcomeView: View {
 
 struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        WelcomeView(goToNextPage: {})
-            .frame(width: 400, height: 600)
+        WelcomeView {}
+            .frame(width: OnboardingPages.contentWidth, height: OnboardingWindow.height)
     }
 }

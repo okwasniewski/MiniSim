@@ -8,7 +8,7 @@
 import Foundation
 
 extension UserDefaults {
-    public struct Keys {
+    public enum Keys {
         static let parameters = "parameters"
         static let commands = "commands"
         static let androidHome = "androidHome"
@@ -16,32 +16,32 @@ extension UserDefaults {
         static let enableiOSSimulators = "enableiOSSimulators"
         static let enableAndroidEmulators = "enableAndroidEmulators"
     }
-    
-    @objc dynamic public var androidHome: String? {
+
+    @objc public dynamic var androidHome: String? {
         get { string(forKey: Keys.androidHome) }
         set { set(newValue, forKey: Keys.androidHome) }
     }
-    
-    @objc dynamic public var isOnboardingFinished: Bool {
+
+    @objc public dynamic var isOnboardingFinished: Bool {
         get { bool(forKey: Keys.isOnboardingFinished) }
         set { set(newValue, forKey: Keys.isOnboardingFinished) }
     }
-    
+
     public var parameters: Data? {
         get { object(forKey: Keys.parameters) as? Data }
         set { set(newValue, forKey: Keys.parameters) }
     }
-    
+
     public var commands: Data? {
         get { object(forKey: Keys.commands) as? Data }
         set { set(newValue, forKey: Keys.commands) }
     }
-    
+
     public var enableiOSSimulators: Bool {
         get { bool(forKey: Keys.enableiOSSimulators) }
         set { set(newValue, forKey: Keys.enableiOSSimulators) }
     }
-    
+
     public var enableAndroidEmulators: Bool {
         get { bool(forKey: Keys.enableAndroidEmulators) }
         set { set(newValue, forKey: Keys.enableAndroidEmulators) }

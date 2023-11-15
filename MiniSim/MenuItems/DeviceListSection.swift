@@ -10,7 +10,7 @@ import Foundation
 enum DeviceListSection: Int, CaseIterable {
     case iOS = 100
     case android
-    
+
     var title: String {
         switch self {
         case .iOS:
