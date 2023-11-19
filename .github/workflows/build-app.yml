@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.ref }}-build
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: macos-latest
@@ -19,7 +23,7 @@ jobs:
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest
+          xcode-version: latest-stable
 
       - name: Install XCBeautify
         run: brew install xcbeautify
