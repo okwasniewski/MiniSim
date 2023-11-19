@@ -21,5 +21,8 @@ jobs:
         with:
           xcode-version: latest-stable
 
+      - name: Install XCBeautify
+        run: brew install xcbeautify
+
       - name: Build
-        run: xcodebuild -scheme MiniSim -destination 'platform=macOS' -skipPackagePluginValidation build
+        run: xcodebuild -scheme MiniSim -destination 'platform=macOS' -skipPackagePluginValidation build | xcbeautify
