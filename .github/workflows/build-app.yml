@@ -22,4 +22,4 @@ jobs:
           xcode-version: latest-stable
 
       - name: Build
-        run: xcodebuild -scheme MiniSim -destination 'platform=macOS,arch=arm64' build
+        run: xcodebuild -scheme MiniSim -destination 'platform=macOS' -skipPackagePluginValidation build
