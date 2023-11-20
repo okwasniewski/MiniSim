@@ -119,9 +119,9 @@ enum SubMenuItems {
             accessibilityDescription: "Delete simulator"
         )
     }
-    
+
     struct DeleteEmulator: SubMenuActionItem {
-        let title = NSLocalizedString("Delete Emulator", comment: "")
+        let title = NSLocalizedString("Delete emulator", comment: "")
         let tag = Tags.delete.rawValue
         let bootsDevice = false
         let needBootedDevice = false
@@ -129,7 +129,6 @@ enum SubMenuItems {
             systemSymbolName: "trash",
             accessibilityDescription: "Delete emulator"
         )
-                
     }
 }
 

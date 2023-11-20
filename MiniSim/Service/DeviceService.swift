@@ -424,7 +424,7 @@ extension DeviceService {
         }
         try shellOut(to: "\(avdPath) delete avd -n \"\(device.name)\"")
     }
-    
+
     static func handleAndroidAction(device: Device, commandTag: SubMenuItems.Tags, itemName: String) {
             do {
                 switch commandTag {

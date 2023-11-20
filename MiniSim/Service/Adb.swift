@@ -47,7 +47,7 @@ final class ADB: ADBProtocol {
     static func getAdbPath() throws -> String {
         try getAndroidHome() + Paths.adb.rawValue
     }
-    
+
     static func getAvdPath() throws -> String {
         try getAndroidHome() + Paths.avd.rawValue
     }
