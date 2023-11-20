@@ -24,6 +24,7 @@ final class ADB: ADBProtocol {
         case home = "/Android/sdk"
         case emulator = "/emulator/emulator"
         case adb = "/platform-tools/adb"
+        case avd = "/cmdline-tools/latest/bin/avdmanager"
     }
 
     /**
@@ -45,6 +46,10 @@ final class ADB: ADBProtocol {
 
     static func getAdbPath() throws -> String {
         try getAndroidHome() + Paths.adb.rawValue
+    }
+    
+    static func getAvdPath() throws -> String {
+        try getAndroidHome() + Paths.avd.rawValue
     }
 
     /**
