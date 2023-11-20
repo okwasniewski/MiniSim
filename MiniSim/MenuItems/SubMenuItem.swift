@@ -127,7 +127,7 @@ enum SubMenuItems {
         let needBootedDevice = false
         let image = NSImage(
             systemSymbolName: "trash",
-            accessibilityDescription: "Delete simulator"
+            accessibilityDescription: "Delete emulator"
         )
                 
     }
