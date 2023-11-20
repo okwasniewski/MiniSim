@@ -28,7 +28,11 @@ protocol DeviceServiceProtocol {
 }
 
 class DeviceService: DeviceServiceProtocol {
-    private static let queue = DispatchQueue(label: "com.MiniSim.DeviceService", qos: .userInteractive)
+    private static let queue = DispatchQueue(
+        label: "com.MiniSim.DeviceService",
+        qos: .userInteractive,
+        attributes: .concurrent
+    )
     private static let deviceBootedError = "Unable to boot device in current state: Booted"
 
     private static let derivedDataLocation = "~/Library/Developer/Xcode/DerivedData"
