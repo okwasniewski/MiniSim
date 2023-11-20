@@ -44,7 +44,3 @@ struct SetupPreferences: View {
         }
     }
 }
-
-#Preview {
-    SetupPreferences {}
-}
