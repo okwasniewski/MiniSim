@@ -119,6 +119,17 @@ enum SubMenuItems {
             accessibilityDescription: "Delete simulator"
         )
     }
+
+    struct DeleteEmulator: SubMenuActionItem {
+        let title = NSLocalizedString("Delete emulator", comment: "")
+        let tag = Tags.delete.rawValue
+        let bootsDevice = false
+        let needBootedDevice = false
+        let image = NSImage(
+            systemSymbolName: "trash",
+            accessibilityDescription: "Delete emulator"
+        )
+    }
 }
 
 extension SubMenuItems {
@@ -131,7 +142,8 @@ extension SubMenuItems {
         ColdBoot(),
         NoAudio(),
         ToggleA11y(),
-        Paste()
+        Paste(),
+        DeleteEmulator()
     ]
 
     static var ios: [SubMenuItem] = [

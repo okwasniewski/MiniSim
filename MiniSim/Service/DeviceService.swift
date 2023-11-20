@@ -413,8 +413,19 @@ extension DeviceService {
         try shellOut(to: "\(adbPath) -s \(deviceId) shell input text \"\(formattedText)\"")
     }
 
+    static func deleteEmulator(device: Device) throws {
+        let avdPath = try ADB.getAvdPath()
+        let adbPath = try ADB.getAdbPath()
+        if device.booted {
+            guard let deviceId = device.identifier else {
+                throw DeviceError.deviceNotFound
+            }
+            try shellOut(to: "\(adbPath) -s \(deviceId) emu kill")
+        }
+        try shellOut(to: "\(avdPath) delete avd -n \"\(device.name)\"")
+    }
+
     static func handleAndroidAction(device: Device, commandTag: SubMenuItems.Tags, itemName: String) {
-        queue.async {
             do {
                 switch commandTag {
                 case .coldBoot:
@@ -447,12 +458,27 @@ extension DeviceService {
                     if let command = DeviceService.getCustomCommand(platform: .android, commandName: itemName) {
                         try DeviceService.runCustomCommand(device, command: command)
                     }
+
+                case .delete:
+                    let result = !NSAlert.showQuestionDialog(
+                        title: "Are you sure?",
+                        message: "Are you sure you want to delete this Emulator?"
+                    )
+                    if result { return }
+                    queue.async {
+                        do {
+                            try DeviceService.deleteEmulator(device: device)
+                            DeviceService.showSuccessMessage(title: "Emulator deleted!", message: device.name)
+                            NotificationCenter.default.post(name: .deviceDeleted, object: nil)
+                        } catch {
+                            NSAlert.showError(message: error.localizedDescription)
+                        }
+                    }
                 default:
                     break
                 }
             } catch {
                 NSAlert.showError(message: error.localizedDescription)
             }
-        }
     }
 }
