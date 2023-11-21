@@ -36,25 +36,24 @@ final class UserDefaultsTests: XCTestCase {
         XCTAssertEqual(UserDefaults.standard.enableiOSSimulators, true)
         XCTAssertEqual(UserDefaults.standard.enableAndroidEmulators, true)
     }
-    
+
     func testChangingParameters() {
         let parameters: [Parameter] = [.init(title: "First", command: "adb reverse")]
         let data = try? JSONEncoder().encode(parameters)
         UserDefaults.standard.parameters = data
-        
+
         let newParameters = UserDefaults.standard.parameters
         let decoded = try? JSONDecoder().decode([Parameter].self, from: newParameters!)
-        
+
         XCTAssertEqual(parameters, decoded)
     }
-    
+
     func testChanging() {
         UserDefaults.standard.isOnboardingFinished = true
         UserDefaults.standard.enableiOSSimulators = false
         UserDefaults.standard.enableAndroidEmulators = false
         UserDefaults.standard.androidHome = "test"
-        
-        
+
         XCTAssertEqual(UserDefaults.standard.isOnboardingFinished, true)
         XCTAssertEqual(UserDefaults.standard.enableiOSSimulators, false)
         XCTAssertEqual(UserDefaults.standard.enableAndroidEmulators, false)

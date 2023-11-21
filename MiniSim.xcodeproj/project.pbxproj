@@ -431,6 +431,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				76B70F802B0D4F9D009D87A4 /* PBXTargetDependency */,
 				76B70F792B0D359D009D87A4 /* PBXTargetDependency */,
 			);
 			name = MiniSimTests;
@@ -618,6 +619,10 @@
 			isa = PBXTargetDependency;
 			target = 766BD22F2981628A0042261B /* MiniSim */;
 			targetProxy = 76B70F782B0D359D009D87A4 /* PBXContainerItemProxy */;
+		};
+		76B70F802B0D4F9D009D87A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 76B70F7F2B0D4F9D009D87A4 /* SwiftLintPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -995,6 +1000,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 76AC9AF72A0EB50800864A8B /* XCRemoteSwiftPackageReference "SymbolPicker" */;
 			productName = SymbolPicker;
+		};
+		76B70F7F2B0D4F9D009D87A4 /* SwiftLintPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4A7892862AF1A767004D3FC8 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintPlugin";
 		};
 		76F04A13298A62CF00BF9CA3 /* ShellOut */ = {
 			isa = XCSwiftPackageProductDependency;
