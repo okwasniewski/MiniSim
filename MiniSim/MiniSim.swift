@@ -154,6 +154,7 @@ class MiniSim: NSObject {
             switch tag {
             case .preferences:
                 settingsController.show()
+                settingsController.window?.orderFrontRegardless()
             case .quit:
                 NSApp.terminate(sender)
             case .clearDerrivedData:
