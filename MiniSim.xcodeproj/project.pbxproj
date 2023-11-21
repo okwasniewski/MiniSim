@@ -69,6 +69,7 @@
 		768F8EC829954C8A00DFBCDB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 768F8EC729954C8A00DFBCDB /* Sparkle */; };
 		76AC9AF62A0EA82C00864A8B /* CustomCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AC9AF52A0EA82C00864A8B /* CustomCommands.swift */; };
 		76AC9AF92A0EB50800864A8B /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 76AC9AF82A0EB50800864A8B /* SymbolPicker */; };
+		76B70F7E2B0D361A009D87A4 /* UserDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B70F7D2B0D361A009D87A4 /* UserDefaultsTests.swift */; };
 		76E4451229D4391000039025 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451129D4391000039025 /* Onboarding.swift */; };
 		76E4451429D4403F00039025 /* NSNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451329D4403F00039025 /* NSNotificationName.swift */; };
 		76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F04A10298A5AE000BF9CA3 /* ADB.swift */; };
@@ -81,6 +82,16 @@
 		76F2A9172991B7B6002D4EF6 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */; };
 		76FCABAB29B390D5003BBF9A /* Collection+get.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FCABAA29B390D5003BBF9A /* Collection+get.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		76B70F782B0D359D009D87A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 766BD2282981628A0042261B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 766BD22F2981628A0042261B;
+			remoteInfo = MiniSim;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		4AFACC732AD730BE00EC369F /* SubMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubMenuItem.swift; sourceTree = "<group>"; };
@@ -142,6 +153,8 @@
 		7684FAAE29D202F500230BB0 /* AndroidHomeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AndroidHomeError.swift; sourceTree = "<group>"; };
 		768F8ECC2995575B00DFBCDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		76AC9AF52A0EA82C00864A8B /* CustomCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCommands.swift; sourceTree = "<group>"; };
+		76B70F742B0D359D009D87A4 /* MiniSimTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MiniSimTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		76B70F7D2B0D361A009D87A4 /* UserDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsTests.swift; sourceTree = "<group>"; };
 		76E4451129D4391000039025 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		76E4451329D4403F00039025 /* NSNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotificationName.swift; sourceTree = "<group>"; };
 		76F04A10298A5AE000BF9CA3 /* ADB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADB.swift; sourceTree = "<group>"; };
@@ -166,6 +179,13 @@
 				7630B26129853EF400D8B57D /* Preferences in Frameworks */,
 				763EEB132A26896B008428F1 /* CodeEditor in Frameworks */,
 				7630B26B2986B4D500D8B57D /* KeyboardShortcuts in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76B70F712B0D359D009D87A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				766BD2322981628A0042261B /* MiniSim */,
+				76B70F752B0D359D009D87A4 /* MiniSimTests */,
 				766BD2312981628A0042261B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -274,6 +295,7 @@
 			isa = PBXGroup;
 			children = (
 				766BD2302981628A0042261B /* MiniSim.app */,
+				76B70F742B0D359D009D87A4 /* MiniSimTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -328,6 +350,14 @@
 				76059BF82AD558C30008D38B /* SetupItemView.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		76B70F752B0D359D009D87A4 /* MiniSimTests */ = {
+			isa = PBXGroup;
+			children = (
+				76B70F7D2B0D361A009D87A4 /* UserDefaultsTests.swift */,
+			);
+			path = MiniSimTests;
 			sourceTree = "<group>";
 		};
 		76E5FAD1299BEBD2007987E0 /* MenuItems */ = {
@@ -390,6 +420,24 @@
 			productReference = 766BD2302981628A0042261B /* MiniSim.app */;
 			productType = "com.apple.product-type.application";
 		};
+		76B70F732B0D359D009D87A4 /* MiniSimTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 76B70F7C2B0D359E009D87A4 /* Build configuration list for PBXNativeTarget "MiniSimTests" */;
+			buildPhases = (
+				76B70F702B0D359D009D87A4 /* Sources */,
+				76B70F712B0D359D009D87A4 /* Frameworks */,
+				76B70F722B0D359D009D87A4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				76B70F792B0D359D009D87A4 /* PBXTargetDependency */,
+			);
+			name = MiniSimTests;
+			productName = MiniSimTests;
+			productReference = 76B70F742B0D359D009D87A4 /* MiniSimTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -397,11 +445,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1400;
-				LastUpgradeCheck = 1420;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					766BD22F2981628A0042261B = {
 						CreatedOnToolsVersion = 14.0.1;
+					};
+					76B70F732B0D359D009D87A4 = {
+						CreatedOnToolsVersion = 15.0.1;
+						TestTargetID = 766BD22F2981628A0042261B;
 					};
 				};
 			};
@@ -429,6 +481,7 @@
 			projectRoot = "";
 			targets = (
 				766BD22F2981628A0042261B /* MiniSim */,
+				76B70F732B0D359D009D87A4 /* MiniSimTests */,
 			);
 		};
 /* End PBXProject section */
@@ -442,6 +495,13 @@
 				766BD2382981628C0042261B /* Assets.xcassets in Resources */,
 				7610992D2A3F95850067885A /* MiniSim.sdef in Resources */,
 				765C44C82A2A6C9600FCC159 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76B70F722B0D359D009D87A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,12 +599,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		76B70F702B0D359D009D87A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76B70F7E2B0D361A009D87A4 /* UserDefaultsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		4A78928A2AF1A9A3004D3FC8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 4A7892892AF1A9A3004D3FC8 /* SwiftLintPlugin */;
+		};
+		76B70F792B0D359D009D87A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 766BD22F2981628A0042261B /* MiniSim */;
+			targetProxy = 76B70F782B0D359D009D87A4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -553,6 +626,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -615,6 +689,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -739,6 +814,51 @@
 			};
 			name = Release;
 		};
+		76B70F7A2B0D359E009D87A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z3M9P6G4WY;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = pl.okwasniewski.MiniSimTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MiniSim.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MiniSim";
+			};
+			name = Debug;
+		};
+		76B70F7B2B0D359E009D87A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z3M9P6G4WY;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = pl.okwasniewski.MiniSimTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MiniSim.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MiniSim";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -756,6 +876,15 @@
 			buildConfigurations = (
 				766BD2402981628C0042261B /* Debug */,
 				766BD2412981628C0042261B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		76B70F7C2B0D359E009D87A4 /* Build configuration list for PBXNativeTarget "MiniSimTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76B70F7A2B0D359E009D87A4 /* Debug */,
+				76B70F7B2B0D359E009D87A4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
