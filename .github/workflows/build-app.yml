@@ -29,7 +29,7 @@ jobs:
         run: brew install xcbeautify
 
       - name: Test
-        run: set -o pipefail && xcodebuild test -scheme MiniSim -destination 'platform=macOS' -skipPackagePluginValidation build | xcbeautify
+        run: set -o pipefail && xcodebuild -scheme MiniSim -destination 'platform=macOS' -skipPackagePluginValidation test COMPILER_INDEX_STORE_ENABLE=NO | xcbeautify
 
       - name: Build
-        run: set -o pipefail && xcodebuild -scheme MiniSim -destination 'platform=macOS' -skipPackagePluginValidation build | xcbeautify
+        run: set -o pipefail && xcodebuild -scheme MiniSim -destination 'platform=macOS' -skipPackagePluginValidation build COMPILER_INDEX_STORE_ENABLE=NO | xcbeautify
