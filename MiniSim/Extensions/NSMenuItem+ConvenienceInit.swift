@@ -39,6 +39,7 @@ extension NSMenuItem {
             systemSymbolName: command.icon,
             accessibilityDescription: command.name
         )
+        self.tag = SubMenuItems.Tags.customCommand.rawValue
         self.title = command.name
     }
 
