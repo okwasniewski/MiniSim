@@ -1,33 +1,38 @@
 @testable import MiniSim
 import XCTest
 
-// Mock ADB class for testing
-class ADB: ADBProtocol {
-  static func getEmulatorPath() throws -> String {
-    ""
-  }
-
-  static func checkAndroidHome(path: String) throws -> Bool {
-    true
-  }
-
-  static func isAccesibilityOn(deviceId: String, adbPath: String) -> Bool {
-    false
-  }
-
-  static func getAdbPath() throws -> String {
-    "/mock/adb/path"
-  }
-
-  static func getAdbId(for deviceName: String, adbPath: String) throws -> String {
-    if deviceName == "Nexus_5X_API_28" {
-      throw NSError(domain: "ADBError", code: 1, userInfo: nil)
-    }
-    return "mock_adb_id_for_\(deviceName)"
-  }
-}
-
 class DeviceParserTests: XCTestCase {
+  // Mock ADB class for testing
+  class ADB: ADBProtocol {
+    static var shell: ShellProtocol = Shell()
+
+    static func getAdbId(for deviceName: String) throws -> String {
+      if deviceName == "Nexus_5X_API_28" {
+        throw NSError(domain: "ADBError", code: 1, userInfo: nil)
+      }
+      return "mock_adb_id_for_\(deviceName)"
+    }
+
+    static func checkAndroidHome(path: String, fileManager: FileManager) throws -> Bool {
+      true
+    }
+
+    static func isAccesibilityOn(deviceId: String) -> Bool {
+      false
+    }
+
+    static func toggleAccesibility(deviceId: String) {
+    }
+
+    static func getEmulatorPath() throws -> String {
+      ""
+    }
+
+    static func getAdbPath() throws -> String {
+      "/mock/adb/path"
+    }
+  }
+
   func testDeviceParserFactory() {
     let iosParser = DeviceParserFactory().getParser(.iosSimulator)
     XCTAssertTrue(iosParser is IOSSimulatorParser)
@@ -277,24 +282,29 @@ class DeviceParserTests: XCTestCase {
 
   func testAndroidEmulatorParserWithADBFailure() {
     class FailingADB: ADBProtocol {
-      static func getEmulatorPath() throws -> String {
-        ""
-      }
+      static var shell: ShellProtocol = Shell()
 
-      static func checkAndroidHome(path: String) throws -> Bool {
-        true
-      }
-
-      static func isAccesibilityOn(deviceId: String, adbPath: String) -> Bool {
-        false
+      static func getAdbId(for deviceName: String) throws -> String {
+        throw NSError(domain: "ADBError", code: 2, userInfo: nil)
       }
 
       static func getAdbPath() throws -> String {
         throw NSError(domain: "ADBError", code: 1, userInfo: nil)
       }
 
-      static func getAdbId(for deviceName: String, adbPath: String) throws -> String {
-        throw NSError(domain: "ADBError", code: 2, userInfo: nil)
+      static func checkAndroidHome(path: String, fileManager: FileManager) throws -> Bool {
+        true
+      }
+
+      static func isAccesibilityOn(deviceId: String) -> Bool {
+        false
+      }
+
+      static func toggleAccesibility(deviceId: String) {
+      }
+
+      static func getEmulatorPath() throws -> String {
+        ""
       }
     }
 
@@ -303,6 +313,8 @@ class DeviceParserTests: XCTestCase {
 
     let devices = parser.parse(input)
 
-    XCTAssertTrue(devices.isEmpty)
+    XCTAssertFalse(devices.isEmpty)
+    XCTAssertEqual(devices[0].name, "Pixel_3a_API_30_x86")
+    XCTAssertFalse(devices[0].booted)
   }
 }

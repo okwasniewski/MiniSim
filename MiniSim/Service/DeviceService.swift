@@ -406,7 +406,7 @@ extension DeviceService {
       throw DeviceError.deviceNotFound
     }
 
-    let a11yIsEnabled = ADB.isAccesibilityOn(deviceId: adbId, adbPath: adbPath)
+    let a11yIsEnabled = ADB.isAccesibilityOn(deviceId: adbId)
     let value = a11yIsEnabled ? ADB.talkbackOff : ADB.talkbackOn
     let shellCmd = "\(adbPath) -s \(adbId) shell settings put secure enabled_accessibility_services \(value)"
     _ = try? shellOut(to: shellCmd)

@@ -5,15 +5,15 @@
 //  Created by Oskar Kwaśniewski on 28/01/2023.
 //
 
+import AcknowList
 import Sparkle
 import SwiftUI
-import AcknowList
 
 struct About: View {
   private let updaterController: SPUStandardUpdaterController
   @Environment (\.openURL) private var openURL
   @State private var isAcknowledgementsListPresented = false
-  
+
   init() {
     updaterController = SPUStandardUpdaterController(
       startingUpdater: true,
@@ -21,12 +21,12 @@ struct About: View {
       userDriverDelegate: nil
     )
   }
-  
+
   let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
   private let bottomPadding: Double = 10
   private let minFrameWidth: Double = 650
   private let minFrameHeight: Double = 450
-  
+
   var body: some View {
     VStack {
       Image(nsImage: NSImage(named: "AppIcon") ?? NSImage())
@@ -42,11 +42,11 @@ struct About: View {
         Label("Check for updates", systemImage: "gear")
       }
       .padding(.bottom, bottomPadding)
-      
+
       Button("Acknowledgements") {
         isAcknowledgementsListPresented.toggle()
       }
-      
+
       HStack {
         Button("GitHub") {
           openURL(URL(string: "https://github.com/okwasniewski/MiniSim")!)

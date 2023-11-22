@@ -19,6 +19,7 @@
 		76059BF52AD4361C0008D38B /* SetupPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF42AD4361C0008D38B /* SetupPreferences.swift */; };
 		76059BF72AD449DC0008D38B /* OnboardingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF62AD449DC0008D38B /* OnboardingHeader.swift */; };
 		76059BF92AD558C30008D38B /* SetupItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF82AD558C30008D38B /* SetupItemView.swift */; };
+		760DEACE2B0DFB6600253576 /* ShellStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760DEACD2B0DFB6600253576 /* ShellStub.swift */; };
 		7610992D2A3F95850067885A /* MiniSim.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 7610992C2A3F95850067885A /* MiniSim.sdef */; };
 		7610992F2A3F95D90067885A /* NSScriptCommand+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7610992E2A3F95D90067885A /* NSScriptCommand+utils.swift */; };
 		7625140B2992B46D0060A225 /* Pasteboard+utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7625140A2992B46D0060A225 /* Pasteboard+utils.swift */; };
@@ -75,8 +76,11 @@
 		76AC9AF62A0EA82C00864A8B /* CustomCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AC9AF52A0EA82C00864A8B /* CustomCommands.swift */; };
 		76AC9AF92A0EB50800864A8B /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 76AC9AF82A0EB50800864A8B /* SymbolPicker */; };
 		76B70F7E2B0D361A009D87A4 /* UserDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B70F7D2B0D361A009D87A4 /* UserDefaultsTests.swift */; };
+		76B70F822B0D50FE009D87A4 /* ADBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B70F812B0D50FE009D87A4 /* ADBTests.swift */; };
+		76B70F842B0D5AB4009D87A4 /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B70F832B0D5AB4009D87A4 /* Shell.swift */; };
 		76BF0AD92C8CB3E6003BE568 /* AcknowList in Frameworks */ = {isa = PBXBuildFile; productRef = 76BF0AD82C8CB3E6003BE568 /* AcknowList */; };
 		76BF0ADB2C8CB4CD003BE568 /* Package.resolved in Resources */ = {isa = PBXBuildFile; fileRef = 76BF0ADA2C8CB4CD003BE568 /* Package.resolved */; };
+		76BF0ADD2C8DF660003BE568 /* AccessibilityElementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0ADC2C8DF660003BE568 /* AccessibilityElementTests.swift */; };
 		76C1396A2C849A3F006CD80C /* MenuIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C139692C849A3F006CD80C /* MenuIcons.swift */; };
 		76E4451229D4391000039025 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451129D4391000039025 /* Onboarding.swift */; };
 		76E4451429D4403F00039025 /* NSNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451329D4403F00039025 /* NSNotificationName.swift */; };
@@ -115,6 +119,7 @@
 		76059BF42AD4361C0008D38B /* SetupPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPreferences.swift; sourceTree = "<group>"; };
 		76059BF62AD449DC0008D38B /* OnboardingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHeader.swift; sourceTree = "<group>"; };
 		76059BF82AD558C30008D38B /* SetupItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupItemView.swift; sourceTree = "<group>"; };
+		760DEACD2B0DFB6600253576 /* ShellStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellStub.swift; sourceTree = "<group>"; };
 		7610992C2A3F95850067885A /* MiniSim.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MiniSim.sdef; sourceTree = "<group>"; };
 		7610992E2A3F95D90067885A /* NSScriptCommand+utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSScriptCommand+utils.swift"; sourceTree = "<group>"; };
 		7625140A2992B46D0060A225 /* Pasteboard+utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pasteboard+utils.swift"; sourceTree = "<group>"; };
@@ -169,7 +174,10 @@
 		76AC9AF52A0EA82C00864A8B /* CustomCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCommands.swift; sourceTree = "<group>"; };
 		76B70F742B0D359D009D87A4 /* MiniSimTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MiniSimTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B70F7D2B0D361A009D87A4 /* UserDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsTests.swift; sourceTree = "<group>"; };
+		76B70F812B0D50FE009D87A4 /* ADBTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADBTests.swift; sourceTree = "<group>"; };
+		76B70F832B0D5AB4009D87A4 /* Shell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		76BF0ADA2C8CB4CD003BE568 /* Package.resolved */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Package.resolved; path = MiniSim.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved; sourceTree = SOURCE_ROOT; };
+		76BF0ADC2C8DF660003BE568 /* AccessibilityElementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityElementTests.swift; sourceTree = "<group>"; };
 		76C139692C849A3F006CD80C /* MenuIcons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuIcons.swift; sourceTree = "<group>"; };
 		76E4451129D4391000039025 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		76E4451329D4403F00039025 /* NSNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotificationName.swift; sourceTree = "<group>"; };
@@ -228,6 +236,14 @@
 				55CDB0772B1B6D24002418D7 /* TerminalApps.swift */,
 			);
 			path = Terminal;
+			sourceTree = "<group>";
+		};
+		760DEACC2B0DFB5B00253576 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				760DEACD2B0DFB6600253576 /* ShellStub.swift */,
+			);
+			path = Mocks;
 			sourceTree = "<group>";
 		};
 		762CF1E12981DDD400099999 /* Extensions */ = {
@@ -297,6 +313,7 @@
 				7645D4BD2982A1B100019227 /* DeviceService.swift */,
 				7699511C2C845B1900462287 /* DeviceParser.swift */,
 				76F04A10298A5AE000BF9CA3 /* ADB.swift */,
+				76B70F832B0D5AB4009D87A4 /* Shell.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -396,8 +413,11 @@
 		76B70F752B0D359D009D87A4 /* MiniSimTests */ = {
 			isa = PBXGroup;
 			children = (
+				760DEACC2B0DFB5B00253576 /* Mocks */,
 				76B70F7D2B0D361A009D87A4 /* UserDefaultsTests.swift */,
 				7699511E2C845CBA00462287 /* DeviceParserTests.swift */,
+				76B70F812B0D50FE009D87A4 /* ADBTests.swift */,
+				76BF0ADC2C8DF660003BE568 /* AccessibilityElementTests.swift */,
 			);
 			path = MiniSimTests;
 			sourceTree = "<group>";
@@ -619,6 +639,7 @@
 				7630B2752986D52900D8B57D /* NSAlert+showError.swift in Sources */,
 				4AFACC742AD730BE00EC369F /* SubMenuItem.swift in Sources */,
 				7630B25E2984339100D8B57D /* MainMenuActions.swift in Sources */,
+				76B70F842B0D5AB4009D87A4 /* Shell.swift in Sources */,
 				76AC9AF62A0EA82C00864A8B /* CustomCommands.swift in Sources */,
 				76489D5C29BFCA330070EF03 /* OnboardingItem.swift in Sources */,
 				7645D5012982E6FA00019227 /* main.swift in Sources */,
@@ -656,7 +677,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				7699511F2C845CBA00462287 /* DeviceParserTests.swift in Sources */,
+				76BF0ADD2C8DF660003BE568 /* AccessibilityElementTests.swift in Sources */,
 				76B70F7E2B0D361A009D87A4 /* UserDefaultsTests.swift in Sources */,
+				760DEACE2B0DFB6600253576 /* ShellStub.swift in Sources */,
+				76B70F822B0D50FE009D87A4 /* ADBTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

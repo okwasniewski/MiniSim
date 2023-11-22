@@ -6,9 +6,10 @@
 //
 
 import AppKit
-import ShellOut
 
 class AccessibilityElement {
+    static var shell: ShellProtocol = Shell()
+
     private let underlyingElement: AXUIElement
 
     required init(_ axUIElement: AXUIElement) {
@@ -44,7 +45,7 @@ class AccessibilityElement {
                         set frontmost of every process whose unix id is \(pid) to true
                     end tell'
                     """
-            _ = try? shellOut(to: script)
+            _ = try? shell.execute(command: script)
         }
     }
 
