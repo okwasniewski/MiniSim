@@ -9,14 +9,28 @@ import Foundation
 import ShellOut
 
 protocol ADBProtocol {
+    static var shell: ShellProtocol.Type { get set }
+
     static func getAdbPath() throws -> String
     static func getEmulatorPath() throws -> String
-    static func getAdbId(for deviceName: String, adbPath: String) throws -> String
-    static func checkAndroidHome(path: String) throws -> Bool
-    static func isAccesibilityOn(deviceId: String, adbPath: String) -> Bool
+    static func getAdbId(
+        for deviceName: String,
+        adbPath: String
+    ) throws -> String
+    static func checkAndroidHome(
+        path: String,
+        fileManager: FileManager
+    ) throws -> Bool
+    static func isAccesibilityOn(
+        deviceId: String,
+        adbPath: String
+    ) -> Bool
 }
 
 final class ADB: ADBProtocol {
+
+    static var shell: ShellProtocol.Type = Shell.self
+
     static let talkbackOn = "com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService"
     static let talkbackOff = "com.android.talkback/com.google.android.marvin.talkback.TalkBackService"
 
@@ -55,13 +69,16 @@ final class ADB: ADBProtocol {
     /**
      Checks if passed path exists and points to `ANDROID_HOME`.
      */
-    @discardableResult static func checkAndroidHome(path: String) throws -> Bool {
-        if !FileManager.default.fileExists(atPath: path) {
+    @discardableResult static func checkAndroidHome(
+        path: String,
+        fileManager: FileManager = .default
+    ) throws -> Bool {
+        if !fileManager.fileExists(atPath: path) {
             throw AndroidHomeError.pathNotFound
         }
 
         do {
-            try shellOut(to: "\(path)" + Paths.emulator.rawValue, arguments: ["-list-avds"])
+            try shell.execute(command: "\(path)" + Paths.emulator.rawValue, arguments: ["-list-avds"])
         } catch {
             throw AndroidHomeError.pathNotCorrect
         }
@@ -72,14 +89,22 @@ final class ADB: ADBProtocol {
         try getAndroidHome() + Paths.emulator.rawValue
     }
 
-    static func getAdbId(for deviceName: String, adbPath: String) throws -> String {
-        let onlineDevices = try shellOut(to: "\(adbPath) devices")
+    static func getAdbId(
+        for deviceName: String,
+        adbPath: String
+    ) throws -> String {
+        let onlineDevices = try shell.execute(command: "\(adbPath) devices")
         let splitted = onlineDevices.components(separatedBy: "\n")
 
         for line in splitted {
             let device = line.match("^emulator-[0-9]+")
             guard let deviceId = device.first?.first else { continue }
-            let output = try? shellOut(to: "\(adbPath) -s \(deviceId) emu avd name").components(separatedBy: "\n")
+
+            let output = try? shell.execute(
+                command: "\(adbPath) -s \(deviceId) emu avd name"
+            )
+            .components(separatedBy: "\n")
+
             if let name = output?.first {
                 let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
                 let trimmedDeviceName = deviceName.trimmingCharacters(in: .whitespacesAndNewlines)
