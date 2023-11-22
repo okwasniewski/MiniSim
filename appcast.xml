@@ -6,20 +6,20 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>0.8.1</title>
+      <title>0.8.2</title>
       <description>
       <![CDATA[ <ul>
-      <li>Feat: Add option to delete Android emulators</li>
-      <li>Fix: Make MiniSim dispatch queue concurrent</li>
+      <li>fix: custom commands not executing</li>
+      <li>fix: forcefully focus search controller to show window on MacOS Sonoma</li>
       </ul> ]]>
       </description>
-      <pubDate>2023-11-13</pubDate>
-      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.8.1</releaseNotesLink>
+      <pubDate>2023-11-22</pubDate>
+      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.8.2</releaseNotesLink>
       <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
       <enclosure
-        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.8.1/MiniSim.app.zip"
-        sparkle:version="14"
-        sparkle:shortVersionString="0.8.1"
+        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.8.2/MiniSim.app.zip"
+        sparkle:version="15"
+        sparkle:shortVersionString="0.8.2"
         length="0"
         type="application/octet-stream"
       />
