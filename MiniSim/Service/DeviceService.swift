@@ -385,21 +385,16 @@ extension DeviceService {
         return splitted
             .filter { !$0.isEmpty }
             .map { deviceName in
-                let adbId = try? ADB.getAdbId(for: deviceName, adbPath: adbPath)
+                let adbId = try? ADB.getAdbId(for: deviceName)
                 return Device(name: deviceName, identifier: adbId, booted: adbId != nil, platform: .android)
             }
     }
 
     static func toggleA11y(device: Device) throws {
-        let adbPath = try ADB.getAdbPath()
         guard let adbId = device.identifier else {
             throw DeviceError.deviceNotFound
         }
-
-        let a11yIsEnabled = ADB.isAccesibilityOn(deviceId: adbId, adbPath: adbPath)
-        let value = a11yIsEnabled ? ADB.talkbackOff : ADB.talkbackOn
-        let shellCmd = "\(adbPath) -s \(adbId) shell settings put secure enabled_accessibility_services \(value)"
-        _ = try? shellOut(to: shellCmd)
+        ADB.toggleAccesibility(deviceId: adbId)
     }
 
     static func sendText(device: Device, text: String) throws {

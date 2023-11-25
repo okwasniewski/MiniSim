@@ -6,29 +6,22 @@
 //
 
 import Foundation
-import ShellOut
 
 protocol ADBProtocol {
     static var shell: ShellProtocol.Type { get set }
 
     static func getAdbPath() throws -> String
     static func getEmulatorPath() throws -> String
-    static func getAdbId(
-        for deviceName: String,
-        adbPath: String
-    ) throws -> String
+    static func getAdbId(for deviceName: String) throws -> String
     static func checkAndroidHome(
         path: String,
         fileManager: FileManager
     ) throws -> Bool
-    static func isAccesibilityOn(
-        deviceId: String,
-        adbPath: String
-    ) -> Bool
+    static func isAccesibilityOn(deviceId: String) -> Bool
+    static func toggleAccesibility(deviceId: String)
 }
 
 final class ADB: ADBProtocol {
-
     static var shell: ShellProtocol.Type = Shell.self
 
     static let talkbackOn = "com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService"
@@ -89,10 +82,8 @@ final class ADB: ADBProtocol {
         try getAndroidHome() + Paths.emulator.rawValue
     }
 
-    static func getAdbId(
-        for deviceName: String,
-        adbPath: String
-    ) throws -> String {
+    static func getAdbId(for deviceName: String) throws -> String {
+        let adbPath = try Self.getAdbPath()
         let onlineDevices = try shell.execute(command: "\(adbPath) devices")
         let splitted = onlineDevices.components(separatedBy: "\n")
 
@@ -116,9 +107,12 @@ final class ADB: ADBProtocol {
         throw DeviceError.deviceNotFound
     }
 
-    static func isAccesibilityOn(deviceId: String, adbPath: String) -> Bool {
+    static func isAccesibilityOn(deviceId: String) -> Bool {
+        guard let adbPath = try? Self.getAdbPath() else {
+            return false
+        }
         let shellCommand = "\(adbPath) -s \(deviceId) shell settings get secure enabled_accessibility_services"
-        guard let result = try? shellOut(to: [shellCommand]) else {
+        guard let result = try? shell.execute(command: shellCommand) else {
             return false
         }
 
@@ -127,5 +121,17 @@ final class ADB: ADBProtocol {
         }
 
         return false
+    }
+
+    static func toggleAccesibility(deviceId: String) {
+        guard let adbPath = try? Self.getAdbPath() else {
+            return
+        }
+        let a11yIsEnabled = Self.isAccesibilityOn(deviceId: deviceId)
+        let value = a11yIsEnabled ? ADB.talkbackOff : ADB.talkbackOn
+        let shellCmd = "\(adbPath) -s \(deviceId) shell settings put secure enabled_accessibility_services \(value)"
+
+        // Ignore the error if toggling a11y fails.
+        _ = try? shell.execute(command: shellCmd)
     }
 }
