@@ -27,6 +27,7 @@ enum SubMenuItems {
         case toggleA11y
         case paste
         case delete
+        case logcat
         case customCommand = 200
     }
 
@@ -130,6 +131,17 @@ enum SubMenuItems {
             accessibilityDescription: "Delete emulator"
         )
     }
+
+    struct LaunchLogCat: SubMenuActionItem {
+        let title = NSLocalizedString("Launch Logcat", comment: "")
+        let tag = Tags.logcat.rawValue
+        let bootsDevice = false
+        let needBootedDevice = true
+        let image = NSImage(
+            systemSymbolName: "trash",
+            accessibilityDescription: "Launch Logcat"
+        )
+    }
 }
 
 extension SubMenuItems {
@@ -143,7 +155,8 @@ extension SubMenuItems {
         NoAudio(),
         ToggleA11y(),
         Paste(),
-        DeleteEmulator()
+        DeleteEmulator(),
+        LaunchLogCat()
     ]
 
     static var ios: [SubMenuItem] = [
@@ -151,7 +164,6 @@ extension SubMenuItems {
         CopyUDID(),
 
         Separator(),
-
         Delete()
     ]
 }
