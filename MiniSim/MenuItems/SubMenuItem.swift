@@ -133,12 +133,12 @@ enum SubMenuItems {
     }
 
     struct LaunchLogCat: SubMenuActionItem {
-        let title = NSLocalizedString("Launch Logcat", comment: "")
+        let title = NSLocalizedString("Launch logcat", comment: "")
         let tag = Tags.logcat.rawValue
         let bootsDevice = false
         let needBootedDevice = true
         let image = NSImage(
-            systemSymbolName: "trash",
+            systemSymbolName: "terminal",
             accessibilityDescription: "Launch Logcat"
         )
     }
