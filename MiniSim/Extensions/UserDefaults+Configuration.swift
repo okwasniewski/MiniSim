@@ -47,7 +47,7 @@ extension UserDefaults {
         get { bool(forKey: Keys.enableAndroidEmulators) }
         set { set(newValue, forKey: Keys.enableAndroidEmulators) }
     }
-
+// Need to add ui for changing the terminal preference
     @objc public dynamic var preferedTerminal: String? {
         get { string(forKey: Keys.preferedTerminal) }
         set { set(newValue, forKey: Keys.preferedTerminal) }
