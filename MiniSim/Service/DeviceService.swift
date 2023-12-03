@@ -426,13 +426,13 @@ extension DeviceService {
     }
 
     static func launchLogCat(device: Device) throws {
-        if device.booted {
-            guard let deviceId = device.identifier else {
-                throw DeviceError.deviceNotFound
-            }
-            let preferedTermial = TerminalType(rawValue: UserDefaults.standard.preferedTerminal ?? "Terminal")
-            try TerminalService.launchTerminal(type: preferedTermial!, deviceId: deviceId)
+        guard let deviceId = device.identifier else {
+            throw DeviceError.deviceNotFound
         }
+        guard let preferedTerminal = TerminalType(rawValue: UserDefaults.standard.preferedTerminal ?? "Terminal")
+        else { return  }
+        let terminal = TerminalService.getTerminal(type: preferedTerminal)
+        try TerminalService.launchTerminal(terminal: terminal, deviceId: deviceId)
     }
     static func handleAndroidAction(device: Device, commandTag: SubMenuItems.Tags, itemName: String) {
             do {

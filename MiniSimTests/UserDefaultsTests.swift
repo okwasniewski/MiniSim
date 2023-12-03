@@ -9,6 +9,7 @@ final class UserDefaultsTests: XCTestCase {
     let savedIsOnboardingFinished = UserDefaults.standard.isOnboardingFinished
     let savedEnableiOSSimulators = UserDefaults.standard.enableiOSSimulators
     let savedEnableAndroidEmulators = UserDefaults.standard.enableAndroidEmulators
+    let savedPrefferedTerminal = UserDefaults.standard.preferedTerminal
 
     override func setUp() {
         UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.parameters)
@@ -17,6 +18,7 @@ final class UserDefaultsTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.isOnboardingFinished)
         UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.enableiOSSimulators)
         UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.enableAndroidEmulators)
+        UserDefaults.standard.removeObject(forKey: UserDefaults.Keys.preferedTerminal)
     }
 
     override func tearDown() {
@@ -26,6 +28,7 @@ final class UserDefaultsTests: XCTestCase {
         UserDefaults.standard.isOnboardingFinished = savedIsOnboardingFinished
         UserDefaults.standard.enableiOSSimulators = savedEnableiOSSimulators
         UserDefaults.standard.enableAndroidEmulators = savedEnableAndroidEmulators
+        UserDefaults.standard.preferedTerminal = savedPrefferedTerminal
     }
 
     func testDefaultValues() {
@@ -35,6 +38,7 @@ final class UserDefaultsTests: XCTestCase {
         XCTAssertEqual(UserDefaults.standard.isOnboardingFinished, false)
         XCTAssertEqual(UserDefaults.standard.enableiOSSimulators, true)
         XCTAssertEqual(UserDefaults.standard.enableAndroidEmulators, true)
+        XCTAssertEqual(UserDefaults.standard.preferedTerminal, "Terminal")
     }
 
     func testChangingParameters() {
@@ -53,10 +57,12 @@ final class UserDefaultsTests: XCTestCase {
         UserDefaults.standard.enableiOSSimulators = false
         UserDefaults.standard.enableAndroidEmulators = false
         UserDefaults.standard.androidHome = "test"
+        UserDefaults.standard.preferedTerminal = "test"
 
         XCTAssertEqual(UserDefaults.standard.isOnboardingFinished, true)
         XCTAssertEqual(UserDefaults.standard.enableiOSSimulators, false)
         XCTAssertEqual(UserDefaults.standard.enableAndroidEmulators, false)
         XCTAssertEqual(UserDefaults.standard.androidHome, "test")
+        XCTAssertEqual(UserDefaults.standard.preferedTerminal, "test")
     }
 }

@@ -164,6 +164,7 @@ extension SubMenuItems {
         CopyUDID(),
 
         Separator(),
+
         Delete()
     ]
 }
