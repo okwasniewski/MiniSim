@@ -27,6 +27,7 @@ enum SubMenuItems {
         case toggleA11y
         case paste
         case delete
+        case togglePinned
         case customCommand = 200
     }
 
@@ -108,7 +109,18 @@ enum SubMenuItems {
             accessibilityDescription: "Keyboard"
         )
     }
-
+    
+    struct TogglePinToTop: SubMenuActionItem {
+        let title = NSLocalizedString("Pin/unpin to top", comment: "")
+        let tag = Tags.togglePinned.rawValue
+        let bootsDevice = false
+        let needBootedDevice = false
+        let image = NSImage(
+            systemSymbolName: "pin",
+            accessibilityDescription: "Pin or unpin to Top"
+        )
+    }
+    
     struct Delete: SubMenuActionItem {
         let title = NSLocalizedString("Delete simulator", comment: "")
         let tag = Tags.delete.rawValue
@@ -138,7 +150,8 @@ extension SubMenuItems {
         CopyID(),
 
         Separator(),
-
+        
+        TogglePinToTop(),
         ColdBoot(),
         NoAudio(),
         ToggleA11y(),
@@ -151,7 +164,8 @@ extension SubMenuItems {
         CopyUDID(),
 
         Separator(),
-
+        
+        TogglePinToTop(),
         Delete()
     ]
 }
