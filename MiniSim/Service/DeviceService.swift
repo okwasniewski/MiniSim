@@ -429,7 +429,7 @@ extension DeviceService {
         guard let deviceId = device.identifier else {
             throw DeviceError.deviceNotFound
         }
-        guard let preferedTerminal = TerminalType(rawValue: UserDefaults.standard.preferedTerminal ?? "Terminal")
+        guard let preferedTerminal = Terminal(rawValue: UserDefaults.standard.preferedTerminal ?? Terminal.terminal.rawValue )
         else { return  }
         let terminal = TerminalService.getTerminal(type: preferedTerminal)
         try TerminalService.launchTerminal(terminal: terminal, deviceId: deviceId)

@@ -8,17 +8,13 @@
 import Foundation
 import ShellOut
 
-enum TerminalType: String {
-    case terminal = "Terminal"
-    case iterm = "iTerm"
-}
 protocol TerminalServiceProtocol {
-    static func getTerminal(type: TerminalType) -> TerminalApp
+    static func getTerminal(type: Terminal) -> TerminalApp
     static func launchTerminal(terminal: TerminalApp, deviceId: String) throws
 }
 
 class TerminalService: TerminalServiceProtocol {
-    static func getTerminal(type: TerminalType) -> TerminalApp {
+    static func getTerminal(type: Terminal) -> TerminalApp {
         switch type {
         case .terminal:
             return AppleTerminal()

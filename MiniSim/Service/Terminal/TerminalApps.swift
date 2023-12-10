@@ -12,6 +12,11 @@ protocol TerminalApp {
     func getLaunchScript(deviceId: String, logcatCommand: String) -> String
 }
 
+enum Terminal: String {
+    case terminal = "Terminal"
+    case iterm = "iTerm"
+}
+
 struct AppleTerminal: TerminalApp {
     var name: String = "Terminal"
     func getLaunchScript(deviceId: String, logcatCommand: String) -> String {
