@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct BlurredView: NSViewRepresentable {
     func makeNSView(context: Context) -> NSVisualEffectView {
         let view = NSVisualEffectView()
@@ -15,8 +14,6 @@ struct BlurredView: NSViewRepresentable {
         view.blendingMode = .behindWindow
         return view
     }
-    
-    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
-        
-    }
+
+    func updateNSView(_ nsView: NSVisualEffectView, context: Context) { }
 }

@@ -11,9 +11,9 @@ struct SetupItemView<Content: View>: View {
     var imageName: String
     var title: String
     var subTitle: String?
-    
+
     @ViewBuilder let content: Content?
-    
+
     var body: some View {
         HStack {
             Image(imageName)
@@ -22,7 +22,7 @@ struct SetupItemView<Content: View>: View {
                 .frame(width: 40)
                 .padding(.trailing, 5)
             HStack {
-                VStack (alignment: .leading) {
+                VStack(alignment: .leading) {
                     Text(title)
                         .font(.headline)
                         .padding(.bottom, 2)

@@ -9,9 +9,19 @@ import Foundation
 
 extension String {
     func match(_ regex: String) -> [[String]] {
+        // swiftlint:disable:next legacy_objc_type
         let nsString = self as NSString
-        return (try? NSRegularExpression(pattern: regex, options: []))?.matches(in: self, options: [], range: NSMakeRange(0, nsString.length)).map { match in
-            (0..<match.numberOfRanges).map { match.range(at: $0).location == NSNotFound ? "" : nsString.substring(with: match.range(at: $0)) }
-        } ?? []
+        let regexMatch = try? NSRegularExpression(pattern: regex, options: [])
+        let match = regexMatch?.matches(
+            in: self,
+            options: [],
+            range: NSRange(location: 0, length: nsString.length)
+        )
+            .map { match in
+                (0..<match.numberOfRanges).map { idx in
+                    match.range(at: idx).location == NSNotFound ? "" : nsString.substring(with: match.range(at: idx))
+                }
+            }
+        return match ?? []
     }
 }

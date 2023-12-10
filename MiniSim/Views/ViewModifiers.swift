@@ -18,7 +18,7 @@ struct DescriptionText: ViewModifier {
 
 struct OnboardingContainer: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
-    
+
     func body(content: Content) -> some View {
         content
             .padding(20)
@@ -33,7 +33,7 @@ extension View {
     func descriptionText() -> some View {
         modifier(DescriptionText())
     }
-    
+
     func onboardingContainer() -> some View {
         modifier(OnboardingContainer())
     }

@@ -5,20 +5,26 @@
 //  Created by Oskar Kwaśniewski on 28/01/2023.
 //
 
-import SwiftUI
 import Sparkle
-
+import SwiftUI
 
 struct About: View {
     private let updaterController: SPUStandardUpdaterController
     @Environment (\.openURL) private var openURL
-    
+
     init() {
-        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+        updaterController = SPUStandardUpdaterController(
+            startingUpdater: true,
+            updaterDelegate: nil,
+            userDriverDelegate: nil
+        )
     }
-    
+
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-    
+    private let bottomPadding: Double = 10
+    private let minFrameWidth: Double = 650
+    private let minFrameHeight: Double = 450
+
     var body: some View {
         VStack {
             Image(nsImage: NSImage(named: "AppIcon") ?? NSImage())
@@ -26,15 +32,15 @@ struct About: View {
                 .font(.title)
             if let appVersion {
                 Text("Version: \(appVersion)")
-                    .padding(.bottom, 10)
+                    .padding(.bottom, bottomPadding)
             }
             Button {
                 updaterController.updater.checkForUpdates()
             } label: {
                 Label("Check for updates", systemImage: "gear")
             }
-            .padding(.bottom, 10)
-            
+            .padding(.bottom, bottomPadding)
+
             HStack {
                 Button("GitHub") {
                     openURL(URL(string: "https://github.com/okwasniewski/MiniSim")!)
@@ -46,6 +52,6 @@ struct About: View {
             Link("Created by Oskar Kwaśniewski", destination: URL(string: "https://github.com/okwasniewski")!)
                 .font(.caption)
         }
-        .frame(minWidth: 650, minHeight: 450)
+        .frame(minWidth: minFrameWidth, minHeight: minFrameHeight)
     }
 }

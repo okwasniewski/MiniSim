@@ -1,0 +1,35 @@
+name: Build MiniSim
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.ref }}-build
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-13
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 15
+
+      - name: Install XCBeautify
+        run: brew install xcbeautify
+
+      - name: Test
+        run: set -o pipefail && xcodebuild -scheme MiniSim -destination 'platform=macOS' -skipPackagePluginValidation test COMPILER_INDEX_STORE_ENABLE=NO | xcbeautify
+
+      - name: Build
+        run: set -o pipefail && xcodebuild -scheme MiniSim -destination 'platform=macOS' -skipPackagePluginValidation build COMPILER_INDEX_STORE_ENABLE=NO | xcbeautify

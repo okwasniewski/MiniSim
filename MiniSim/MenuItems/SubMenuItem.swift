@@ -14,7 +14,7 @@ protocol SubMenuActionItem: SubMenuItem {
     var title: String { get }
     var tag: Int { get }
     var needBootedDevice: Bool { get }
-    var bootsDevice: Bool  { get }
+    var bootsDevice: Bool { get }
     var image: NSImage? { get }
 }
 
@@ -30,9 +30,9 @@ enum SubMenuItems {
         case togglePinned
         case customCommand = 200
     }
-    
+
     struct Separator: SubMenuItem { }
-    
+
     struct CopyName: SubMenuActionItem {
         let title = NSLocalizedString("Copy name", comment: "")
         let tag = Tags.copyName.rawValue
@@ -43,7 +43,7 @@ enum SubMenuItems {
             accessibilityDescription: "Copy name"
         )
     }
-    
+
     struct CopyID: SubMenuActionItem {
         let title = NSLocalizedString("Copy ID", comment: "")
         let tag = Tags.copyID.rawValue
@@ -54,7 +54,7 @@ enum SubMenuItems {
             accessibilityDescription: "Copy ID"
         )
     }
-    
+
     struct CopyUDID: SubMenuActionItem {
         let title = NSLocalizedString("Copy UDID", comment: "")
         let tag = Tags.copyID.rawValue
@@ -65,7 +65,7 @@ enum SubMenuItems {
             accessibilityDescription: "Copy UDID"
         )
     }
-    
+
     struct ColdBoot: SubMenuActionItem {
         let title = NSLocalizedString("Cold boot", comment: "")
         let tag = Tags.coldBoot.rawValue
@@ -76,7 +76,7 @@ enum SubMenuItems {
             accessibilityDescription: "Cold boot"
         )
     }
-    
+
     struct NoAudio: SubMenuActionItem {
         let title = NSLocalizedString("Run without audio", comment: "")
         let tag = Tags.noAudio.rawValue
@@ -87,7 +87,7 @@ enum SubMenuItems {
             accessibilityDescription: "Run without audio"
         )
     }
-    
+
     struct ToggleA11y: SubMenuActionItem {
         let title = NSLocalizedString("Toggle accessibility", comment: "")
         let tag = Tags.toggleA11y.rawValue
@@ -98,7 +98,7 @@ enum SubMenuItems {
             accessibilityDescription: "Toggle accessibility"
         )
     }
-    
+
     struct Paste: SubMenuActionItem {
         let title = NSLocalizedString("Paste clipboard to device", comment: "")
         let tag = Tags.paste.rawValue
@@ -131,26 +131,38 @@ enum SubMenuItems {
             accessibilityDescription: "Delete simulator"
         )
     }
+
+    struct DeleteEmulator: SubMenuActionItem {
+        let title = NSLocalizedString("Delete emulator", comment: "")
+        let tag = Tags.delete.rawValue
+        let bootsDevice = false
+        let needBootedDevice = false
+        let image = NSImage(
+            systemSymbolName: "trash",
+            accessibilityDescription: "Delete emulator"
+        )
+    }
 }
 
 extension SubMenuItems {
     static var android: [SubMenuItem] = [
         CopyName(),
         CopyID(),
-        
+
         Separator(),
         
         TogglePinToTop(),
         ColdBoot(),
         NoAudio(),
         ToggleA11y(),
-        Paste()
+        Paste(),
+        DeleteEmulator()
     ]
-    
+
     static var ios: [SubMenuItem] = [
         CopyName(),
         CopyUDID(),
-        
+
         Separator(),
         
         TogglePinToTop(),

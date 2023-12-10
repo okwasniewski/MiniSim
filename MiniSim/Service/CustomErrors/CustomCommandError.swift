@@ -18,7 +18,7 @@ extension CustomCommandError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .commandError(let errorMessage):
-            return NSLocalizedString("Custom Command Error \n" + errorMessage, comment: "")
+            return NSLocalizedString("Custom Command Error \n", comment: "") + "\n\(errorMessage)"
         }
     }
 }

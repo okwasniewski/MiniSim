@@ -5,8 +5,8 @@
 //  Created by Oskar Kwasniewski on 15/08/2023.
 //
 
-import Foundation
 import Cocoa
+import Foundation
 
 class ExecuteCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
@@ -18,17 +18,17 @@ class ExecuteCommand: NSScriptCommand {
             let deviceName = self.property(forKey: "deviceName") as? String,
             let deviceId = self.property(forKey: "deviceId") as? String
         else {
-            scriptErrorNumber = NSRequiredArgumentsMissingScriptError;
+            scriptErrorNumber = NSRequiredArgumentsMissingScriptError
             return nil
         }
-        
-        let device = Device(name: deviceName, ID: deviceId, platform: platform)
+
+        let device = Device(name: deviceName, identifier: deviceId, platform: platform)
         let rawTag = Int(tag) ?? 0
-        
+
         guard let menuItem = SubMenuItems.Tags(rawValue: rawTag) else {
             return nil
         }
-        
+
         switch platform {
         case .android:
             DeviceService.handleAndroidAction(

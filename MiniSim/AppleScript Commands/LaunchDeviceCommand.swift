@@ -5,35 +5,35 @@
 //  Created by Oskar Kwasniewski on 09/07/2023.
 //
 
-import Foundation
 import Cocoa
+import Foundation
 
 class LaunchDeviceCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
         guard let deviceName = self.property(forKey: "deviceName") as? String else {
-            scriptErrorNumber = NSRequiredArgumentsMissingScriptError;
-            return nil;
+            scriptErrorNumber = NSRequiredArgumentsMissingScriptError
+            return nil
         }
-        
+
         do {
             var devices: [Device] = []
             try devices.append(contentsOf: DeviceService.getIOSDevices())
             try devices.append(contentsOf: DeviceService.getAndroidDevices())
-            
+
             guard let device = devices.first(where: { $0.name == deviceName }) else {
-                scriptErrorNumber = NSInternalScriptError;
+                scriptErrorNumber = NSInternalScriptError
                 return nil
             }
-            
+
             if device.booted {
                 DeviceService.focusDevice(device)
                 return nil
             }
-            
+
             DeviceService.launch(device: device) { _ in }
             return nil
         } catch {
-            scriptErrorNumber = NSInternalScriptError;
+            scriptErrorNumber = NSInternalScriptError
             return nil
         }
     }

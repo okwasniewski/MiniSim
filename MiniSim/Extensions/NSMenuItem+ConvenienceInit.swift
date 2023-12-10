@@ -14,7 +14,7 @@ extension NSMenuItem {
         self.target = target
         self.action = action
     }
-    
+
     convenience init(
         menuItem: SubMenuActionItem,
         target: AnyObject,
@@ -28,7 +28,7 @@ extension NSMenuItem {
         self.target = target
         self.action = action
     }
-    
+
     convenience init(
         command: Command,
         target: AnyObject,
@@ -39,9 +39,10 @@ extension NSMenuItem {
             systemSymbolName: command.icon,
             accessibilityDescription: command.name
         )
+        self.tag = SubMenuItems.Tags.customCommand.rawValue
         self.title = command.name
     }
-    
+
     convenience init(mainMenuItem: MainMenuActions, target: AnyObject, action: Selector) {
         self.init(target: target, action: action)
         self.tag = mainMenuItem.rawValue

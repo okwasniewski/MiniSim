@@ -7,21 +7,24 @@
 
 import SwiftUI
 
-struct ParametersTable: View {    
-    @StateObject private var viewModel: ViewModel = ViewModel()
-    
+struct ParametersTable: View {
+    @StateObject private var viewModel = ViewModel()
+
     var body: some View {
         VStack {
             SectionHeader(
                 title: "Android additional launch parameters",
-                subTitle: "These parameters are passed to every android launch command. \nFor example: Cold boot, Run without audio etc."
+                subTitle: """
+                          These parameters are passed to every android launch command.
+                          \nFor example: Cold boot, Run without audio etc.
+                          """
             )
             Table(viewModel.parameters, selection: $viewModel.selection) {
                 TableColumn("Title", value: \.title)
                     .width(80)
                 TableColumn("Command", value: \.command)
-                TableColumn("Enabled") {
-                    Text("\(String($0.enabled))")
+                TableColumn("Enabled") { toggle in
+                    Text("\(String(toggle.enabled))")
                 }
             }
             .contextMenu {
@@ -54,7 +57,11 @@ struct ParametersTable: View {
             viewModel.loadData()
         }
         .sheet(isPresented: $viewModel.showForm) {
-            ParametersTableForm(parameter: viewModel.selectedParameter, allParameters: viewModel.parameters, onSubmit: viewModel.handleForm)
+            ParametersTableForm(
+                parameter: viewModel.selectedParameter,
+                allParameters: viewModel.parameters,
+                onSubmit: viewModel.handleForm
+            )
         }
     }
 }

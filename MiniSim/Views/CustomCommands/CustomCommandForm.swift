@@ -5,21 +5,28 @@
 //  Created by Oskar Kwaśniewski on 15/05/2023.
 //
 
+import CodeEditor
 import SwiftUI
 import SymbolPicker
-import CodeEditor
-
 
 struct CustomCommandForm: View {
     var command: Command?
     var allCommands: [Command]
     var onSubmit: (_ command: Command, _ prevCommand: Command?) -> Void
-    
+
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
-    
-    @StateObject private var viewModel: ViewModel = ViewModel()
-    
+
+    @StateObject private var viewModel = ViewModel()
+
+    private let codeEditorCornerRadius: Double = 6
+    private let variablesOpacity: Double = 0.9
+    private let iconPickerImageFrameWidth: Double = 20
+    private let iconPickerImagePadding: Double = 3
+    private let iconPickerButtonCornerRadious: Double = 12
+    private let formMinWidth: Double = 550
+    private let formMinHeight: Double = 400
+
     var body: some View {
         Form {
             TextField("Name", text: $viewModel.commandName)
@@ -30,7 +37,7 @@ struct CustomCommandForm: View {
                     theme: colorScheme == .dark ? .atelierSavannaDark : .atelierSavannaLight,
                     flags: [.selectable, .editable, .smartIndent]
                 )
-                .cornerRadius(6)
+                .cornerRadius(codeEditorCornerRadius)
                 GroupBox("Variables") {
                     VStack(alignment: .leading) {
                         ForEach(viewModel.availableVariables, id: \.self) { variable in
@@ -38,7 +45,7 @@ struct CustomCommandForm: View {
                                 NSPasteboard.general.copyToPasteboard(text: variable.rawValue)
                             }
                             .buttonStyle(.plain)
-                            .opacity(0.9)
+                            .opacity(variablesOpacity)
                             .font(.system(.caption, design: .monospaced))
                             .help(variable.description + " - click to copy.")
                             .padding(.vertical, 1)
@@ -56,37 +63,37 @@ struct CustomCommandForm: View {
             HStack {
                 Text("Icon")
                 Spacer()
-                Button(action: {
+                Button {
                     viewModel.iconPickerPresented = true
-                }) {
+                } label: {
                     Image(systemName: viewModel.icon)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 20)
-                        .padding(3)
+                        .frame(width: iconPickerImageFrameWidth)
+                        .padding(iconPickerImagePadding)
                 }
                 .background(.regularMaterial)
-                .cornerRadius(12)
+                .cornerRadius(iconPickerButtonCornerRadious)
             }
             Picker("Platform", selection: $viewModel.platform) {
                 Text("iOS").tag(Platform.ios)
                 Text("Android").tag(Platform.android)
             }
-            
-            Toggle(isOn: $viewModel.needsBootedDevice, label: {
+
+            Toggle(isOn: $viewModel.needsBootedDevice) {
                 Text("Needs booted device")
-            })
+            }
             .help("Determines if command needs a booted device to execute.")
             .toggleStyle(.switch)
             .disabled(viewModel.bootsDevice)
-            
-            Toggle(isOn: $viewModel.bootsDevice, label: {
+
+            Toggle(isOn: $viewModel.bootsDevice) {
                 Text("Boots device")
-            })
+            }
             .help("Determines if executed command boots device. This command will be hidden on booted devices.")
             .toggleStyle(.switch)
             .disabled(viewModel.needsBootedDevice)
-            
+
             HStack {
                 HStack {
                     Button("Cancel") {
@@ -116,7 +123,7 @@ struct CustomCommandForm: View {
             .padding(.top)
         }
         .padding()
-        .frame(minWidth: 550, minHeight: 400)
+        .frame(minWidth: formMinWidth, minHeight: formMinHeight)
         .sheet(isPresented: $viewModel.iconPickerPresented) {
             SymbolPicker(symbol: $viewModel.icon)
         }
