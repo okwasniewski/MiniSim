@@ -429,11 +429,14 @@ extension DeviceService {
         guard let deviceId = device.identifier else {
             throw DeviceError.deviceNotFound
         }
-        guard let preferedTerminal = Terminal(rawValue: UserDefaults.standard.preferedTerminal ?? Terminal.terminal.rawValue )
+        guard let preferedTerminal = Terminal(
+            rawValue: UserDefaults.standard.preferedTerminal ?? Terminal.terminal.rawValue
+        )
         else { return  }
         let terminal = TerminalService.getTerminal(type: preferedTerminal)
         try TerminalService.launchTerminal(terminal: terminal, deviceId: deviceId)
     }
+    
     static func handleAndroidAction(device: Device, commandTag: SubMenuItems.Tags, itemName: String) {
             do {
                 switch commandTag {
