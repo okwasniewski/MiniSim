@@ -116,7 +116,8 @@ class MiniSim: NSObject {
     private func setDefaultValues() {
         UserDefaults.standard.register(defaults: [
             UserDefaults.Keys.enableAndroidEmulators: true,
-            UserDefaults.Keys.enableiOSSimulators: true
+            UserDefaults.Keys.enableiOSSimulators: true,
+            UserDefaults.Keys.preferedTerminal: "Terminal"
         ])
     }
 

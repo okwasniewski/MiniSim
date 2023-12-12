@@ -425,6 +425,18 @@ extension DeviceService {
         try shellOut(to: "\(avdPath) delete avd -n \"\(device.name)\"")
     }
 
+    static func launchLogCat(device: Device) throws {
+        guard let deviceId = device.identifier else {
+            throw DeviceError.deviceNotFound
+        }
+        guard let preferedTerminal = Terminal(
+            rawValue: UserDefaults.standard.preferedTerminal ?? Terminal.terminal.rawValue
+        )
+        else { return  }
+        let terminal = TerminalService.getTerminal(type: preferedTerminal)
+        try TerminalService.launchTerminal(terminal: terminal, deviceId: deviceId)
+    }
+    
     static func handleAndroidAction(device: Device, commandTag: SubMenuItems.Tags, itemName: String) {
             do {
                 switch commandTag {
@@ -458,6 +470,8 @@ extension DeviceService {
                     if let command = DeviceService.getCustomCommand(platform: .android, commandName: itemName) {
                         try DeviceService.runCustomCommand(device, command: command)
                     }
+                case .logcat:
+                    try DeviceService.launchLogCat(device: device)
 
                 case .delete:
                     let result = !NSAlert.showQuestionDialog(
@@ -474,6 +488,7 @@ extension DeviceService {
                             NSAlert.showError(message: error.localizedDescription)
                         }
                     }
+
                 default:
                     break
                 }

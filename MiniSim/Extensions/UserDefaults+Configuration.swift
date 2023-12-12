@@ -15,6 +15,7 @@ extension UserDefaults {
         static let isOnboardingFinished = "isOnboardingFinished"
         static let enableiOSSimulators = "enableiOSSimulators"
         static let enableAndroidEmulators = "enableAndroidEmulators"
+        static let preferedTerminal = "preferedTerminal"
     }
 
     @objc public dynamic var androidHome: String? {
@@ -45,5 +46,10 @@ extension UserDefaults {
     public var enableAndroidEmulators: Bool {
         get { bool(forKey: Keys.enableAndroidEmulators) }
         set { set(newValue, forKey: Keys.enableAndroidEmulators) }
+    }
+// TODO: #112 Need to add ui for changing the terminal preference
+    @objc public dynamic var preferedTerminal: String? {
+        get { string(forKey: Keys.preferedTerminal) }
+        set { set(newValue, forKey: Keys.preferedTerminal) }
     }
 }

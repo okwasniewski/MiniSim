@@ -13,6 +13,8 @@
 		52B363EA2AEC0D3D006F515C /* ParametersTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363E92AEC0D3D006F515C /* ParametersTableViewModel.swift */; };
 		52B363EC2AEC10A3006F515C /* ParametersTableForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363EB2AEC10A3006F515C /* ParametersTableForm.swift */; };
 		52B363EE2AEC10B3006F515C /* ParametersTableFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B363ED2AEC10B3006F515C /* ParametersTableFormViewModel.swift */; };
+		551B882A2B1385E900B8D325 /* Terminal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551B88292B1385E900B8D325 /* Terminal.swift */; };
+		55CDB0782B1B6D24002418D7 /* TerminalApps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CDB0772B1B6D24002418D7 /* TerminalApps.swift */; };
 		76059BF52AD4361C0008D38B /* SetupPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF42AD4361C0008D38B /* SetupPreferences.swift */; };
 		76059BF72AD449DC0008D38B /* OnboardingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF62AD449DC0008D38B /* OnboardingHeader.swift */; };
 		76059BF92AD558C30008D38B /* SetupItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76059BF82AD558C30008D38B /* SetupItemView.swift */; };
@@ -100,6 +102,8 @@
 		52B363E92AEC0D3D006F515C /* ParametersTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableViewModel.swift; sourceTree = "<group>"; };
 		52B363EB2AEC10A3006F515C /* ParametersTableForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableForm.swift; sourceTree = "<group>"; };
 		52B363ED2AEC10B3006F515C /* ParametersTableFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableFormViewModel.swift; sourceTree = "<group>"; };
+		551B88292B1385E900B8D325 /* Terminal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Terminal.swift; sourceTree = "<group>"; };
+		55CDB0772B1B6D24002418D7 /* TerminalApps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalApps.swift; sourceTree = "<group>"; };
 		76059BF42AD4361C0008D38B /* SetupPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPreferences.swift; sourceTree = "<group>"; };
 		76059BF62AD449DC0008D38B /* OnboardingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHeader.swift; sourceTree = "<group>"; };
 		76059BF82AD558C30008D38B /* SetupItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupItemView.swift; sourceTree = "<group>"; };
@@ -203,6 +207,15 @@
 			path = ParametersTable;
 			sourceTree = "<group>";
 		};
+		55CDB0762B1B6D06002418D7 /* Terminal */ = {
+			isa = PBXGroup;
+			children = (
+				551B88292B1385E900B8D325 /* Terminal.swift */,
+				55CDB0772B1B6D24002418D7 /* TerminalApps.swift */,
+			);
+			path = Terminal;
+			sourceTree = "<group>";
+		};
 		762CF1E12981DDD400099999 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -262,6 +275,7 @@
 		7645D4BC2982800D00019227 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				55CDB0762B1B6D06002418D7 /* Terminal */,
 				76F269832A2A375900424BDA /* CustomErrors */,
 				7645D4BD2982A1B100019227 /* DeviceService.swift */,
 				76F04A10298A5AE000BF9CA3 /* ADB.swift */,
@@ -541,6 +555,7 @@
 				7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */,
 				76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */,
 				76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */,
+				551B882A2B1385E900B8D325 /* Terminal.swift in Sources */,
 				767A9CC929C320ED00554193 /* OnboardingButton.swift in Sources */,
 				7677999C29C26240009030F8 /* SetupView.swift in Sources */,
 				76F269852A2A376A00424BDA /* CustomCommandError.swift in Sources */,
@@ -595,6 +610,7 @@
 				7630B26D2986B4FD00D8B57D /* KeyboardShortcuts.swift in Sources */,
 				76059BF52AD4361C0008D38B /* SetupPreferences.swift in Sources */,
 				7684FAAF29D202F500230BB0 /* AndroidHomeError.swift in Sources */,
+				55CDB0782B1B6D24002418D7 /* TerminalApps.swift in Sources */,
 				7645D4BE2982A1B100019227 /* DeviceService.swift in Sources */,
 				765ABF382A8BECD900A063CB /* ExecuteCommand.swift in Sources */,
 			);
