@@ -33,7 +33,7 @@ struct Preferences: View {
                 .onChange(of: preferedTerminal) { _ in
                     UserDefaults.standard.setValue(preferedTerminal.rawValue, forKey: UserDefaults.Keys.preferedTerminal)
                 }
-                Text("User prefered terminal").descriptionText()
+                Text("Users can choose their preferred terminal from the above supported terminal list").descriptionText()
             }
             Settings.Section(title: "Hotkey:") {
                 KeyboardShortcuts.Recorder("", name: .toggleMiniSim)
