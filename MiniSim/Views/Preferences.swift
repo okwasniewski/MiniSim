@@ -8,32 +8,36 @@
 import KeyboardShortcuts
 import LaunchAtLogin
 import Preferences
+import ShellOut
 import SwiftUI
-
 struct Preferences: View {
     @State private var preferedTerminal: Terminal
 
     init() {
-           let userPrefered = UserDefaults.standard.preferedTerminal
-           if let terminal = Terminal(rawValue: userPrefered ?? Terminal.terminal.rawValue) {
-               preferedTerminal = terminal
-           } else {
-               preferedTerminal = Terminal.terminal
-           }
+        let userPrefered = UserDefaults.standard.preferedTerminal
+        if let terminal = Terminal(rawValue: userPrefered ?? Terminal.terminal.rawValue) {
+            preferedTerminal = terminal
+        } else {
+            preferedTerminal = Terminal.terminal
+        }
     }
 
     var body: some View {
         Settings.Container(contentWidth: 400) {
             Settings.Section(title: "Preferred Terminal:") {
                 Picker("", selection: $preferedTerminal) {
-                    ForEach(Terminal.allCases, id: \.self) { terminal in
+                    let availableTerminal = Terminal.allCases.filter { checkAppIsInstalled(appName: $0) }
+                    ForEach(availableTerminal, id: \.self) { terminal in
                         Text(terminal.rawValue)
                     }
                 }
                 .onChange(of: preferedTerminal) { _ in
-                    UserDefaults.standard.setValue(preferedTerminal.rawValue, forKey: UserDefaults.Keys.preferedTerminal)
+                    UserDefaults.standard.setValue(
+                        preferedTerminal.rawValue, forKey: UserDefaults.Keys.preferedTerminal
+                    )
                 }
-                Text("Users can choose their preferred terminal from the above supported terminal list").descriptionText()
+                Text("Users can choose their preferred terminal from the above supported terminal list")
+                    .descriptionText()
             }
             Settings.Section(title: "Hotkey:") {
                 KeyboardShortcuts.Recorder("", name: .toggleMiniSim)
@@ -55,6 +59,18 @@ struct Preferences: View {
         .frame(minWidth: 650, minHeight: 450)
     }
 
+    func checkAppIsInstalled(appName: Terminal) -> Bool {
+        if appName.rawValue == Terminal.terminal.rawValue {
+            return true
+        }
+        let command = "ls /Applications/ | grep -i \(appName.rawValue)"
+        do {
+            var _ = try shellOut(to: "\(command)")
+            return true
+        } catch {
+            return false
+        }
+    }
     func resetDefaults() {
         let shouldReset = NSAlert.showQuestionDialog(
             title: "Are you sure?",
