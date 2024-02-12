@@ -920,7 +920,7 @@
 			repositoryURL = "git@github.com:realm/SwiftLint.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.53.0;
+				minimumVersion = 0.54.0;
 			};
 		};
 		7630B25F29853EF400D8B57D /* XCRemoteSwiftPackageReference "Preferences" */ = {
