@@ -12,7 +12,7 @@ protocol TerminalApp {
     func getLaunchScript(deviceId: String, logcatCommand: String) -> String
 }
 
-enum Terminal: String {
+enum Terminal: String, CaseIterable {
     case terminal = "Terminal"
     case iterm = "iTerm"
 }
