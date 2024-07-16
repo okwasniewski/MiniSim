@@ -921,7 +921,7 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		4A7892862AF1A767004D3FC8 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:realm/SwiftLint.git";
+			repositoryURL = "https://github.com/realm/SwiftLint.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.54.0;
