@@ -7,7 +7,7 @@
 
 import KeyboardShortcuts
 import LaunchAtLogin
-import Preferences
+import Settings
 import ShellOut
 import SwiftUI
 struct Preferences: View {

@@ -55,12 +55,12 @@
       }
     },
     {
-      "identity" : "preferences",
+      "identity" : "settings",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sindresorhus/Preferences",
+      "location" : "https://github.com/sindresorhus/Settings",
       "state" : {
         "branch" : "main",
-        "revision" : "00342137c16b1351408669ca88be60036aa7e343"
+        "revision" : "879ea83a7bbc6dbebf62bed8c547f090146372a6"
       }
     },
     {

@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import Preferences
+import Settings
 import SwiftUI
 import UserNotifications
 
