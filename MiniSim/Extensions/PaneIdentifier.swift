@@ -5,7 +5,7 @@
 //  Created by Oskar Kwaśniewski on 29/01/2023.
 //
 
-import Preferences
+import Settings
 
 extension Settings.PaneIdentifier {
     static let preferences = Self("preferences")

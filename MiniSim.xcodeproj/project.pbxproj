@@ -25,7 +25,6 @@
 		762CF1E02981968F00099999 /* String+match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1DF2981968F00099999 /* String+match.swift */; };
 		762CF1E42981DE6100099999 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762CF1E32981DE6100099999 /* Device.swift */; };
 		7630B25E2984339100D8B57D /* MainMenuActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B25D2984339100D8B57D /* MainMenuActions.swift */; };
-		7630B26129853EF400D8B57D /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = 7630B26029853EF400D8B57D /* Preferences */; };
 		7630B2662985C44A00D8B57D /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2652985C44A00D8B57D /* Preferences.swift */; };
 		7630B2682985C4CF00D8B57D /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7630B2672985C4CF00D8B57D /* About.swift */; };
 		7630B26B2986B4D500D8B57D /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 7630B26A2986B4D500D8B57D /* KeyboardShortcuts */; };
@@ -51,6 +50,7 @@
 		764BA3E92A5AD418003A78AF /* GetDevicesCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764BA3E82A5AD418003A78AF /* GetDevicesCommand.swift */; };
 		764BA3EB2A5AD43F003A78AF /* LaunchDeviceCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764BA3EA2A5AD43F003A78AF /* LaunchDeviceCommand.swift */; };
 		764BA3ED2A5AD478003A78AF /* GetCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764BA3EC2A5AD478003A78AF /* GetCommands.swift */; };
+		765077C62C46F04A00C7B5F3 /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = 765077C52C46F04A00C7B5F3 /* Settings */; };
 		765ABF382A8BECD900A063CB /* ExecuteCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765ABF372A8BECD900A063CB /* ExecuteCommand.swift */; };
 		765C44C82A2A6C9600FCC159 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 765C44C72A2A6C9600FCC159 /* MainMenu.xib */; };
 		76630F0C29BDD0C000FB64F9 /* Devices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76630F0B29BDD0C000FB64F9 /* Devices.swift */; };
@@ -178,11 +178,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				765077C62C46F04A00C7B5F3 /* Settings in Frameworks */,
 				768F8EC829954C8A00DFBCDB /* Sparkle in Frameworks */,
 				76F04A14298A62CF00BF9CA3 /* ShellOut in Frameworks */,
 				76AC9AF92A0EB50800864A8B /* SymbolPicker in Frameworks */,
 				7630B2702986C0F200D8B57D /* LaunchAtLogin in Frameworks */,
-				7630B26129853EF400D8B57D /* Preferences in Frameworks */,
 				763EEB132A26896B008428F1 /* CodeEditor in Frameworks */,
 				7630B26B2986B4D500D8B57D /* KeyboardShortcuts in Frameworks */,
 			);
@@ -299,12 +299,20 @@
 			path = "AppleScript Commands";
 			sourceTree = "<group>";
 		};
+		765077C42C46F04A00C7B5F3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		766BD2272981628A0042261B = {
 			isa = PBXGroup;
 			children = (
 				766BD2322981628A0042261B /* MiniSim */,
 				76B70F752B0D359D009D87A4 /* MiniSimTests */,
 				766BD2312981628A0042261B /* Products */,
+				765077C42C46F04A00C7B5F3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -425,13 +433,13 @@
 			);
 			name = MiniSim;
 			packageProductDependencies = (
-				7630B26029853EF400D8B57D /* Preferences */,
 				7630B26A2986B4D500D8B57D /* KeyboardShortcuts */,
 				7630B26F2986C0F200D8B57D /* LaunchAtLogin */,
 				76F04A13298A62CF00BF9CA3 /* ShellOut */,
 				768F8EC729954C8A00DFBCDB /* Sparkle */,
 				76AC9AF82A0EB50800864A8B /* SymbolPicker */,
 				763EEB122A26896B008428F1 /* CodeEditor */,
+				765077C52C46F04A00C7B5F3 /* Settings */,
 			);
 			productName = MiniSim;
 			productReference = 766BD2302981628A0042261B /* MiniSim.app */;
@@ -485,7 +493,6 @@
 			);
 			mainGroup = 766BD2272981628A0042261B;
 			packageReferences = (
-				7630B25F29853EF400D8B57D /* XCRemoteSwiftPackageReference "Preferences" */,
 				7630B2692986B4D500D8B57D /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				7630B26E2986C0F200D8B57D /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
 				76F04A12298A62CF00BF9CA3 /* XCRemoteSwiftPackageReference "ShellOut" */,
@@ -493,6 +500,7 @@
 				76AC9AF72A0EB50800864A8B /* XCRemoteSwiftPackageReference "SymbolPicker" */,
 				763EEB112A26896B008428F1 /* XCRemoteSwiftPackageReference "CodeEditor" */,
 				4A7892862AF1A767004D3FC8 /* XCRemoteSwiftPackageReference "SwiftLint" */,
+				76A5C3B72C46E4C40064118A /* XCRemoteSwiftPackageReference "Settings" */,
 			);
 			productRefGroup = 766BD2312981628A0042261B /* Products */;
 			projectDirPath = "";
@@ -927,14 +935,6 @@
 				minimumVersion = 0.54.0;
 			};
 		};
-		7630B25F29853EF400D8B57D /* XCRemoteSwiftPackageReference "Preferences" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sindresorhus/Preferences";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		7630B2692986B4D500D8B57D /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
@@ -967,6 +967,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		76A5C3B72C46E4C40064118A /* XCRemoteSwiftPackageReference "Settings" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/Settings";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		76AC9AF72A0EB50800864A8B /* XCRemoteSwiftPackageReference "SymbolPicker" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/xnth97/SymbolPicker.git";
@@ -991,11 +999,6 @@
 			package = 4A7892862AF1A767004D3FC8 /* XCRemoteSwiftPackageReference "SwiftLint" */;
 			productName = "plugin:SwiftLintPlugin";
 		};
-		7630B26029853EF400D8B57D /* Preferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7630B25F29853EF400D8B57D /* XCRemoteSwiftPackageReference "Preferences" */;
-			productName = Preferences;
-		};
 		7630B26A2986B4D500D8B57D /* KeyboardShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7630B2692986B4D500D8B57D /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
@@ -1010,6 +1013,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 763EEB112A26896B008428F1 /* XCRemoteSwiftPackageReference "CodeEditor" */;
 			productName = CodeEditor;
+		};
+		765077C52C46F04A00C7B5F3 /* Settings */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76A5C3B72C46E4C40064118A /* XCRemoteSwiftPackageReference "Settings" */;
+			productName = Settings;
 		};
 		768F8EC729954C8A00DFBCDB /* Sparkle */ = {
 			isa = XCSwiftPackageProductDependency;
