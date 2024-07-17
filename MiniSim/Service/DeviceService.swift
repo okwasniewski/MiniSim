@@ -261,6 +261,8 @@ extension DeviceService {
   }
 
   static func getIOSDevices() throws -> [Device] {
+    Thread.assertBackgroundThread()
+
     let output = try shellOut(
       to: ProcessPaths.xcrun.rawValue,
       arguments: ["simctl", "list", "devices", "available"]
