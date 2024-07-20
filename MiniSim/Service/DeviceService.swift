@@ -34,6 +34,7 @@ class DeviceService: DeviceServiceProtocol {
     attributes: .concurrent
   )
   private static let deviceBootedError = "Unable to boot device in current state: Booted"
+  private static let crashDataError = "Storing crashdata"
 
   private static let derivedDataLocation = "~/Library/Developer/Xcode/DerivedData"
 
@@ -261,6 +262,8 @@ extension DeviceService {
   }
 
   static func getIOSDevices() throws -> [Device] {
+    Thread.assertBackgroundThread()
+
     let output = try shellOut(
       to: ProcessPaths.xcrun.rawValue,
       arguments: ["simctl", "list", "devices", "available"]
@@ -393,7 +396,7 @@ extension DeviceService {
     let splitted = output.components(separatedBy: "\n")
 
     return splitted
-      .filter { !$0.isEmpty }
+      .filter { !$0.isEmpty && !$0.contains(crashDataError) }
       .map { deviceName in
         let adbId = try? ADB.getAdbId(for: deviceName, adbPath: adbPath)
         return Device(name: deviceName, identifier: adbId, booted: adbId != nil, platform: .android)
