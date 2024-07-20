@@ -6,20 +6,20 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>0.8.3</title>
+      <title>0.8.4</title>
       <description>
       <![CDATA[ <ul>
-      <li>fix: memory leak when running with custom parameters</li>
-      <li>chore: bump packages</li>
+      <li>fix: Raycast integration</li>
+      <li>fix: Parse out emulator crash error bug from device list</li>
       </ul> ]]>
       </description>
-      <pubDate>2024-07-16</pubDate>
-      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.8.3</releaseNotesLink>
+      <pubDate>2024-07-20</pubDate>
+      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.8.4</releaseNotesLink>
       <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
       <enclosure
-        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.8.3/MiniSim.app.zip"
-        sparkle:version="16"
-        sparkle:shortVersionString="0.8.3"
+        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.8.4/MiniSim.app.zip"
+        sparkle:version="17"
+        sparkle:shortVersionString="0.8.4"
         length="0"
         type="application/octet-stream"
       />
