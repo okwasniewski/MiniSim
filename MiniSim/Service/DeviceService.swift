@@ -213,6 +213,45 @@ class DeviceService: DeviceServiceProtocol {
 
 // MARK: iOS Methods
 extension DeviceService {
+  private static func parseIOSPhysicalDevices(result: [String]) -> [Device] {
+    var devices = [Device]()
+
+    let deviceNameIdx = 1
+    let osVersionIdx = 2
+    let identifierIdx = 3
+    var isDevice = false
+    for line in result {
+      if let match = line.match("== ([\\s\\w]+) ==").first {
+        let deviceType = match[1]
+        isDevice = deviceType.contains("Devices")
+        continue
+      }
+
+      guard isDevice else { continue }
+
+      // The version is set as optional which only is the case for the device running the application, for exmaple your macbook
+      // Maybe we can make it not optional because we filter that device anyway but just in case some other device also has this behavior
+      guard let match = line.match("(.+?)\\s(?:\\(([\\d\\.]+)\\))?\\s?\\((\\S+)\\)").first else {
+        continue
+      }
+
+      let deviceName = match[deviceNameIdx]
+      let osVersion = match[osVersionIdx]
+      let identifier = match[identifierIdx]
+
+      devices.append(
+        Device(
+          name: deviceName,
+          version: osVersion.isEmpty ? nil : osVersion,
+          identifier: identifier,
+          platform: .ios
+        )
+      )
+    }
+
+    return devices
+  }
+
   static func clearDerivedData(
     completionQueue: DispatchQueue = .main,
     completion: @escaping (String, Error?) -> Void
@@ -235,7 +274,26 @@ extension DeviceService {
 
   static func getIOSDevices() throws -> [Device] {
     Thread.assertBackgroundThread()
+    let simulators = try getIOSSimulators()
+    let devices = try getIOSPhysicalDevices()
+    return simulators + devices
+  }
 
+  static func getIOSPhysicalDevices() throws -> [Device] {
+    let devicesOutput = try shellOut(
+      to: ProcessPaths.xcrun.rawValue,
+      arguments: ["xctrace", "list", "devices"]
+    )
+    let splitted = devicesOutput.components(separatedBy: "\n")
+
+    let currentDeviceUuid = try shellOut(
+      to: "system_profiler SPHardwareDataType | awk '/UUID/ { print $3; }'"
+    )
+
+    return parseIOSPhysicalDevices(result: splitted).filter { $0.identifier != currentDeviceUuid }
+  }
+
+  static func getIOSSimulators() throws -> [Device] {
     let output = try shellOut(
       to: ProcessPaths.xcrun.rawValue,
       arguments: ["simctl", "list", "devices", "available"]
