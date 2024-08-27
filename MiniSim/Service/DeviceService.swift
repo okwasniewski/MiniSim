@@ -417,7 +417,40 @@ extension DeviceService {
 
   static func getAndroidDevices() throws -> [Device] {
     Thread.assertBackgroundThread()
+    let emulators = try getAndroidEmulators()
+    let devices = try getAndroidPhysicalDevices()
+    return emulators + devices
+  }
 
+  static func getAndroidPhysicalDevices() throws -> [Device] {
+      let adbPath = try ADB.getAdbPath()
+      let output = try shellOut(to: adbPath, arguments: ["devices", "-l"])
+      var splitted = output.components(separatedBy: "\n")
+      splitted.removeFirst() // removes 'List of devices attached'
+      splitted.removeLast() // removes empty line
+      let filtered = splitted.filter { !$0.hasPrefix("emulator-") }
+
+      return filtered.compactMap { item -> Device? in
+        let serialNoIdx = 0
+        let modelNameIdx = 4
+        let components = item.components(separatedBy: .whitespaces).filter { !$0.isEmpty }
+        guard components.count > 4  else {
+          return nil
+        }
+
+        let id = components[serialNoIdx]
+        let name = components[modelNameIdx].components(separatedBy: ":")[1]
+
+        return Device(
+          name: name,
+          identifier: id,
+          booted: true,
+          platform: .android
+        )
+      }
+  }
+
+  static func getAndroidEmulators() throws -> [Device] {
     let emulatorPath = try ADB.getEmulatorPath()
     let output = try shellOut(to: emulatorPath, arguments: ["-list-avds"])
 
