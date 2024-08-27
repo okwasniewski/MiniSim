@@ -8,15 +8,21 @@
 import Foundation
 
 enum DeviceListSection: Int, CaseIterable {
-    case iOS = 100
-    case android
+    case iOSPhysical = 100
+    case iOSVirtual
+    case androidPhysical
+    case androidVirtual
 
     var title: String {
         switch self {
-        case .iOS:
+        case .iOSPhysical:
+            return NSLocalizedString("iOS Devices", comment: "")
+        case .iOSVirtual:
             return NSLocalizedString("iOS Simulator", comment: "")
-        case .android:
+        case .androidVirtual:
             return NSLocalizedString("Android Simulator", comment: "")
+        case .androidPhysical:
+            return NSLocalizedString("Android Devices", comment: "")
         }
     }
 }

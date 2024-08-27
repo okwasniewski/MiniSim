@@ -35,12 +35,15 @@ class Menu: NSMenu {
 
     func populateDefaultMenu() {
         var sections: [DeviceListSection] = []
+
+        sections.append(.iOSPhysical)
         if UserDefaults.standard.enableiOSSimulators {
-            sections.append(.iOS)
+            sections.append(.iOSVirtual)
         }
 
+        sections.append(.androidPhysical)
         if UserDefaults.standard.enableAndroidEmulators {
-            sections.append(.android)
+            sections.append(.androidVirtual)
         }
 
         if sections.isEmpty {
@@ -170,17 +173,30 @@ class Menu: NSMenu {
         var sections: [DeviceListSection] = []
 
         if UserDefaults.standard.enableAndroidEmulators {
-            sections.append(.android)
+            sections.append(.androidVirtual)
         }
+        sections.append(.androidPhysical)
+
         if UserDefaults.standard.enableiOSSimulators {
-            sections.append(.iOS)
+            sections.append(.iOSVirtual)
         }
+        sections.append(.iOSPhysical)
         return sections
     }
 
     private func filter(devices: [Device], for section: DeviceListSection) -> [Device] {
-        let platform: Platform = section == .iOS ? .ios : .android
-        return devices.filter { $0.platform == platform }
+      devices.filter { device in
+        switch section {
+        case .iOSPhysical:
+          return device.platform == .ios && device.type == .physical
+        case .iOSVirtual:
+          return device.platform == .ios && device.type == .virtual
+        case .androidPhysical:
+          return device.platform == .android && device.type == .physical
+        case .androidVirtual:
+          return device.platform == .android && device.type == .virtual
+        }
+      }
     }
 
     private func updateSection(with items: [NSMenuItem], section: DeviceListSection) {
