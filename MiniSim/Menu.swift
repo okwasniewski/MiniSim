@@ -205,6 +205,10 @@ class Menu: NSMenu {
             return
         }
 
+        let isEmpty = items.isEmpty
+        self.items[startIndex].isHidden = isEmpty
+        guard !isEmpty else { return }
+
         for menuItem in items.reversed() {
             if let itemIndex = self.items.firstIndex(where: { $0.title == menuItem.title }) {
                 self.replaceMenuItem(at: itemIndex, with: menuItem)
