@@ -24,7 +24,7 @@ class ExecuteCommand: NSScriptCommand {
             return nil
         }
 
-        let device = Device(name: deviceName, identifier: deviceId, platform: platform, deviceType: deviceType)
+        let device = Device(name: deviceName, identifier: deviceId, platform: platform, type: deviceType)
         let rawTag = Int(tag) ?? 0
 
         guard let menuItem = SubMenuItems.Tags(rawValue: rawTag) else {

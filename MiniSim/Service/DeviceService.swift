@@ -248,7 +248,7 @@ extension DeviceService {
           identifier: identifier,
           booted: isOnline,
           platform: .ios,
-          deviceType: .physical
+          type: .physical
         )
       )
     }
@@ -449,7 +449,7 @@ extension DeviceService {
           identifier: id,
           booted: true,
           platform: .android,
-          deviceType: .physical
+          type: .physical
         )
       }
   }

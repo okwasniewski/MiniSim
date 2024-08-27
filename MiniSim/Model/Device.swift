@@ -36,14 +36,14 @@ struct Device: Hashable, Codable {
     identifier: String?,
     booted: Bool = false,
     platform: Platform,
-    deviceType: DeviceType
+    type: DeviceType
   ) {
         self.name = name
         self.version = version
         self.identifier = identifier
         self.booted = booted
         self.platform = platform
-        self.type = deviceType
+        self.type = type
     }
 
     init(from decoder: Decoder) throws {
@@ -53,7 +53,7 @@ struct Device: Hashable, Codable {
         identifier = try values.decode(String.self, forKey: .identifier)
         booted = try values.decode(Bool.self, forKey: .booted)
         platform = try values.decode(Platform.self, forKey: .platform)
-        type = try values.decode(DeviceType.self, forKey: .platform)
+        type = try values.decode(DeviceType.self, forKey: .type)
     }
 
     func encode(to encoder: Encoder) throws {
