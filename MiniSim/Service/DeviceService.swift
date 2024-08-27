@@ -220,17 +220,19 @@ extension DeviceService {
     let osVersionIdx = 2
     let identifierIdx = 3
     var isDevice = false
+    var isOnline = true
     for line in result {
       if let match = line.match("== ([\\s\\w]+) ==").first {
-        let deviceType = match[1]
-        isDevice = deviceType.contains("Devices")
+        isDevice = match[1].contains("Devices")
+        isOnline = !match[1].contains("Offline")
         continue
       }
 
       guard isDevice else { continue }
 
-      // The version is set as optional which only is the case for the device running the application, for exmaple your macbook
-      // Maybe we can make it not optional because we filter that device anyway but just in case some other device also has this behavior
+      // The version is set as optional which only is the case for the device running
+      // the application, for exmaple your macbook, maybe we can make it not optional
+      // because we filter that device anyway but just in case some other device also has this behavior
       guard let match = line.match("(.+?)\\s(?:\\(([\\d\\.]+)\\))?\\s?\\((\\S+)\\)").first else {
         continue
       }
@@ -244,6 +246,7 @@ extension DeviceService {
           name: deviceName,
           version: osVersion.isEmpty ? nil : osVersion,
           identifier: identifier,
+          booted: isOnline,
           platform: .ios
         )
       )
@@ -427,7 +430,6 @@ extension DeviceService {
       let output = try shellOut(to: adbPath, arguments: ["devices", "-l"])
       var splitted = output.components(separatedBy: "\n")
       splitted.removeFirst() // removes 'List of devices attached'
-      splitted.removeLast() // removes empty line
       let filtered = splitted.filter { !$0.hasPrefix("emulator-") }
 
       return filtered.compactMap { item -> Device? in
