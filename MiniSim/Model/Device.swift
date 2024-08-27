@@ -11,6 +11,7 @@ struct Device: Hashable, Codable {
     var identifier: String?
     var booted: Bool
     var platform: Platform
+    var type: DeviceType
 
     var displayName: String {
         switch platform {
@@ -26,15 +27,23 @@ struct Device: Hashable, Codable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case name, version, identifier, booted, platform, displayName
+        case name, version, identifier, booted, platform, displayName, type
     }
 
-    init(name: String, version: String? = nil, identifier: String?, booted: Bool = false, platform: Platform) {
+  init(
+    name: String,
+    version: String? = nil,
+    identifier: String?,
+    booted: Bool = false,
+    platform: Platform,
+    deviceType: DeviceType
+  ) {
         self.name = name
         self.version = version
         self.identifier = identifier
         self.booted = booted
         self.platform = platform
+        self.type = deviceType
     }
 
     init(from decoder: Decoder) throws {
@@ -44,6 +53,7 @@ struct Device: Hashable, Codable {
         identifier = try values.decode(String.self, forKey: .identifier)
         booted = try values.decode(Bool.self, forKey: .booted)
         platform = try values.decode(Platform.self, forKey: .platform)
+        type = try values.decode(DeviceType.self, forKey: .platform)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -54,5 +64,6 @@ struct Device: Hashable, Codable {
         try container.encode(booted, forKey: .booted)
         try container.encode(platform, forKey: .platform)
         try container.encode(displayName, forKey: .displayName)
+        try container.encode(type, forKey: .type)
     }
 }

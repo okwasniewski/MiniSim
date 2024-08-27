@@ -87,6 +87,7 @@
 		76F2A914299050F9002D4EF6 /* UserDefaults+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */; };
 		76F2A9172991B7B6002D4EF6 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */; };
 		76FCABAB29B390D5003BBF9A /* Collection+get.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FCABAA29B390D5003BBF9A /* Collection+get.swift */; };
+		9B225A9C2C7E360D002620BA /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B225A9B2C7E360D002620BA /* DeviceType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +178,7 @@
 		76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Configuration.swift"; sourceTree = "<group>"; };
 		76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		76FCABAA29B390D5003BBF9A /* Collection+get.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+get.swift"; sourceTree = "<group>"; };
+		9B225A9B2C7E360D002620BA /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +255,7 @@
 				763121882A12AF9C00EE7F48 /* Command.swift */,
 				7631218A2A12AFBC00EE7F48 /* Platform.swift */,
 				76F269862A2A39D100424BDA /* Variables.swift */,
+				9B225A9B2C7E360D002620BA /* DeviceType.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -634,6 +637,7 @@
 				7684FAAF29D202F500230BB0 /* AndroidHomeError.swift in Sources */,
 				76C1396A2C849A3F006CD80C /* MenuIcons.swift in Sources */,
 				55CDB0782B1B6D24002418D7 /* TerminalApps.swift in Sources */,
+				9B225A9C2C7E360D002620BA /* DeviceType.swift in Sources */,
 				7645D4BE2982A1B100019227 /* DeviceService.swift in Sources */,
 				765ABF382A8BECD900A063CB /* ExecuteCommand.swift in Sources */,
 			);

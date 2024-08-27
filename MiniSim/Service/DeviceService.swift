@@ -247,7 +247,8 @@ extension DeviceService {
           version: osVersion.isEmpty ? nil : osVersion,
           identifier: identifier,
           booted: isOnline,
-          platform: .ios
+          platform: .ios,
+          deviceType: .physical
         )
       )
     }
@@ -447,7 +448,8 @@ extension DeviceService {
           name: name,
           identifier: id,
           booted: true,
-          platform: .android
+          platform: .android,
+          deviceType: .physical
         )
       }
   }
