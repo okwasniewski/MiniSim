@@ -108,7 +108,7 @@ class Menu: NSMenu {
     }
 
     @objc private func deviceItemClick(_ sender: NSMenuItem) {
-        guard let device = getDeviceByName(name: sender.title) else { return }
+        guard let device = getDeviceByName(name: sender.title), device.type == .virtual else { return }
 
         if device.booted {
             DeviceService.focusDevice(device)
