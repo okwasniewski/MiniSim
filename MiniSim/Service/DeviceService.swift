@@ -39,6 +39,7 @@ class DeviceService: DeviceServiceProtocol {
   private enum ProcessPaths: String {
     case xcrun = "/usr/bin/xcrun"
     case xcodeSelect = "/usr/bin/xcode-select"
+    case systemProfiler = "/usr/sbin/system_profiler"
   }
 
   private enum BundleURL: String {
@@ -283,18 +284,37 @@ extension DeviceService {
     return simulators + devices
   }
 
+  static var currentMachineUUID: String? {
+    guard let output = try? shellOut(
+      to: ProcessPaths.systemProfiler.rawValue,
+      arguments: ["SPHardwareDataType"]
+    ) else { return nil }
+
+    let uuidIdx = 1
+    for line in output.components(separatedBy: "\n") {
+      guard let match = line.match("Hardware UUID: ([\\S]+)").first else {
+        continue
+      }
+
+      if match.count >= 2 {
+        return match[uuidIdx]
+      }
+    }
+
+    return nil
+  }
+
   static func getIOSPhysicalDevices() throws -> [Device] {
+    guard let currentMachineUUID else { return [] }
+
+    // Command also returns current machine as a device, we filter it before returning
     let devicesOutput = try shellOut(
       to: ProcessPaths.xcrun.rawValue,
       arguments: ["xctrace", "list", "devices"]
     )
     let splitted = devicesOutput.components(separatedBy: "\n")
 
-    let currentDeviceUuid = try shellOut(
-      to: "system_profiler SPHardwareDataType | awk '/UUID/ { print $3; }'"
-    )
-
-    return parseIOSPhysicalDevices(result: splitted).filter { $0.identifier != currentDeviceUuid }
+    return parseIOSPhysicalDevices(result: splitted).filter { $0.identifier != currentMachineUUID }
   }
 
   static func getIOSSimulators() throws -> [Device] {
