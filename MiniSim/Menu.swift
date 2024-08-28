@@ -241,9 +241,10 @@ class Menu: NSMenu {
     func buildSubMenu(for device: Device) -> NSMenu {
         let subMenu = NSMenu()
         let platform = device.platform
+        let deviceType = device.type
         let callback = platform == .android ? #selector(androidSubMenuClick) : #selector(IOSSubMenuClick)
         let actionsSubMenu = createActionsSubMenu(
-            for: platform.subMenuItems,
+            for: SubMenuItems.items(platform: platform, deviceType: deviceType),
             isDeviceBooted: device.booted,
             callback: callback
         )
@@ -324,16 +325,5 @@ extension Menu: NSMenuDelegate {
     func menuDidClose(_ menu: NSMenu) {
         NotificationCenter.default.post(name: .menuDidClose, object: nil)
         KeyboardShortcuts.enable(.toggleMiniSim)
-    }
-}
-
-extension Platform {
-    var subMenuItems: [SubMenuItem] {
-        switch self {
-        case .android:
-            return SubMenuItems.android
-        case .ios:
-            return SubMenuItems.ios
-        }
     }
 }

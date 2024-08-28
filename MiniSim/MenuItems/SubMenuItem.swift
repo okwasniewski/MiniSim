@@ -145,26 +145,54 @@ enum SubMenuItems {
 }
 
 extension SubMenuItems {
-    static var android: [SubMenuItem] = [
-        CopyName(),
-        CopyID(),
+  static func items(platform: Platform, deviceType: DeviceType) -> [SubMenuItem] {
+    switch platform {
+    case .ios:
+      switch deviceType {
+      case .physical:
+        return [
+          CopyName(),
+          CopyUDID()
+        ]
+      case .virtual:
+        return [
+          CopyName(),
+          CopyUDID(),
 
-        Separator(),
+          Separator(),
 
-        ColdBoot(),
-        NoAudio(),
-        ToggleA11y(),
-        Paste(),
-        DeleteEmulator(),
-        LaunchLogCat()
-    ]
+          Delete()
+        ]
+      }
+    case .android:
+      switch deviceType {
+      case .physical:
+        return [
+          CopyName(),
+          CopyID(),
 
-    static var ios: [SubMenuItem] = [
-        CopyName(),
-        CopyUDID(),
+          Separator(),
 
-        Separator(),
+          ToggleA11y(),
+          Paste(),
+          LaunchLogCat()
+        ]
 
-        Delete()
-    ]
+      case .virtual:
+        return [
+          CopyName(),
+          CopyID(),
+
+          Separator(),
+
+          ColdBoot(),
+          NoAudio(),
+          ToggleA11y(),
+          Paste(),
+          DeleteEmulator(),
+          LaunchLogCat()
+        ]
+      }
+    }
+  }
 }
