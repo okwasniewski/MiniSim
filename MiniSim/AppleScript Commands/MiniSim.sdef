@@ -14,6 +14,9 @@
             <parameter code="plat" name="platform" description="Platform to get. Can be either android | ios." type="text">
                 <cocoa key="platform"/>
             </parameter>
+            <parameter code="devT" name="deviceType" description="DeviceType to get. Can be either physical | virtual" type="text">
+                <cocoa key="deviceType"/>
+            </parameter>
             <result type="text" description="JSON string with devices."/>
         </command>
         
@@ -31,6 +34,9 @@
             <access-group identifier="*"/>
             <parameter code="plat" name="platform" description="Platform to get. Can be either android | ios." type="text">
                 <cocoa key="platform"/>
+            </parameter>
+            <parameter code="devT" name="deviceType" description="DeviceType to get. Can be either physical | virtual" type="text">
+                <cocoa key="deviceType"/>
             </parameter>
             <result type="text" description="Response code"/>
         </command>
@@ -52,6 +58,9 @@
             </parameter>
             <parameter code="devI" name="deviceId" description="Unique identifier of the device." type="text">
                 <cocoa key="deviceId"/>
+            </parameter>
+            <parameter code="devT" name="deviceType" description="DeviceType to get. Can be either physical | virtual" type="text">
+                <cocoa key="deviceType"/>
             </parameter>
             <result type="text" description="Response code"/>
         </command>
