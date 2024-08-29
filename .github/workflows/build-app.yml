@@ -1,5 +1,4 @@
-name: Build MiniSim
-
+name: Build App
 on:
   pull_request:
     branches:
@@ -7,29 +6,43 @@ on:
   push:
     branches:
       - main
-
 concurrency:
   group: ${{ github.ref }}-build
   cancel-in-progress: true
 
 jobs:
-  build:
+  test:
     runs-on: macos-13
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: 15
-
-      - name: Install XCBeautify
-        run: brew install xcbeautify
-
       - name: Test
         run: set -o pipefail && xcodebuild -scheme MiniSim -destination 'platform=macOS' -skipPackagePluginValidation -skipMacroValidation test COMPILER_INDEX_STORE_ENABLE=NO | xcbeautify
 
-      - name: Build
-        run: set -o pipefail && xcodebuild -scheme MiniSim -destination 'platform=macOS' -skipPackagePluginValidation -skipMacroValidation build COMPILER_INDEX_STORE_ENABLE=NO | xcbeautify
+  archive:
+    env:
+      TEAM_ID: Z3M9P6G4WY
+    runs-on: macos-13
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 15
+      - name: Archive and Export
+        run: |
+          set -o pipefail && xcodebuild -scheme MiniSim -destination 'platform=macOS' -skipPackagePluginValidation -skipMacroValidation archive -archivePath $PWD/build/MiniSim.xcarchive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcbeautify
+          xcodebuild -exportArchive -archivePath $PWD/build/MiniSim.xcarchive -exportPath $PWD/build -exportOptionsPlist $PWD/exportOptions.plist | xcbeautify
+          codesign --force --options runtime --sign "$TEAM_ID" $PWD/build/MiniSim.app
+      - name: Zip .app
+        run: zip -r MiniSim.zip build/MiniSim.app
+      - name: Upload zipped .app artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: MiniSim.zip
+          path: MiniSim.zip
