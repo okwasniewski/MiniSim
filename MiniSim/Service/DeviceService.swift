@@ -232,7 +232,7 @@ extension DeviceService {
       guard isDevice else { continue }
 
       // The version is set as optional which only is the case for the device running
-      // the application, for exmaple your macbook, maybe we can make it not optional
+      // the application, for example your MacBook, maybe we can make it not optional
       // because we filter that device anyway but just in case some other device also has this behavior
       guard let match = line.match("(.+?)\\s(?:\\(([\\d\\.]+)\\))?\\s?\\((\\S+)\\)").first else {
         continue
