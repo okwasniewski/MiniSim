@@ -451,7 +451,7 @@ extension DeviceService {
       let output = try shellOut(to: adbPath, arguments: ["devices", "-l"])
       var splitted = output.components(separatedBy: "\n")
       splitted.removeFirst() // removes 'List of devices attached'
-      let filtered = splitted.filter { !$0.hasPrefix("emulator-") }
+      let filtered = splitted.filter { !$0.contains("emulator") }
 
       return filtered.compactMap { item -> Device? in
         let serialNoIdx = 0
