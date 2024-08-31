@@ -18,9 +18,9 @@ enum DeviceListSection: Int, CaseIterable {
         case .iOSPhysical:
             return NSLocalizedString("iOS Devices", comment: "")
         case .iOSVirtual:
-            return NSLocalizedString("iOS Simulator", comment: "")
+            return NSLocalizedString("iOS Simulators", comment: "")
         case .androidVirtual:
-            return NSLocalizedString("Android Simulator", comment: "")
+            return NSLocalizedString("Android Emulators", comment: "")
         case .androidPhysical:
             return NSLocalizedString("Android Devices", comment: "")
         }
