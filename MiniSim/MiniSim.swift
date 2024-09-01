@@ -16,6 +16,7 @@ class MiniSim: NSObject {
     @objc let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
     private var isOnboardingFinishedObserver: NSKeyValueObservation?
+    private var menuImageObserver: NSKeyValueObservation?
 
     private lazy var onboarding = Onboarding()
 
@@ -32,6 +33,7 @@ class MiniSim: NSObject {
 
     deinit {
         isOnboardingFinishedObserver?.invalidate()
+        menuImageObserver?.invalidate()
         NotificationCenter.default.removeObserver(self, name: .commandDidSucceed, object: nil)
         NotificationCenter.default.removeObserver(self, name: .deviceDeleted, object: nil)
     }
@@ -98,6 +100,10 @@ class MiniSim: NSObject {
                 self.onboarding.showPopOver(button: self.statusItem.button)
             }
         }
+        menuImageObserver = UserDefaults.standard.observe(\.menuImage, options: .new) { _, _ in
+            self.setMenuImage()
+        }
+
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(
             self,
@@ -123,11 +129,10 @@ class MiniSim: NSObject {
 
     private func setMenuImage() {
         if let button = statusItem.button {
-            button.toolTip = "MiniSim"
-            let itemImage = NSImage(named: "menu_icon")
-            itemImage?.size = NSSize(width: 9, height: 16)
-            itemImage?.isTemplate = true
-            button.image = itemImage
+          button.toolTip = "MiniSim"
+          let itemImage = MenuImage(rawValue: UserDefaults.standard.menuImage)?.image
+          itemImage?.isTemplate = true
+          button.image = itemImage
         }
     }
 

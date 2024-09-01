@@ -75,6 +75,7 @@
 		76AC9AF62A0EA82C00864A8B /* CustomCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AC9AF52A0EA82C00864A8B /* CustomCommands.swift */; };
 		76AC9AF92A0EB50800864A8B /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 76AC9AF82A0EB50800864A8B /* SymbolPicker */; };
 		76B70F7E2B0D361A009D87A4 /* UserDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B70F7D2B0D361A009D87A4 /* UserDefaultsTests.swift */; };
+		76C1396A2C849A3F006CD80C /* MenuIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C139692C849A3F006CD80C /* MenuIcons.swift */; };
 		76E4451229D4391000039025 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451129D4391000039025 /* Onboarding.swift */; };
 		76E4451429D4403F00039025 /* NSNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451329D4403F00039025 /* NSNotificationName.swift */; };
 		76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F04A10298A5AE000BF9CA3 /* ADB.swift */; };
@@ -165,6 +166,7 @@
 		76AC9AF52A0EA82C00864A8B /* CustomCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCommands.swift; sourceTree = "<group>"; };
 		76B70F742B0D359D009D87A4 /* MiniSimTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MiniSimTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B70F7D2B0D361A009D87A4 /* UserDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsTests.swift; sourceTree = "<group>"; };
+		76C139692C849A3F006CD80C /* MenuIcons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuIcons.swift; sourceTree = "<group>"; };
 		76E4451129D4391000039025 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		76E4451329D4403F00039025 /* NSNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotificationName.swift; sourceTree = "<group>"; };
 		76F04A10298A5AE000BF9CA3 /* ADB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADB.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 		762CF1E12981DDD400099999 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				76C139692C849A3F006CD80C /* MenuIcons.swift */,
 				762CF1DF2981968F00099999 /* String+match.swift */,
 				7645D5022983186100019227 /* NSMenuItem+ImageInit.swift */,
 				7630B26C2986B4FD00D8B57D /* KeyboardShortcuts.swift */,
@@ -629,6 +632,7 @@
 				7630B26D2986B4FD00D8B57D /* KeyboardShortcuts.swift in Sources */,
 				76059BF52AD4361C0008D38B /* SetupPreferences.swift in Sources */,
 				7684FAAF29D202F500230BB0 /* AndroidHomeError.swift in Sources */,
+				76C1396A2C849A3F006CD80C /* MenuIcons.swift in Sources */,
 				55CDB0782B1B6D24002418D7 /* TerminalApps.swift in Sources */,
 				7645D4BE2982A1B100019227 /* DeviceService.swift in Sources */,
 				765ABF382A8BECD900A063CB /* ExecuteCommand.swift in Sources */,

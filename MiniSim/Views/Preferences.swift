@@ -10,7 +10,9 @@ import LaunchAtLogin
 import Settings
 import ShellOut
 import SwiftUI
+
 struct Preferences: View {
+    @State var menuImageSelected: String = "iphone"
     @State private var preferedTerminal: Terminal
 
     init() {
@@ -24,6 +26,20 @@ struct Preferences: View {
 
     var body: some View {
         Settings.Container(contentWidth: 400) {
+            Settings.Section(title: "Icon:") {
+                Picker("", selection: $menuImageSelected) {
+                    ForEach(MenuImage.allCases, id: \.self) { image in
+                        Image(nsImage: NSImage(imageLiteralResourceName: image.rawValue))
+                            .tag(image.rawValue)
+                    }
+                }
+                .fixedSize(horizontal: true, vertical: false)
+                .onChange(of: menuImageSelected) { _ in
+                    UserDefaults.standard.menuImage = menuImageSelected
+                }
+                Text("The icon displayed in the Menu Bar.")
+                    .descriptionText()
+            }
             Settings.Section(title: "Preferred Terminal:") {
                 Picker("", selection: $preferedTerminal) {
                     let availableTerminal = Terminal.allCases.filter { checkAppIsInstalled(appName: $0) }
@@ -57,6 +73,13 @@ struct Preferences: View {
             }
         }
         .frame(minWidth: 650, minHeight: 450)
+        .onAppear {
+            MenuImage.allCases.forEach { image in
+                if UserDefaults.standard.menuImage == image.rawValue {
+                    menuImageSelected = image.rawValue
+                }
+            }
+        }
     }
 
     func checkAppIsInstalled(appName: Terminal) -> Bool {
