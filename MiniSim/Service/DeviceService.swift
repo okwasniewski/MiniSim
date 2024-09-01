@@ -34,8 +34,6 @@ class DeviceService: DeviceServiceProtocol {
     attributes: .concurrent
   )
   private static let deviceBootedError = "Unable to boot device in current state: Booted"
-  private static let crashDataError = "Storing crashdata"
-
   private static let derivedDataLocation = "~/Library/Developer/Xcode/DerivedData"
 
   private enum ProcessPaths: String {
@@ -412,12 +410,10 @@ extension DeviceService {
     guard let deviceId = device.identifier else {
       throw DeviceError.deviceNotFound
     }
-    guard let preferedTerminal = Terminal(
-      rawValue: UserDefaults.standard.preferedTerminal ?? Terminal.terminal.rawValue
-    )
-    else { return  }
-    let terminal = TerminalService.getTerminal(type: preferedTerminal)
-    try TerminalService.launchTerminal(terminal: terminal, deviceId: deviceId)
+
+    guard let adbPath = try? ADB.getAdbPath() else { return }
+    let logcatCommand = "\(adbPath) -s \(deviceId) logcat -v color"
+    try TerminalService.launchTerminal(command: logcatCommand)
   }
 
   static func handleAndroidAction(device: Device, commandTag: SubMenuItems.Tags, itemName: String) {
