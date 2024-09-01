@@ -41,19 +41,23 @@ struct Preferences: View {
                     .descriptionText()
             }
             Settings.Section(title: "Preferred Terminal:") {
-                Picker("", selection: $preferedTerminal) {
-                    let availableTerminal = Terminal.allCases.filter { checkAppIsInstalled(appName: $0) }
+                  Picker("", selection: $preferedTerminal) {
+                    let availableTerminal = Terminal.allCases.filter { $0.isAvailable() }
                     ForEach(availableTerminal, id: \.self) { terminal in
+                      HStack {
+                        Image(nsImage: terminal.getAppIcon() ?? NSImage())
                         Text(terminal.rawValue)
+                      }
+                      .tag(terminal.rawValue)
                     }
-                }
-                .onChange(of: preferedTerminal) { _ in
-                    UserDefaults.standard.setValue(
-                        preferedTerminal.rawValue, forKey: UserDefaults.Keys.preferedTerminal
-                    )
-                }
-                Text("Users can choose their preferred terminal from the above supported terminal list")
-                    .descriptionText()
+                  }
+                  .onChange(of: preferedTerminal) { _ in
+                      UserDefaults.standard.setValue(
+                          preferedTerminal.rawValue, forKey: UserDefaults.Keys.preferedTerminal
+                      )
+                  }
+                  Text("Users can choose their preferred terminal from the above supported terminal list")
+                      .descriptionText()
             }
             Settings.Section(title: "Hotkey:") {
                 KeyboardShortcuts.Recorder("", name: .toggleMiniSim)
@@ -82,18 +86,6 @@ struct Preferences: View {
         }
     }
 
-    func checkAppIsInstalled(appName: Terminal) -> Bool {
-        if appName.rawValue == Terminal.terminal.rawValue {
-            return true
-        }
-        let command = "ls /Applications/ | grep -i \(appName.rawValue)"
-        do {
-            var _ = try shellOut(to: "\(command)")
-            return true
-        } catch {
-            return false
-        }
-    }
     func resetDefaults() {
         let shouldReset = NSAlert.showQuestionDialog(
             title: "Are you sure?",

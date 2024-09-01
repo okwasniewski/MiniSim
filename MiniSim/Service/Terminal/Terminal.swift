@@ -10,7 +10,7 @@ import ShellOut
 
 protocol TerminalServiceProtocol {
     static func getTerminal(type: Terminal) -> TerminalApp
-    static func launchTerminal(terminal: TerminalApp, deviceId: String) throws
+    static func launchTerminal(command: String, terminal: TerminalApp) throws
 }
 
 class TerminalService: TerminalServiceProtocol {
@@ -20,12 +20,22 @@ class TerminalService: TerminalServiceProtocol {
             return AppleTerminal()
         case .iterm:
             return ITermTerminal()
+        case .wezterm:
+            return WezTermTerminal()
         }
     }
 
-    static func launchTerminal(terminal: TerminalApp, deviceId: String) throws {
-        let logcatCommand = "adb -s \(deviceId) logcat -v color"
-        let terminalScript = terminal.getLaunchScript(deviceId: deviceId, logcatCommand: logcatCommand)
+    private static func getPrefferedTerminal() -> TerminalApp {
+        guard let preferedTerminal = Terminal(
+          rawValue: UserDefaults.standard.preferedTerminal ?? Terminal.terminal.rawValue
+        )
+        else { return getTerminal(type: Terminal.terminal) }
+
+        return getTerminal(type: preferedTerminal)
+    }
+
+    static func launchTerminal(command: String, terminal: TerminalApp = getPrefferedTerminal()) throws {
+        let terminalScript = terminal.getLaunchScript(command: command)
         try shellOut(to: "osascript -e '\(terminalScript)'")
     }
 }
