@@ -304,17 +304,61 @@ extension DeviceService {
     return nil
   }
 
+  struct DeviceCtlJson: Codable {
+    struct Info: Codable {
+      var outcome: String
+    }
+
+    struct DeviceProperties: Codable {
+      let name: String
+      let osVersionNumber: String
+    }
+
+    struct HardwareProperties: Codable {
+      let udid: String
+    }
+
+    struct ConnectionProperties: Codable {
+      let tunnelState: String
+    }
+
+    struct Device: Codable {
+      let deviceProperties: DeviceProperties
+      let hardwareProperties: HardwareProperties
+      let connectionProperties: ConnectionProperties
+    }
+
+    struct Result: Codable {
+      let devices: [Device]
+    }
+
+    let info: Info
+    let result: Result
+  }
+
   static func getIOSPhysicalDevices() throws -> [Device] {
-    guard let currentMachineUUID else { return [] }
+    let tempDirectory = FileManager.default.temporaryDirectory
+    let outputFile = tempDirectory.appendingPathComponent("iosPhysicalDevices.json")
 
-    // Command also returns current machine as a device, we filter it before returning
-    let devicesOutput = try shellOut(
+    try shellOut(
       to: ProcessPaths.xcrun.rawValue,
-      arguments: ["xctrace", "list", "devices"]
+      arguments: ["devicectl", "list", "devices", "-j \(outputFile.path)"]
     )
-    let splitted = devicesOutput.components(separatedBy: "\n")
 
-    return parseIOSPhysicalDevices(result: splitted).filter { $0.identifier != currentMachineUUID }
+    let jsonData = try Data(contentsOf: outputFile)
+    let jsonObject = try JSONDecoder().decode(DeviceCtlJson.self, from: jsonData)
+
+    guard jsonObject.info.outcome == "success" else { return [] }
+    return jsonObject.result.devices.map { jsonObjectDevice in
+      Device(
+        name: jsonObjectDevice.deviceProperties.name,
+        version: jsonObjectDevice.deviceProperties.osVersionNumber,
+        identifier: jsonObjectDevice.hardwareProperties.udid,
+        booted: jsonObjectDevice.connectionProperties.tunnelState != "unavailable",
+        platform: .ios,
+        type: .physical
+      )
+    }
   }
 
   static func getIOSSimulators() throws -> [Device] {
