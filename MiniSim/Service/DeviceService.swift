@@ -215,32 +215,6 @@ class DeviceService: DeviceServiceProtocol {
 
 // MARK: iOS Methods
 extension DeviceService {
-  private static func parseIOSDevices(result: [String]) -> [Device] {
-    var devices: [Device] = []
-    let currentOSIdx = 1
-    let deviceNameIdx = 1
-    let identifierIdx = 4
-    let deviceStateIdx = 5
-    var osVersion = ""
-    result.forEach { line in
-      if let currentOs = line.match("-- (.*?) --").first, !currentOs.isEmpty {
-        osVersion = currentOs[currentOSIdx]
-      }
-      if let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\) (\\(.*?)\\)").first {
-        devices.append(
-          Device(
-            name: device[deviceNameIdx].trimmingCharacters(in: .whitespacesAndNewlines),
-            version: osVersion,
-            identifier: device[identifierIdx],
-            booted: device[deviceStateIdx].contains("Booted"),
-            platform: .ios
-          )
-        )
-      }
-    }
-    return devices
-  }
-
   static func clearDerivedData(
     completionQueue: DispatchQueue = .main,
     completion: @escaping (String, Error?) -> Void
@@ -268,9 +242,7 @@ extension DeviceService {
       to: ProcessPaths.xcrun.rawValue,
       arguments: ["simctl", "list", "devices", "available"]
     )
-    let splitted = output.components(separatedBy: "\n")
-
-    return parseIOSDevices(result: splitted)
+    return DeviceParserFactory().getParser(.iosSimulator).parse(output)
   }
 
   static func launchSimulatorApp(uuid: String) throws {
@@ -391,16 +363,9 @@ extension DeviceService {
     Thread.assertBackgroundThread()
 
     let emulatorPath = try ADB.getEmulatorPath()
-    let adbPath = try ADB.getAdbPath()
     let output = try shellOut(to: emulatorPath, arguments: ["-list-avds"])
-    let splitted = output.components(separatedBy: "\n")
 
-    return splitted
-      .filter { !$0.isEmpty && !$0.contains(crashDataError) }
-      .map { deviceName in
-        let adbId = try? ADB.getAdbId(for: deviceName, adbPath: adbPath)
-        return Device(name: deviceName, identifier: adbId, booted: adbId != nil, platform: .android)
-      }
+    return DeviceParserFactory().getParser(.androidEmulator).parse(output)
   }
 
   static func toggleA11y(device: Device) throws {
