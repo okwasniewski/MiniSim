@@ -75,18 +75,21 @@ class DeviceParserTests: XCTestCase {
     XCTAssertEqual(devices[0].identifier, "957C8A2F-4C12-4732-A4E9-37F8FDD35E3B")
     XCTAssertTrue(devices[0].booted)
     XCTAssertEqual(devices[0].platform, .ios)
+    XCTAssertEqual(devices[0].type, .virtual)
 
     XCTAssertEqual(devices[1].name, "iPhone 15")
     XCTAssertEqual(devices[1].version, "iOS 17.5")
     XCTAssertEqual(devices[1].identifier, "7B8464FF-956F-405B-B357-8ED4689E5177")
     XCTAssertFalse(devices[1].booted)
     XCTAssertEqual(devices[1].platform, .ios)
+    XCTAssertEqual(devices[1].type, .virtual)
 
     XCTAssertEqual(devices[2].name, "iPhone 15 Plus")
     XCTAssertEqual(devices[2].version, "iOS 17.5")
     XCTAssertEqual(devices[2].identifier, "37A0352D-849D-463B-B513-D23ED0113A87")
     XCTAssertTrue(devices[2].booted)
     XCTAssertEqual(devices[2].platform, .ios)
+    XCTAssertEqual(devices[2].type, .virtual)
   }
 
   func testAndroidEmulatorParser() {
@@ -105,17 +108,72 @@ class DeviceParserTests: XCTestCase {
     XCTAssertEqual(devices[0].identifier, "mock_adb_id_for_Pixel_3a_API_30_x86")
     XCTAssertTrue(devices[0].booted)
     XCTAssertEqual(devices[0].platform, .android)
+    XCTAssertEqual(devices[0].type, .virtual)
 
     XCTAssertEqual(devices[1].name, "Pixel_4_API_29")
     XCTAssertEqual(devices[1].identifier, "mock_adb_id_for_Pixel_4_API_29")
     XCTAssertTrue(devices[1].booted)
     XCTAssertEqual(devices[1].platform, .android)
+    XCTAssertEqual(devices[1].type, .virtual)
 
     XCTAssertEqual(devices[2].name, "Nexus_5X_API_28")
     XCTAssertEqual(devices[2].identifier, nil)
     XCTAssertFalse(devices[2].booted)
     XCTAssertEqual(devices[2].platform, .android)
+    XCTAssertEqual(devices[2].type, .virtual)
   }
+
+  func testAndroidPhysicalDeviceParser() {
+    let parser = AndroidPhysicalDeviceParser()
+    let emptyInput = """
+        List of devices attached
+
+        """
+
+    var devices = parser.parse(emptyInput)
+    XCTAssertEqual(devices.count, 0)
+
+    let singleEmulatorInput = """
+      List of devices attached
+      emulator-5554          device product:sdk_gphone64_arm64 model:sdk_gphone64_arm64 device:emu64a transport_id:3
+
+      """
+
+    devices = parser.parse(singleEmulatorInput)
+    XCTAssertEqual(devices.count, 0)
+
+    let singlePhysicalDeviceInput = """
+      List of devices attached
+      RFCWA0FXXXX            device 0-1 product:a34xdxx model:SM_A346E device:a34x transport_id:5
+
+      """
+
+    devices = parser.parse(singlePhysicalDeviceInput)
+    XCTAssertEqual(devices.count, 1)
+
+    XCTAssertEqual(devices[0].name, "SM_A346E")
+    XCTAssertEqual(devices[0].identifier, "RFCWA0FXXXX")
+    XCTAssertTrue(devices[0].booted)
+    XCTAssertEqual(devices[0].platform, .android)
+    XCTAssertEqual(devices[0].type, .physical)
+
+    let mixedInput = """
+      List of devices attached
+      emulator-5554          device product:sdk_gphone64_arm64 model:sdk_gphone64_arm64 device:emu64a transport_id:3
+      RFCWA0FXXXX            device 0-1 product:a34xdxx model:SM_A346E device:a34x transport_id:5
+
+      """
+
+    devices = parser.parse(mixedInput)
+    XCTAssertEqual(devices.count, 1)
+
+    XCTAssertEqual(devices[0].name, "SM_A346E")
+    XCTAssertEqual(devices[0].identifier, "RFCWA0FXXXX")
+    XCTAssertTrue(devices[0].booted)
+    XCTAssertEqual(devices[0].platform, .android)
+    XCTAssertEqual(devices[0].type, .physical)
+  }
+
 
   func filtersOutEmulatorCrashData() {
     let parser = AndroidEmulatorParser(adb: ADB.self)
@@ -132,6 +190,7 @@ class DeviceParserTests: XCTestCase {
     XCTAssertEqual(devices[0].identifier, "mock_adb_id_for_Pixel_3a_API_30_x86")
     XCTAssertTrue(devices[0].booted)
     XCTAssertEqual(devices[0].platform, .android)
+    XCTAssertEqual(devices[0].type, .virtual)
 
     XCTAssertNil(devices.first(where: { $0.name.contains("crashdata") }))
   }

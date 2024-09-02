@@ -129,12 +129,6 @@ class AndroidEmulatorParser: DeviceParser {
 }
 
 class AndroidPhysicalDeviceParser: DeviceParser {
-  let adb: ADBProtocol.Type
-
-  required init(adb: ADBProtocol.Type = ADB.self) {
-    self.adb = adb
-  }
-
   func parse(_ input: String) -> [Device] {
     var splitted = input.components(separatedBy: "\n")
     splitted.removeFirst() // removes 'List of devices attached'
