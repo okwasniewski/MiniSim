@@ -304,38 +304,6 @@ extension DeviceService {
     return nil
   }
 
-  struct DeviceCtlJson: Codable {
-    struct Info: Codable {
-      var outcome: String
-    }
-
-    struct DeviceProperties: Codable {
-      let name: String
-      let osVersionNumber: String
-    }
-
-    struct HardwareProperties: Codable {
-      let udid: String
-    }
-
-    struct ConnectionProperties: Codable {
-      let tunnelState: String
-    }
-
-    struct Device: Codable {
-      let deviceProperties: DeviceProperties
-      let hardwareProperties: HardwareProperties
-      let connectionProperties: ConnectionProperties
-    }
-
-    struct Result: Codable {
-      let devices: [Device]
-    }
-
-    let info: Info
-    let result: Result
-  }
-
   static func getIOSPhysicalDevices() throws -> [Device] {
     let tempDirectory = FileManager.default.temporaryDirectory
     let outputFile = tempDirectory.appendingPathComponent("iosPhysicalDevices.json")
@@ -345,20 +313,8 @@ extension DeviceService {
       arguments: ["devicectl", "list", "devices", "-j \(outputFile.path)"]
     )
 
-    let jsonData = try Data(contentsOf: outputFile)
-    let jsonObject = try JSONDecoder().decode(DeviceCtlJson.self, from: jsonData)
-
-    guard jsonObject.info.outcome == "success" else { return [] }
-    return jsonObject.result.devices.map { jsonObjectDevice in
-      Device(
-        name: jsonObjectDevice.deviceProperties.name,
-        version: jsonObjectDevice.deviceProperties.osVersionNumber,
-        identifier: jsonObjectDevice.hardwareProperties.udid,
-        booted: jsonObjectDevice.connectionProperties.tunnelState != "unavailable",
-        platform: .ios,
-        type: .physical
-      )
-    }
+    let jsonString = try String(contentsOf: outputFile)
+    return DeviceParserFactory().getParser(.iosPhysical).parse(jsonString)
   }
 
   static func getIOSSimulators() throws -> [Device] {

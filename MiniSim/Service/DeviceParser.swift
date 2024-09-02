@@ -2,6 +2,7 @@ import Foundation
 
 enum DeviceParserType {
   case iosSimulator
+  case iosPhysical
   case androidEmulator
 }
 
@@ -14,6 +15,8 @@ class DeviceParserFactory {
     switch type {
     case .iosSimulator:
       return IOSSimulatorParser()
+    case .iosPhysical:
+      return IOSPhysicalDeviceParser()
     case .androidEmulator:
       return AndroidEmulatorParser()
     }
@@ -41,7 +44,8 @@ class IOSSimulatorParser: DeviceParser {
             version: osVersion,
             identifier: device[identifierIdx],
             booted: device[deviceStateIdx].contains("Booted"),
-            platform: .ios
+            platform: .ios,
+            type: .virtual
           )
         )
       }
@@ -49,6 +53,58 @@ class IOSSimulatorParser: DeviceParser {
     return devices
   }
 }
+
+class IOSPhysicalDeviceParser: DeviceParser {
+  struct IOSPhysicalDevicesJson: Codable {
+    struct Info: Codable {
+      var outcome: String
+    }
+
+    struct DeviceProperties: Codable {
+      let name: String
+      let osVersionNumber: String
+    }
+
+    struct HardwareProperties: Codable {
+      let udid: String
+    }
+
+    struct ConnectionProperties: Codable {
+      let tunnelState: String
+    }
+
+    struct Device: Codable {
+      let deviceProperties: DeviceProperties
+      let hardwareProperties: HardwareProperties
+      let connectionProperties: ConnectionProperties
+    }
+
+    struct Result: Codable {
+      let devices: [Device]
+    }
+
+    let info: Info
+    let result: Result
+  }
+
+  func parse(_ input: String) -> [Device] {
+    guard let jsonData = input.data(using: .utf8) else { return [] }
+    guard let jsonObject = try? JSONDecoder().decode(IOSPhysicalDevicesJson.self, from: jsonData) else { return [] }
+
+    guard jsonObject.info.outcome == "success" else { return [] }
+    return jsonObject.result.devices.map { jsonObjectDevice in
+      Device(
+        name: jsonObjectDevice.deviceProperties.name,
+        version: jsonObjectDevice.deviceProperties.osVersionNumber,
+        identifier: jsonObjectDevice.hardwareProperties.udid,
+        booted: jsonObjectDevice.connectionProperties.tunnelState != "unavailable",
+        platform: .ios,
+        type: .physical
+      )
+    }
+  }
+}
+
 
 class AndroidEmulatorParser: DeviceParser {
   let adb: ADBProtocol.Type
@@ -64,7 +120,7 @@ class AndroidEmulatorParser: DeviceParser {
       .filter { !$0.isEmpty && !$0.contains("Storing crashdata") }
       .compactMap { deviceName in
         let adbId = try? adb.getAdbId(for: deviceName, adbPath: adbPath)
-        return Device(name: deviceName, identifier: adbId, booted: adbId != nil, platform: .android)
+        return Device(name: deviceName, identifier: adbId, booted: adbId != nil, platform: .android, type: .virtual)
       }
   }
 }
