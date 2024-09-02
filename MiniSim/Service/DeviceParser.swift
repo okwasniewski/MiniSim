@@ -4,6 +4,7 @@ enum DeviceParserType {
   case iosSimulator
   case iosPhysical
   case androidEmulator
+  case androidPhysical
 }
 
 protocol DeviceParser {
@@ -19,6 +20,8 @@ class DeviceParserFactory {
       return IOSPhysicalDeviceParser()
     case .androidEmulator:
       return AndroidEmulatorParser()
+    case .androidPhysical:
+      return AndroidPhysicalDeviceParser()
     }
   }
 }
@@ -124,3 +127,38 @@ class AndroidEmulatorParser: DeviceParser {
       }
   }
 }
+
+class AndroidPhysicalDeviceParser: DeviceParser {
+  let adb: ADBProtocol.Type
+
+  required init(adb: ADBProtocol.Type = ADB.self) {
+    self.adb = adb
+  }
+
+  func parse(_ input: String) -> [Device] {
+    var splitted = input.components(separatedBy: "\n")
+    splitted.removeFirst() // removes 'List of devices attached'
+    let filtered = splitted.filter { !$0.contains("emulator") }
+
+    return filtered.compactMap { item -> Device? in
+      let serialNoIdx = 0
+      let modelNameIdx = 4
+      let components = item.components(separatedBy: .whitespaces).filter { !$0.isEmpty }
+      guard components.count > 4  else {
+        return nil
+      }
+
+      let id = components[serialNoIdx]
+      let name = components[modelNameIdx].components(separatedBy: ":")[1]
+
+      return Device(
+        name: name,
+        identifier: id,
+        booted: true,
+        platform: .android,
+        type: .physical
+      )
+    }
+}
+}
+

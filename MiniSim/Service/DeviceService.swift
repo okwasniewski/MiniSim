@@ -449,29 +449,8 @@ extension DeviceService {
   static func getAndroidPhysicalDevices() throws -> [Device] {
       let adbPath = try ADB.getAdbPath()
       let output = try shellOut(to: adbPath, arguments: ["devices", "-l"])
-      var splitted = output.components(separatedBy: "\n")
-      splitted.removeFirst() // removes 'List of devices attached'
-      let filtered = splitted.filter { !$0.contains("emulator") }
 
-      return filtered.compactMap { item -> Device? in
-        let serialNoIdx = 0
-        let modelNameIdx = 4
-        let components = item.components(separatedBy: .whitespaces).filter { !$0.isEmpty }
-        guard components.count > 4  else {
-          return nil
-        }
-
-        let id = components[serialNoIdx]
-        let name = components[modelNameIdx].components(separatedBy: ":")[1]
-
-        return Device(
-          name: name,
-          identifier: id,
-          booted: true,
-          platform: .android,
-          type: .physical
-        )
-      }
+    return DeviceParserFactory().getParser(.androidPhysical).parse(output)
   }
 
   static func getAndroidEmulators() throws -> [Device] {
