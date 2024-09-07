@@ -174,6 +174,87 @@ class DeviceParserTests: XCTestCase {
     XCTAssertEqual(devices[0].type, .physical)
   }
 
+  func testIOSPhysicalDeviceParser() {
+    let parser = IOSPhysicalDeviceParser()
+    let emptyInput = """
+        """
+
+    var devices = parser.parse(emptyInput)
+    XCTAssertEqual(devices.count, 0)
+
+    let invalidInput = """
+      some random text
+      """
+
+    devices = parser.parse(invalidInput)
+    XCTAssertEqual(devices.count, 0)
+
+    let unsuccessfulOutcomeInput = """
+      {
+        "info" : {
+          "outcome" : "success",
+        }
+      }
+      """
+
+    devices = parser.parse(unsuccessfulOutcomeInput)
+    XCTAssertEqual(devices.count, 0)
+
+    let validInput = """
+      {
+        "info" : {
+          "outcome" : "success",
+        },
+        "result" : {
+          "devices" : [
+            {
+              "connectionProperties" : {
+                "tunnelState" : "connected"
+              },
+              "deviceProperties" : {
+                "name" : "Random iPhone 1",
+                "osVersionNumber" : "17.6.1",
+              },
+              "hardwareProperties" : {
+                "udid" : "xxx-xxx-xxx1"
+              },
+            },
+            {
+              "connectionProperties" : {
+                "tunnelState" : "unavailable"
+              },
+              "deviceProperties" : {
+                "name" : "Random iPhone 2",
+                "osVersionNumber" : "17.6.2",
+              },
+              "hardwareProperties" : {
+                "udid" : "xxx-xxx-xxx2"
+              },
+            }
+          ]
+        }
+      }
+      """
+
+    devices = parser.parse(validInput)
+    XCTAssertEqual(devices.count, 2)
+
+    XCTAssertEqual(devices[0].name, "Random iPhone 1")
+    XCTAssertEqual(devices[0].identifier, "xxx-xxx-xxx1")
+    XCTAssertTrue(devices[0].booted)
+    XCTAssertTrue(devices[0].booted)
+    XCTAssertEqual(devices[0].version, "17.6.1")
+    XCTAssertEqual(devices[0].platform, .ios)
+    XCTAssertEqual(devices[0].type, .physical)
+
+    XCTAssertEqual(devices[1].name, "Random iPhone 2")
+    XCTAssertEqual(devices[1].identifier, "xxx-xxx-xxx2")
+    XCTAssertFalse(devices[1].booted)
+    XCTAssertEqual(devices[1].version, "17.6.2")
+    XCTAssertEqual(devices[1].platform, .ios)
+    XCTAssertEqual(devices[1].type, .physical)
+  }
+
   func filtersOutEmulatorCrashData() {
     let parser = AndroidEmulatorParser(adb: ADB.self)
     let input = """
