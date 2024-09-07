@@ -108,7 +108,6 @@ class IOSPhysicalDeviceParser: DeviceParser {
   }
 }
 
-
 class AndroidEmulatorParser: DeviceParser {
   let adb: ADBProtocol.Type
 
@@ -155,4 +154,3 @@ class AndroidPhysicalDeviceParser: DeviceParser {
     }
 }
 }
-
