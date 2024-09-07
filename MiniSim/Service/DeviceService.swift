@@ -245,10 +245,10 @@ extension DeviceService {
     let tempDirectory = FileManager.default.temporaryDirectory
     let outputFile = tempDirectory.appendingPathComponent("iosPhysicalDevices.json")
 
-    guard let _ = try? shellOut(
+    guard (try? shellOut(
       to: ProcessPaths.xcrun.rawValue,
       arguments: ["devicectl", "list", "devices", "-j \(outputFile.path)"]
-    ) else {
+    )) != nil else {
       return []
     }
 
