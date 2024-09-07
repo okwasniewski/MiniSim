@@ -75,6 +75,8 @@
 		76AC9AF62A0EA82C00864A8B /* CustomCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AC9AF52A0EA82C00864A8B /* CustomCommands.swift */; };
 		76AC9AF92A0EB50800864A8B /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 76AC9AF82A0EB50800864A8B /* SymbolPicker */; };
 		76B70F7E2B0D361A009D87A4 /* UserDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B70F7D2B0D361A009D87A4 /* UserDefaultsTests.swift */; };
+		76BF0AD92C8CB3E6003BE568 /* AcknowList in Frameworks */ = {isa = PBXBuildFile; productRef = 76BF0AD82C8CB3E6003BE568 /* AcknowList */; };
+		76BF0ADB2C8CB4CD003BE568 /* Package.resolved in Resources */ = {isa = PBXBuildFile; fileRef = 76BF0ADA2C8CB4CD003BE568 /* Package.resolved */; };
 		76C1396A2C849A3F006CD80C /* MenuIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C139692C849A3F006CD80C /* MenuIcons.swift */; };
 		76E4451229D4391000039025 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451129D4391000039025 /* Onboarding.swift */; };
 		76E4451429D4403F00039025 /* NSNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451329D4403F00039025 /* NSNotificationName.swift */; };
@@ -167,6 +169,7 @@
 		76AC9AF52A0EA82C00864A8B /* CustomCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCommands.swift; sourceTree = "<group>"; };
 		76B70F742B0D359D009D87A4 /* MiniSimTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MiniSimTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B70F7D2B0D361A009D87A4 /* UserDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsTests.swift; sourceTree = "<group>"; };
+		76BF0ADA2C8CB4CD003BE568 /* Package.resolved */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Package.resolved; path = MiniSim.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved; sourceTree = SOURCE_ROOT; };
 		76C139692C849A3F006CD80C /* MenuIcons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuIcons.swift; sourceTree = "<group>"; };
 		76E4451129D4391000039025 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		76E4451329D4403F00039025 /* NSNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotificationName.swift; sourceTree = "<group>"; };
@@ -187,6 +190,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				765077C62C46F04A00C7B5F3 /* Settings in Frameworks */,
+				76BF0AD92C8CB3E6003BE568 /* AcknowList in Frameworks */,
 				768F8EC829954C8A00DFBCDB /* Sparkle in Frameworks */,
 				76F04A14298A62CF00BF9CA3 /* ShellOut in Frameworks */,
 				76AC9AF92A0EB50800864A8B /* SymbolPicker in Frameworks */,
@@ -356,6 +360,7 @@
 				7645D5002982E6FA00019227 /* main.swift */,
 				766BD2372981628C0042261B /* Assets.xcassets */,
 				766BD23C2981628C0042261B /* MiniSim.entitlements */,
+				76BF0ADA2C8CB4CD003BE568 /* Package.resolved */,
 				766BD2392981628C0042261B /* Preview Content */,
 			);
 			path = MiniSim;
@@ -452,6 +457,7 @@
 				76AC9AF82A0EB50800864A8B /* SymbolPicker */,
 				763EEB122A26896B008428F1 /* CodeEditor */,
 				765077C52C46F04A00C7B5F3 /* Settings */,
+				76BF0AD82C8CB3E6003BE568 /* AcknowList */,
 			);
 			productName = MiniSim;
 			productReference = 766BD2302981628A0042261B /* MiniSim.app */;
@@ -513,6 +519,7 @@
 				763EEB112A26896B008428F1 /* XCRemoteSwiftPackageReference "CodeEditor" */,
 				4A7892862AF1A767004D3FC8 /* XCRemoteSwiftPackageReference "SwiftLint" */,
 				76A5C3B72C46E4C40064118A /* XCRemoteSwiftPackageReference "Settings" */,
+				76BF0AD72C8CB3E6003BE568 /* XCRemoteSwiftPackageReference "AcknowList" */,
 			);
 			productRefGroup = 766BD2312981628A0042261B /* Products */;
 			projectDirPath = "";
@@ -530,6 +537,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				766BD23B2981628C0042261B /* Preview Assets.xcassets in Resources */,
+				76BF0ADB2C8CB4CD003BE568 /* Package.resolved in Resources */,
 				766BD2382981628C0042261B /* Assets.xcassets in Resources */,
 				7610992D2A3F95850067885A /* MiniSim.sdef in Resources */,
 				765C44C82A2A6C9600FCC159 /* MainMenu.xib in Resources */,
@@ -999,6 +1007,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		76BF0AD72C8CB3E6003BE568 /* XCRemoteSwiftPackageReference "AcknowList" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vtourraine/AcknowList";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
 		76F04A12298A62CF00BF9CA3 /* XCRemoteSwiftPackageReference "ShellOut" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JohnSundell/ShellOut.git";
@@ -1049,6 +1065,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4A7892862AF1A767004D3FC8 /* XCRemoteSwiftPackageReference "SwiftLint" */;
 			productName = "plugin:SwiftLintPlugin";
+		};
+		76BF0AD82C8CB3E6003BE568 /* AcknowList */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76BF0AD72C8CB3E6003BE568 /* XCRemoteSwiftPackageReference "AcknowList" */;
+			productName = AcknowList;
 		};
 		76F04A13298A62CF00BF9CA3 /* ShellOut */ = {
 			isa = XCSwiftPackageProductDependency;

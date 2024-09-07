@@ -23,8 +23,6 @@ class MiniSim: NSObject {
     override init() {
         super.init()
 
-        settingsController.window?.delegate = self
-
         setDefaultValues()
         initObservers()
 
@@ -159,6 +157,7 @@ class MiniSim: NSObject {
         if let tag = MainMenuActions(rawValue: sender.tag) {
             switch tag {
             case .preferences:
+                settingsController.window?.delegate = self
                 settingsController.show()
                 settingsController.window?.orderFrontRegardless()
             case .quit:
