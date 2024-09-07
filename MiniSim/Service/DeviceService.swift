@@ -39,7 +39,6 @@ class DeviceService: DeviceServiceProtocol {
   private enum ProcessPaths: String {
     case xcrun = "/usr/bin/xcrun"
     case xcodeSelect = "/usr/bin/xcode-select"
-    case systemProfiler = "/usr/sbin/system_profiler"
   }
 
   private enum BundleURL: String {
