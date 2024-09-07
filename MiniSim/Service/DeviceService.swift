@@ -245,10 +245,12 @@ extension DeviceService {
     let tempDirectory = FileManager.default.temporaryDirectory
     let outputFile = tempDirectory.appendingPathComponent("iosPhysicalDevices.json")
 
-    try shellOut(
+    guard let _ = try? shellOut(
       to: ProcessPaths.xcrun.rawValue,
       arguments: ["devicectl", "list", "devices", "-j \(outputFile.path)"]
-    )
+    ) else {
+      return []
+    }
 
     let jsonString = try String(contentsOf: outputFile)
     return DeviceParserFactory().getParser(.iosPhysical).parse(jsonString)
