@@ -174,7 +174,6 @@ class DeviceParserTests: XCTestCase {
     XCTAssertEqual(devices[0].type, .physical)
   }
 
-
   func filtersOutEmulatorCrashData() {
     let parser = AndroidEmulatorParser(adb: ADB.self)
     let input = """
@@ -192,7 +191,7 @@ class DeviceParserTests: XCTestCase {
     XCTAssertEqual(devices[0].platform, .android)
     XCTAssertEqual(devices[0].type, .virtual)
 
-    XCTAssertNil(devices.first(where: { $0.name.contains("crashdata") }))
+    XCTAssertNil(devices.first { $0.name.contains("crashdata") })
   }
 
   func testAndroidEmulatorParserWithADBFailure() {
