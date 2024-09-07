@@ -11,14 +11,17 @@ import Foundation
 class GetCommands: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
         guard
-            let argument = self.property(forKey: "platform") as? String,
-            let platform = Platform(rawValue: argument)
+            let platformArg = self.property(forKey: "platform") as? String,
+            let platform = Platform(rawValue: platformArg),
+            let deviceTypeArg = self.property(forKey: "deviceType") as? String,
+            let deviceType = DeviceType(rawValue: deviceTypeArg)
+
         else {
             scriptErrorNumber = NSRequiredArgumentsMissingScriptError
             return nil
         }
 
-        let commands = platform.subMenuItems
+        let commands = SubMenuItems.items(platform: platform, deviceType: deviceType)
             .compactMap { $0 as? SubMenuActionItem }
             .map { $0.commandItem }
         let customCommands = DeviceService.getCustomCommands(platform: platform)

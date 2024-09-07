@@ -74,6 +74,9 @@ opt_in_rules:
   - weak_delegate
   - yoda_condition
   
+disabled_rules:
+  - nesting
+
 identifier_name:
   excluded: # excluded via string array
     - id

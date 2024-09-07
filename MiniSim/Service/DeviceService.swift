@@ -235,7 +235,27 @@ extension DeviceService {
 
   static func getIOSDevices() throws -> [Device] {
     Thread.assertBackgroundThread()
+    let simulators = try getIOSSimulators()
+    let devices = try getIOSPhysicalDevices()
+    return simulators + devices
+  }
 
+  static func getIOSPhysicalDevices() throws -> [Device] {
+    let tempDirectory = FileManager.default.temporaryDirectory
+    let outputFile = tempDirectory.appendingPathComponent("iosPhysicalDevices.json")
+
+    guard (try? shellOut(
+      to: ProcessPaths.xcrun.rawValue,
+      arguments: ["devicectl", "list", "devices", "-j \(outputFile.path)"]
+    )) != nil else {
+      return []
+    }
+
+    let jsonString = try String(contentsOf: outputFile)
+    return DeviceParserFactory().getParser(.iosPhysical).parse(jsonString)
+  }
+
+  static func getIOSSimulators() throws -> [Device] {
     let output = try shellOut(
       to: ProcessPaths.xcrun.rawValue,
       arguments: ["simctl", "list", "devices", "available"]
@@ -359,7 +379,19 @@ extension DeviceService {
 
   static func getAndroidDevices() throws -> [Device] {
     Thread.assertBackgroundThread()
+    let emulators = try getAndroidEmulators()
+    let devices = try getAndroidPhysicalDevices()
+    return emulators + devices
+  }
 
+  static func getAndroidPhysicalDevices() throws -> [Device] {
+      let adbPath = try ADB.getAdbPath()
+      let output = try shellOut(to: adbPath, arguments: ["devices", "-l"])
+
+    return DeviceParserFactory().getParser(.androidPhysical).parse(output)
+  }
+
+  static func getAndroidEmulators() throws -> [Device] {
     let emulatorPath = try ADB.getEmulatorPath()
     let output = try shellOut(to: emulatorPath, arguments: ["-list-avds"])
 
