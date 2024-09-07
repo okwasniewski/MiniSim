@@ -214,49 +214,6 @@ class DeviceService: DeviceServiceProtocol {
 
 // MARK: iOS Methods
 extension DeviceService {
-  private static func parseIOSPhysicalDevices(result: [String]) -> [Device] {
-    var devices = [Device]()
-
-    let deviceNameIdx = 1
-    let osVersionIdx = 2
-    let identifierIdx = 3
-    var isDevice = false
-    var isOnline = true
-    for line in result {
-      if let match = line.match("== ([\\s\\w]+) ==").first {
-        isDevice = match[1].contains("Devices")
-        isOnline = !match[1].contains("Offline")
-        continue
-      }
-
-      guard isDevice else { continue }
-
-      // The version is set as optional which only is the case for the device running
-      // the application, for example your MacBook, maybe we can make it not optional
-      // because we filter that device anyway but just in case some other device also has this behavior
-      guard let match = line.match("(.+?)\\s(?:\\(([\\d\\.]+)\\))?\\s?\\((\\S+)\\)").first else {
-        continue
-      }
-
-      let deviceName = match[deviceNameIdx]
-      let osVersion = match[osVersionIdx]
-      let identifier = match[identifierIdx]
-
-      devices.append(
-        Device(
-          name: deviceName,
-          version: osVersion.isEmpty ? nil : osVersion,
-          identifier: identifier,
-          booted: isOnline,
-          platform: .ios,
-          type: .physical
-        )
-      )
-    }
-
-    return devices
-  }
-
   static func clearDerivedData(
     completionQueue: DispatchQueue = .main,
     completion: @escaping (String, Error?) -> Void
@@ -282,26 +239,6 @@ extension DeviceService {
     let simulators = try getIOSSimulators()
     let devices = try getIOSPhysicalDevices()
     return simulators + devices
-  }
-
-  static var currentMachineUUID: String? {
-    guard let output = try? shellOut(
-      to: ProcessPaths.systemProfiler.rawValue,
-      arguments: ["SPHardwareDataType"]
-    ) else { return nil }
-
-    let uuidIdx = 1
-    for line in output.components(separatedBy: "\n") {
-      guard let match = line.match("Hardware UUID: ([\\S]+)").first else {
-        continue
-      }
-
-      if match.count >= 2 {
-        return match[uuidIdx]
-      }
-    }
-
-    return nil
   }
 
   static func getIOSPhysicalDevices() throws -> [Device] {
