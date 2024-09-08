@@ -116,12 +116,11 @@ class AndroidEmulatorParser: DeviceParser {
   }
 
   func parse(_ input: String) -> [Device] {
-    guard let adbPath = try? adb.getAdbPath() else { return [] }
     let deviceNames = input.components(separatedBy: .newlines)
     return deviceNames
       .filter { !$0.isEmpty && !$0.contains("Storing crashdata") }
       .compactMap { deviceName in
-        let adbId = try? adb.getAdbId(for: deviceName, adbPath: adbPath)
+        let adbId = try? adb.getAdbId(for: deviceName)
         return Device(name: deviceName, identifier: adbId, booted: adbId != nil, platform: .android, type: .virtual)
       }
   }

@@ -8,7 +8,6 @@
 import KeyboardShortcuts
 import LaunchAtLogin
 import Settings
-import ShellOut
 import SwiftUI
 
 struct Preferences: View {

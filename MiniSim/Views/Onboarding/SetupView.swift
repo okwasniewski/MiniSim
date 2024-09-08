@@ -5,7 +5,6 @@
 //  Created by Oskar Kwaśniewski on 15/03/2023.
 //
 
-import ShellOut
 import SwiftUI
 
 struct SetupView: View {
