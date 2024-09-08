@@ -284,7 +284,7 @@ class Menu: NSMenu {
     }
 
     func createCustomCommandsMenu(for platform: Platform, isDeviceBooted: Bool, callback: Selector) -> [NSMenuItem] {
-        DeviceService.getCustomCommands(platform: platform)
+        CustomCommandService.getCustomCommands(platform: platform)
             .filter {  item in
                 if item.needBootedDevice && !isDeviceBooted {
                     return false

@@ -81,6 +81,9 @@
 		76BF0AD92C8CB3E6003BE568 /* AcknowList in Frameworks */ = {isa = PBXBuildFile; productRef = 76BF0AD82C8CB3E6003BE568 /* AcknowList */; };
 		76BF0ADB2C8CB4CD003BE568 /* Package.resolved in Resources */ = {isa = PBXBuildFile; fileRef = 76BF0ADA2C8CB4CD003BE568 /* Package.resolved */; };
 		76BF0ADD2C8DF660003BE568 /* AccessibilityElementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0ADC2C8DF660003BE568 /* AccessibilityElementTests.swift */; };
+		76BF0ADF2C8E01B3003BE568 /* CustomCommandService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0ADE2C8E01B3003BE568 /* CustomCommandService.swift */; };
+		76BF0AE12C8E027D003BE568 /* DeviceConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0AE02C8E027D003BE568 /* DeviceConstants.swift */; };
+		76BF0AE32C8E041C003BE568 /* CustomCommandServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0AE22C8E041C003BE568 /* CustomCommandServiceTests.swift */; };
 		76C1396A2C849A3F006CD80C /* MenuIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C139692C849A3F006CD80C /* MenuIcons.swift */; };
 		76E4451229D4391000039025 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451129D4391000039025 /* Onboarding.swift */; };
 		76E4451429D4403F00039025 /* NSNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451329D4403F00039025 /* NSNotificationName.swift */; };
@@ -178,6 +181,9 @@
 		76B70F832B0D5AB4009D87A4 /* Shell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		76BF0ADA2C8CB4CD003BE568 /* Package.resolved */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Package.resolved; path = MiniSim.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved; sourceTree = SOURCE_ROOT; };
 		76BF0ADC2C8DF660003BE568 /* AccessibilityElementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityElementTests.swift; sourceTree = "<group>"; };
+		76BF0ADE2C8E01B3003BE568 /* CustomCommandService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCommandService.swift; sourceTree = "<group>"; };
+		76BF0AE02C8E027D003BE568 /* DeviceConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceConstants.swift; sourceTree = "<group>"; };
+		76BF0AE22C8E041C003BE568 /* CustomCommandServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCommandServiceTests.swift; sourceTree = "<group>"; };
 		76C139692C849A3F006CD80C /* MenuIcons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuIcons.swift; sourceTree = "<group>"; };
 		76E4451129D4391000039025 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		76E4451329D4403F00039025 /* NSNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotificationName.swift; sourceTree = "<group>"; };
@@ -314,6 +320,8 @@
 				7699511C2C845B1900462287 /* DeviceParser.swift */,
 				76F04A10298A5AE000BF9CA3 /* ADB.swift */,
 				76B70F832B0D5AB4009D87A4 /* Shell.swift */,
+				76BF0ADE2C8E01B3003BE568 /* CustomCommandService.swift */,
+				76BF0AE02C8E027D003BE568 /* DeviceConstants.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -418,6 +426,7 @@
 				7699511E2C845CBA00462287 /* DeviceParserTests.swift */,
 				76B70F812B0D50FE009D87A4 /* ADBTests.swift */,
 				76BF0ADC2C8DF660003BE568 /* AccessibilityElementTests.swift */,
+				76BF0AE22C8E041C003BE568 /* CustomCommandServiceTests.swift */,
 			);
 			path = MiniSimTests;
 			sourceTree = "<group>";
@@ -612,7 +621,9 @@
 				76F269852A2A376A00424BDA /* CustomCommandError.swift in Sources */,
 				767799A029C30BF5009030F8 /* BlurredView.swift in Sources */,
 				7645D4C42982CB2B00019227 /* MiniSim.swift in Sources */,
+				76BF0ADF2C8E01B3003BE568 /* CustomCommandService.swift in Sources */,
 				76F2A912299033EA002D4EF6 /* DeviceError.swift in Sources */,
+				76BF0AE12C8E027D003BE568 /* DeviceConstants.swift in Sources */,
 				7631218E2A12B3BA00EE7F48 /* CustomCommandsViewModel.swift in Sources */,
 				4AFACC782AD74E9000EC369F /* DeviceListSection.swift in Sources */,
 				760554A32C085BEA001607FE /* Thread+Asserts.swift in Sources */,
@@ -678,6 +689,7 @@
 			files = (
 				7699511F2C845CBA00462287 /* DeviceParserTests.swift in Sources */,
 				76BF0ADD2C8DF660003BE568 /* AccessibilityElementTests.swift in Sources */,
+				76BF0AE32C8E041C003BE568 /* CustomCommandServiceTests.swift in Sources */,
 				76B70F7E2B0D361A009D87A4 /* UserDefaultsTests.swift in Sources */,
 				760DEACE2B0DFB6600253576 /* ShellStub.swift in Sources */,
 				76B70F822B0D50FE009D87A4 /* ADBTests.swift in Sources */,

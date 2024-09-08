@@ -6,6 +6,10 @@ class DeviceParserTests: XCTestCase {
   class ADB: ADBProtocol {
     static var shell: ShellProtocol = Shell()
 
+    static func getAndroidHome() throws -> String {
+      ""
+    }
+
     static func getAdbId(for deviceName: String) throws -> String {
       if deviceName == "Nexus_5X_API_28" {
         throw NSError(domain: "ADBError", code: 1, userInfo: nil)
@@ -282,6 +286,10 @@ class DeviceParserTests: XCTestCase {
 
   func testAndroidEmulatorParserWithADBFailure() {
     class FailingADB: ADBProtocol {
+      static func getAndroidHome() throws -> String {
+        ""
+      }
+
       static var shell: ShellProtocol = Shell()
 
       static func getAdbId(for deviceName: String) throws -> String {

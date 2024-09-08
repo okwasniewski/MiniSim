@@ -7,7 +7,7 @@ class ShellStub: ShellProtocol {
     private var _lastExecutedCommand: String = ""
     private var _lastPassedArguments: [String] = []
     private var _lastPassedPath: String = ""
-    private var _mockedExecute: ((String, [String], String) -> String)?
+    private var _mockedExecute: ((String, [String], String) throws -> String)?
 
     var lastExecutedCommand: String {
         queue.sync { _lastExecutedCommand }
@@ -21,7 +21,7 @@ class ShellStub: ShellProtocol {
         queue.sync { _lastPassedPath }
     }
 
-    var mockedExecute: ((String, [String], String) -> String)? {
+    var mockedExecute: ((String, [String], String) throws -> String)? {
         get { queue.sync { _mockedExecute } }
         set { queue.async(flags: .barrier) { self._mockedExecute = newValue } }
     }
@@ -34,7 +34,7 @@ class ShellStub: ShellProtocol {
         }
 
         if let mockedExecute = queue.sync(execute: { _mockedExecute }) {
-            return mockedExecute(command, arguments, atPath)
+            return try mockedExecute(command, arguments, atPath)
         }
         return ""
     }

@@ -12,6 +12,7 @@ protocol ADBProtocol {
 
     static func getAdbPath() throws -> String
     static func getEmulatorPath() throws -> String
+    static func getAndroidHome() throws -> String
     static func getAdbId(for deviceName: String) throws -> String
     static func checkAndroidHome(
         path: String,

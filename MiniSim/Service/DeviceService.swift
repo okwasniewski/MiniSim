@@ -21,9 +21,6 @@ protocol DeviceServiceProtocol {
   static func checkAndroidSetup() throws -> String
 
   static func focusDevice(_ device: Device)
-  static func runCustomCommand(_ device: Device, command: Command) throws
-  static func getCustomCommands(platform: Platform) -> [Command]
-  static func getCustomCommand(platform: Platform, commandName: String) -> Command?
   static func showSuccessMessage(title: String, message: String)
 }
 
@@ -33,61 +30,6 @@ class DeviceService: DeviceServiceProtocol {
     qos: .userInteractive,
     attributes: .concurrent
   )
-  private static let deviceBootedError = "Unable to boot device in current state: Booted"
-  private static let derivedDataLocation = "~/Library/Developer/Xcode/DerivedData"
-
-  private enum ProcessPaths: String {
-    case xcrun = "/usr/bin/xcrun"
-    case xcodeSelect = "/usr/bin/xcode-select"
-  }
-
-  private enum BundleURL: String {
-    case emulator = "qemu-system-aarch64"
-    case simulator = "Simulator.app"
-  }
-
-  static func getCustomCommands(platform: Platform) -> [Command] {
-    guard let commandsData = UserDefaults.standard.commands else { return [] }
-    guard let commands = try? JSONDecoder().decode([Command].self, from: commandsData) else {
-      return []
-    }
-
-    return commands.filter { $0.platform == platform }
-  }
-
-  static func getCustomCommand(platform: Platform, commandName: String) -> Command? {
-    let commands = getCustomCommands(platform: platform)
-    return commands.first { $0.name == commandName }
-  }
-
-  static func runCustomCommand(_ device: Device, command: Command) throws {
-    Thread.assertBackgroundThread()
-    var commandToExecute = command.command
-      .replacingOccurrences(of: Variables.deviceName.rawValue, with: device.name)
-
-    let deviceID = device.identifier ?? ""
-
-    if command.platform == .android {
-      commandToExecute = try commandToExecute
-        .replacingOccurrences(of: Variables.adbPath.rawValue, with: ADB.getAdbPath())
-        .replacingOccurrences(of: Variables.adbId.rawValue, with: deviceID)
-        .replacingOccurrences(of: Variables.androidHomePath.rawValue, with: ADB.getAndroidHome())
-    } else {
-      commandToExecute = commandToExecute
-        .replacingOccurrences(of: Variables.uuid.rawValue, with: deviceID)
-        .replacingOccurrences(of: Variables.xcrunPath.rawValue, with: ProcessPaths.xcrun.rawValue)
-    }
-
-    do {
-      try shellOut(to: commandToExecute)
-      if command.bootsDevice ?? false && command.platform == .ios {
-        try? launchSimulatorApp(uuid: deviceID)
-      }
-      NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
-    } catch {
-      throw CustomCommandError.commandError(errorMessage: error.localizedDescription)
-    }
-  }
 
   static func focusDevice(_ device: Device) {
     queue.async {
@@ -100,11 +42,11 @@ class DeviceService: DeviceServiceProtocol {
       for app in runningApps {
         guard
           let bundleURL = app.bundleURL?.absoluteString,
-          bundleURL.contains(BundleURL.simulator.rawValue) ||
-            bundleURL.contains(BundleURL.emulator.rawValue) else {
+          bundleURL.contains(DeviceConstants.BundleURL.simulator.rawValue) ||
+            bundleURL.contains(DeviceConstants.BundleURL.emulator.rawValue) else {
           continue
         }
-        let isAndroid = bundleURL.contains(BundleURL.emulator.rawValue)
+        let isAndroid = bundleURL.contains(DeviceConstants.BundleURL.emulator.rawValue)
 
         for window in AccessibilityElement.allWindowsForPID(app.processIdentifier) {
           guard let windowTitle = window.attribute(key: .title, type: String.self),
@@ -139,7 +81,7 @@ class DeviceService: DeviceServiceProtocol {
   }
 
   static func checkXcodeSetup() -> Bool {
-    FileManager.default.fileExists(atPath: ProcessPaths.xcrun.rawValue)
+    FileManager.default.fileExists(atPath: DeviceConstants.ProcessPaths.xcrun.rawValue)
   }
 
   static func checkAndroidSetup() throws -> String {
@@ -200,7 +142,7 @@ class DeviceService: DeviceServiceProtocol {
           completion(nil)
         }
       } catch {
-        if error.localizedDescription.contains(deviceBootedError) {
+        if error.localizedDescription.contains(DeviceConstants.deviceBootedError) {
           return
         }
         completionQueue.async {
@@ -219,9 +161,9 @@ extension DeviceService {
   ) {
     self.queue.async {
       do {
-        let amountCleared = try? shellOut(to: "du -sh \(derivedDataLocation)")
+        let amountCleared = try? shellOut(to: "du -sh \(DeviceConstants.derivedDataLocation)")
           .match(###"\d+\.?\d+\w+"###).first?.first
-        try shellOut(to: "rm -rf \(derivedDataLocation)")
+        try shellOut(to: "rm -rf \(DeviceConstants.derivedDataLocation)")
         completionQueue.async {
           completion(amountCleared ?? "", nil)
         }
@@ -245,7 +187,7 @@ extension DeviceService {
     let outputFile = tempDirectory.appendingPathComponent("iosPhysicalDevices.json")
 
     guard (try? shellOut(
-      to: ProcessPaths.xcrun.rawValue,
+      to: DeviceConstants.ProcessPaths.xcrun.rawValue,
       arguments: ["devicectl", "list", "devices", "-j \(outputFile.path)"]
     )) != nil else {
       return []
@@ -257,7 +199,7 @@ extension DeviceService {
 
   static func getIOSSimulators() throws -> [Device] {
     let output = try shellOut(
-      to: ProcessPaths.xcrun.rawValue,
+      to: DeviceConstants.ProcessPaths.xcrun.rawValue,
       arguments: ["simctl", "list", "devices", "available"]
     )
     return DeviceParserFactory().getParser(.iosSimulator).parse(output)
@@ -269,7 +211,7 @@ extension DeviceService {
 
     if !isSimulatorRunning {
       guard let activeDeveloperDir = try? shellOut(
-        to: ProcessPaths.xcodeSelect.rawValue,
+        to: DeviceConstants.ProcessPaths.xcodeSelect.rawValue,
         arguments: ["-p"]
       )
         .trimmingCharacters(in: .whitespacesAndNewlines) else {
@@ -285,9 +227,9 @@ extension DeviceService {
   private static func launchDevice(uuid: String) throws {
     do {
       try self.launchSimulatorApp(uuid: uuid)
-      try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "boot", uuid])
+      try shellOut(to: DeviceConstants.ProcessPaths.xcrun.rawValue, arguments: ["simctl", "boot", uuid])
     } catch {
-      if !error.localizedDescription.contains(deviceBootedError) {
+      if !error.localizedDescription.contains(DeviceConstants.deviceBootedError) {
         throw error
       }
     }
@@ -295,7 +237,7 @@ extension DeviceService {
 
   static func deleteSimulator(uuid: String) throws {
     Thread.assertBackgroundThread()
-    try shellOut(to: ProcessPaths.xcrun.rawValue, arguments: ["simctl", "delete", uuid])
+    try shellOut(to: DeviceConstants.ProcessPaths.xcrun.rawValue, arguments: ["simctl", "delete", uuid])
   }
 
   static func handleiOSAction(device: Device, commandTag: SubMenuItems.Tags, itemName: String) {
@@ -329,12 +271,12 @@ extension DeviceService {
           }
         }
       case .customCommand:
-        guard let command = DeviceService.getCustomCommand(platform: .ios, commandName: itemName) else {
+        guard let command = CustomCommandService.getCustomCommand(platform: .ios, commandName: itemName) else {
           return
         }
 
         do {
-          try DeviceService.runCustomCommand(device, command: command)
+          try CustomCommandService.runCustomCommand(device, command: command)
         } catch {
           NSAlert.showError(message: error.localizedDescription)
         }
@@ -479,8 +421,8 @@ extension DeviceService {
           try DeviceService.sendText(device: device, text: text)
 
         case .customCommand:
-          if let command = DeviceService.getCustomCommand(platform: .android, commandName: itemName) {
-            try DeviceService.runCustomCommand(device, command: command)
+          if let command = CustomCommandService.getCustomCommand(platform: .android, commandName: itemName) {
+            try CustomCommandService.runCustomCommand(device, command: command)
           }
         case .logcat:
           try DeviceService.launchLogCat(device: device)
