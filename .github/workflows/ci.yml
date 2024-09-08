@@ -1,0 +1,72 @@
+name: MiniSim CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.ref }}-build
+  cancel-in-progress: true
+
+env:
+  DERIVED_DATA_PATH: ${{ github.workspace }}/DerivedData
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: GitHub Action for SwiftLint
+        uses: norio-nomura/action-swiftlint@3.2.1
+
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 15
+      - name: Cache DerivedData
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.DERIVED_DATA_PATH }}
+          key: ${{ runner.os }}-deriveddata-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}
+          restore-keys: |
+            ${{ runner.os }}-deriveddata-
+      - name: Build
+        run: |
+          set -o pipefail && xcodebuild -scheme MiniSim -destination 'platform=macOS' \
+          -skipPackagePluginValidation -skipMacroValidation \
+          -derivedDataPath ${{ env.DERIVED_DATA_PATH }} \
+          build-for-testing \
+          COMPILER_INDEX_STORE_ENABLE=NO | xcbeautify --renderer github-actions
+
+  test:
+    needs: build
+    runs-on: macos-14
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 15
+      - name: Cache DerivedData
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.DERIVED_DATA_PATH }}
+          key: ${{ runner.os }}-deriveddata-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}
+      - name: Test
+        run: |
+          xcodebuild -scheme MiniSim -destination 'platform=macOS' \
+          -skipPackagePluginValidation -skipMacroValidation \
+          -derivedDataPath ${{ env.DERIVED_DATA_PATH }} \
+          test-without-building \
+          COMPILER_INDEX_STORE_ENABLE=NO | xcbeautify --renderer github-actions
