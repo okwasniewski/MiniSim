@@ -19,7 +19,7 @@ protocol SubMenuActionItem: SubMenuItem {
 }
 
 enum SubMenuItems {
-    enum Tags: Int {
+    enum Tags: Int, CaseIterable {
         case copyName = 100
         case copyID
         case coldBoot

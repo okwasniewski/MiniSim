@@ -92,6 +92,8 @@
 		76BF0AF02C9061E8003BE568 /* DeviceDiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0AEF2C9061E8003BE568 /* DeviceDiscoveryService.swift */; };
 		76BF0AF22C907033003BE568 /* DeviceServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0AF12C907032003BE568 /* DeviceServiceFactory.swift */; };
 		76BF0AF42C90A74E003BE568 /* AppleUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0AF32C90A74E003BE568 /* AppleUtilsTests.swift */; };
+		76BF0AF62C90AB03003BE568 /* DeviceDiscoveryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0AF52C90AB03003BE568 /* DeviceDiscoveryTests.swift */; };
+		76BF0AF82C90ACF2003BE568 /* ActionFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0AF72C90ACF2003BE568 /* ActionFactoryTests.swift */; };
 		76C1396A2C849A3F006CD80C /* MenuIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C139692C849A3F006CD80C /* MenuIcons.swift */; };
 		76E4451229D4391000039025 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451129D4391000039025 /* Onboarding.swift */; };
 		76E4451429D4403F00039025 /* NSNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451329D4403F00039025 /* NSNotificationName.swift */; };
@@ -200,6 +202,8 @@
 		76BF0AEF2C9061E8003BE568 /* DeviceDiscoveryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDiscoveryService.swift; sourceTree = "<group>"; };
 		76BF0AF12C907032003BE568 /* DeviceServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceServiceFactory.swift; sourceTree = "<group>"; };
 		76BF0AF32C90A74E003BE568 /* AppleUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleUtilsTests.swift; sourceTree = "<group>"; };
+		76BF0AF52C90AB03003BE568 /* DeviceDiscoveryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDiscoveryTests.swift; sourceTree = "<group>"; };
+		76BF0AF72C90ACF2003BE568 /* ActionFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionFactoryTests.swift; sourceTree = "<group>"; };
 		76C139692C849A3F006CD80C /* MenuIcons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuIcons.swift; sourceTree = "<group>"; };
 		76E4451129D4391000039025 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		76E4451329D4403F00039025 /* NSNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotificationName.swift; sourceTree = "<group>"; };
@@ -451,6 +455,8 @@
 				76BF0ADC2C8DF660003BE568 /* AccessibilityElementTests.swift */,
 				76BF0AE22C8E041C003BE568 /* CustomCommandServiceTests.swift */,
 				76BF0AF32C90A74E003BE568 /* AppleUtilsTests.swift */,
+				76BF0AF52C90AB03003BE568 /* DeviceDiscoveryTests.swift */,
+				76BF0AF72C90ACF2003BE568 /* ActionFactoryTests.swift */,
 			);
 			path = MiniSimTests;
 			sourceTree = "<group>";
@@ -718,10 +724,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76BF0AF62C90AB03003BE568 /* DeviceDiscoveryTests.swift in Sources */,
 				7699511F2C845CBA00462287 /* DeviceParserTests.swift in Sources */,
 				76BF0ADD2C8DF660003BE568 /* AccessibilityElementTests.swift in Sources */,
 				76BF0AE32C8E041C003BE568 /* CustomCommandServiceTests.swift in Sources */,
 				76BF0AF42C90A74E003BE568 /* AppleUtilsTests.swift in Sources */,
+				76BF0AF82C90ACF2003BE568 /* ActionFactoryTests.swift in Sources */,
 				76B70F7E2B0D361A009D87A4 /* UserDefaultsTests.swift in Sources */,
 				760DEACE2B0DFB6600253576 /* ShellStub.swift in Sources */,
 				76B70F822B0D50FE009D87A4 /* ADBTests.swift in Sources */,
