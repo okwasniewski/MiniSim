@@ -94,6 +94,7 @@
 		76BF0AF42C90A74E003BE568 /* AppleUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0AF32C90A74E003BE568 /* AppleUtilsTests.swift */; };
 		76BF0AF62C90AB03003BE568 /* DeviceDiscoveryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0AF52C90AB03003BE568 /* DeviceDiscoveryTests.swift */; };
 		76BF0AF82C90ACF2003BE568 /* ActionFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0AF72C90ACF2003BE568 /* ActionFactoryTests.swift */; };
+		76BF0AFA2C9367DE003BE568 /* ActionExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF0AF92C9367DE003BE568 /* ActionExecutor.swift */; };
 		76C1396A2C849A3F006CD80C /* MenuIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C139692C849A3F006CD80C /* MenuIcons.swift */; };
 		76E4451229D4391000039025 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451129D4391000039025 /* Onboarding.swift */; };
 		76E4451429D4403F00039025 /* NSNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451329D4403F00039025 /* NSNotificationName.swift */; };
@@ -204,6 +205,7 @@
 		76BF0AF32C90A74E003BE568 /* AppleUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleUtilsTests.swift; sourceTree = "<group>"; };
 		76BF0AF52C90AB03003BE568 /* DeviceDiscoveryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDiscoveryTests.swift; sourceTree = "<group>"; };
 		76BF0AF72C90ACF2003BE568 /* ActionFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionFactoryTests.swift; sourceTree = "<group>"; };
+		76BF0AF92C9367DE003BE568 /* ActionExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionExecutor.swift; sourceTree = "<group>"; };
 		76C139692C849A3F006CD80C /* MenuIcons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuIcons.swift; sourceTree = "<group>"; };
 		76E4451129D4391000039025 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		76E4451329D4403F00039025 /* NSNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotificationName.swift; sourceTree = "<group>"; };
@@ -349,6 +351,7 @@
 				76BF0AE72C8E1077003BE568 /* ActionFactory.swift */,
 				76BF0AEF2C9061E8003BE568 /* DeviceDiscoveryService.swift */,
 				76BF0AF12C907032003BE568 /* DeviceServiceFactory.swift */,
+				76BF0AF92C9367DE003BE568 /* ActionExecutor.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -694,6 +697,7 @@
 				763121902A12B45000EE7F48 /* CustomCommandFormViewModel.swift in Sources */,
 				52B363EE2AEC10B3006F515C /* ParametersTableFormViewModel.swift in Sources */,
 				7630B2772986D65800D8B57D /* Bundle+appName.swift in Sources */,
+				76BF0AFA2C9367DE003BE568 /* ActionExecutor.swift in Sources */,
 				763121892A12AF9C00EE7F48 /* Command.swift in Sources */,
 				767DDF6829D32ABC005E6F32 /* ReadyPopOver.swift in Sources */,
 				764BA3E92A5AD418003A78AF /* GetDevicesCommand.swift in Sources */,
