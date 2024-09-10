@@ -21,16 +21,7 @@ class GetDevicesCommand: NSScriptCommand {
         }
 
         do {
-            switch (platform, deviceType) {
-            case (.android, .physical):
-                return try self.encode(DeviceService.getAndroidPhysicalDevices())
-            case (.android, .virtual):
-                return try self.encode(DeviceService.getAndroidEmulators())
-            case (.ios, .physical):
-                return try self.encode(DeviceService.getIOSPhysicalDevices())
-            case (.ios, .virtual):
-                return try self.encode(DeviceService.getIOSSimulators())
-            }
+            return try self.encode(DeviceServiceFactory.getDeviceDiscoveryService(platform: platform).getDevices(type: deviceType))
         } catch {
             scriptErrorNumber = NSInternalScriptError
             return nil

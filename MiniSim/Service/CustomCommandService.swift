@@ -42,7 +42,7 @@ class CustomCommandService {
     do {
       try shell.execute(command: commandToExecute)
       if command.bootsDevice ?? false && command.platform == .ios {
-        try? DeviceService.launchSimulatorApp(uuid: deviceID)
+        try? AppleUtils.launchSimulatorApp(uuid: deviceID)
       }
       NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
     } catch {

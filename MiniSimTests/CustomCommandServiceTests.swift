@@ -5,6 +5,10 @@ class CustomCommandServiceTests: XCTestCase {
   class ADB: ADBProtocol {
     static var shell: ShellProtocol = Shell()
 
+    static func sendText(device: Device, text: String) throws {}
+
+    static func launchLogCat(device: Device) throws {}
+
     static func getAndroidHome() throws -> String {
       "mocked_android_home"
     }

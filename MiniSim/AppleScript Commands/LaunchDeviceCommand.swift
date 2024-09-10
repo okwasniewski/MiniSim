@@ -17,8 +17,8 @@ class LaunchDeviceCommand: NSScriptCommand {
 
         do {
             var devices: [Device] = []
-            try devices.append(contentsOf: DeviceService.getIOSDevices())
-            try devices.append(contentsOf: DeviceService.getAndroidDevices())
+            try devices.append(contentsOf: DeviceServiceFactory.getDeviceDiscoveryService(platform: .ios).getDevices())
+            try devices.append(contentsOf: DeviceServiceFactory.getDeviceDiscoveryService(platform: .android).getDevices())
 
             guard let device = devices.first(where: { $0.name == deviceName }) else {
                 scriptErrorNumber = NSInternalScriptError
@@ -26,11 +26,11 @@ class LaunchDeviceCommand: NSScriptCommand {
             }
 
             if device.booted {
-                DeviceService.focusDevice(device)
+                device.focus()
                 return nil
             }
 
-            DeviceService.launch(device: device) { _ in }
+            try? device.launch()
             return nil
         } catch {
             scriptErrorNumber = NSInternalScriptError

@@ -171,7 +171,7 @@ class MiniSim: NSObject {
                     return
                 }
 
-                DeviceService.clearDerivedData { amountCleared, error in
+                AppleUtils.clearDerivedData { amountCleared, error in
                     guard error == nil else {
                         NSAlert.showError(message: error?.localizedDescription ?? "Failed to clear derived  data.")
                         return
@@ -184,6 +184,11 @@ class MiniSim: NSObject {
                 }
             }
         }
+    }
+
+    static func showSuccessMessage(title: String, message: String) {
+      UNUserNotificationCenter.showNotification(title: title, body: message)
+      NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
     }
 
     private var mainMenu: [NSMenuItem] {
