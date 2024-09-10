@@ -6,7 +6,7 @@
 //
 import Foundation
 
-enum DeviceError: Error {
+enum DeviceError: Error, Equatable {
     // Throw when device was not found
     case deviceNotFound
 

@@ -2,6 +2,7 @@ import AppKit
 
 class AppleUtils {
   static var shell: ShellProtocol = Shell()
+  static var workspace: NSWorkspace = .shared
 
   static func clearDerivedData(
     completionQueue: DispatchQueue = .main,
@@ -24,7 +25,7 @@ class AppleUtils {
   }
 
   static func launchSimulatorApp(uuid: String) throws {
-    let isSimulatorRunning = NSWorkspace.shared.runningApplications
+    let isSimulatorRunning = workspace.runningApplications
       .contains { $0.bundleIdentifier == "com.apple.iphonesimulator" }
 
     if !isSimulatorRunning {
