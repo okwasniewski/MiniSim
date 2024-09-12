@@ -24,7 +24,7 @@ class GetCommands: NSScriptCommand {
         let commands = SubMenuItems.items(platform: platform, deviceType: deviceType)
             .compactMap { $0 as? SubMenuActionItem }
             .map { $0.commandItem }
-        let customCommands = DeviceService.getCustomCommands(platform: platform)
+        let customCommands = CustomCommandService.getCustomCommands(platform: platform)
             .map { command in
                 Command(
                     id: command.id,

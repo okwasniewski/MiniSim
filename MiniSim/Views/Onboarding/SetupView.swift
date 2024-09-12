@@ -26,12 +26,14 @@ struct SetupView: View {
         if !enableiOSSimulators {
             return
         }
-        isXcodeSetupCorrect = DeviceService.checkXcodeSetup()
+      isXcodeSetupCorrect = (try? IOSDeviceDiscovery().checkSetup()) != nil
     }
 
     func checkAndroidStudio() {
         do {
-            UserDefaults.standard.androidHome = try DeviceService.checkAndroidSetup()
+          if (try? AndroidDeviceDiscovery().checkSetup()) != nil {
+            UserDefaults.standard.androidHome = try ADB.getAndroidHome()
+          }
         } catch {
             isAndroidSetupCorrect = false
         }

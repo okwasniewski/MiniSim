@@ -11,7 +11,7 @@ import SwiftUI
 
 struct About: View {
   private let updaterController: SPUStandardUpdaterController
-  @Environment (\.openURL) private var openURL
+  @Environment(\.openURL) private var openURL
   @State private var isAcknowledgementsListPresented = false
 
   init() {

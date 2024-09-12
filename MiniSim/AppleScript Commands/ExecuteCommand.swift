@@ -30,21 +30,13 @@ class ExecuteCommand: NSScriptCommand {
         guard let menuItem = SubMenuItems.Tags(rawValue: rawTag) else {
             return nil
         }
+        let actionExecutor = ActionExecutor()
+        actionExecutor.execute(
+          device: device,
+          commandTag: menuItem,
+          itemName: commandName
+        )
 
-        switch platform {
-        case .android:
-            DeviceService.handleAndroidAction(
-                device: device,
-                commandTag: menuItem,
-                itemName: commandName
-            )
-        case .ios:
-            DeviceService.handleiOSAction(
-                device: device,
-                commandTag: menuItem,
-                itemName: commandName
-            )
-        }
         return nil
     }
 }

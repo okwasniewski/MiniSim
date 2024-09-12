@@ -4,7 +4,17 @@ import XCTest
 class DeviceParserTests: XCTestCase {
   // Mock ADB class for testing
   class ADB: ADBProtocol {
+    static func sendText(device: Device, text: String) throws {
+    }
+
+    static func launchLogCat(device: Device) throws {
+    }
+
     static var shell: ShellProtocol = Shell()
+
+    static func getAndroidHome() throws -> String {
+      ""
+    }
 
     static func getAdbId(for deviceName: String) throws -> String {
       if deviceName == "Nexus_5X_API_28" {
@@ -282,6 +292,16 @@ class DeviceParserTests: XCTestCase {
 
   func testAndroidEmulatorParserWithADBFailure() {
     class FailingADB: ADBProtocol {
+      static func sendText(device: Device, text: String) throws {
+      }
+
+      static func launchLogCat(device: Device) throws {
+      }
+
+      static func getAndroidHome() throws -> String {
+        ""
+      }
+
       static var shell: ShellProtocol = Shell()
 
       static func getAdbId(for deviceName: String) throws -> String {

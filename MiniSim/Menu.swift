@@ -11,6 +11,7 @@ import UserNotifications
 
 class Menu: NSMenu {
     public let maxKeyEquivalent = 9
+    let actionExecutor = ActionExecutor()
 
     var devices: [Device] = [] {
         didSet {
@@ -71,7 +72,7 @@ class Menu: NSMenu {
 
     func updateDevicesList() {
         let userDefaults = UserDefaults.standard
-        DeviceService.getAllDevices(
+        DeviceServiceFactory.getAllDevices(
             android: userDefaults.enableAndroidEmulators && userDefaults.androidHome != nil,
             iOS: userDefaults.enableiOSSimulators
         ) { devices, error in
@@ -93,30 +94,28 @@ class Menu: NSMenu {
             .forEach(safeRemoveItem)
     }
 
-    @objc private func androidSubMenuClick(_ sender: NSMenuItem) {
-        guard let tag = SubMenuItems.Tags(rawValue: sender.tag) else { return }
-        guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
+    @objc private func subMenuClick(_ sender: NSMenuItem) {
+      guard let tag = SubMenuItems.Tags(rawValue: sender.tag) else { return }
+      guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
 
-        DeviceService.handleAndroidAction(device: device, commandTag: tag, itemName: sender.title)
-    }
-
-    @objc private func IOSSubMenuClick(_ sender: NSMenuItem) {
-        guard let tag = SubMenuItems.Tags(rawValue: sender.tag) else { return }
-        guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
-
-        DeviceService.handleiOSAction(device: device, commandTag: tag, itemName: sender.title)
+      actionExecutor.execute(
+        device: device,
+        commandTag: tag,
+        itemName: sender.title
+      )
     }
 
     @objc private func deviceItemClick(_ sender: NSMenuItem) {
         guard let device = getDeviceByName(name: sender.title), device.type == .virtual else { return }
 
-        if device.booted {
-            DeviceService.focusDevice(device)
-            return
-        }
-
-        DeviceService.launch(device: device) { error in
-            if let error {
+        DispatchQueue.global().async {
+            if device.booted {
+                device.focus()
+                return
+            }
+            do {
+                try device.launch()
+            } catch {
                 NSAlert.showError(message: error.localizedDescription)
             }
         }
@@ -242,7 +241,7 @@ class Menu: NSMenu {
         let subMenu = NSMenu()
         let platform = device.platform
         let deviceType = device.type
-        let callback = platform == .android ? #selector(androidSubMenuClick) : #selector(IOSSubMenuClick)
+        let callback = #selector(subMenuClick)
         let actionsSubMenu = createActionsSubMenu(
             for: SubMenuItems.items(platform: platform, deviceType: deviceType),
             isDeviceBooted: device.booted,
@@ -284,7 +283,7 @@ class Menu: NSMenu {
     }
 
     func createCustomCommandsMenu(for platform: Platform, isDeviceBooted: Bool, callback: Selector) -> [NSMenuItem] {
-        DeviceService.getCustomCommands(platform: platform)
+        CustomCommandService.getCustomCommands(platform: platform)
             .filter {  item in
                 if item.needBootedDevice && !isDeviceBooted {
                     return false
