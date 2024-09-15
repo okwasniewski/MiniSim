@@ -1,5 +1,3 @@
-//
-//  Preferences.swift
 //  MiniSim
 //
 //  Created by Oskar Kwaśniewski on 28/01/2023.
@@ -27,9 +25,9 @@ struct Preferences: View {
         Settings.Container(contentWidth: 400) {
             Settings.Section(title: "Icon:") {
                 Picker("", selection: $menuImageSelected) {
-                    ForEach(MenuImage.allCases, id: \.self) { image in
-                        Image(nsImage: NSImage(imageLiteralResourceName: image.rawValue))
-                            .tag(image.rawValue)
+                    ForEach(MenuImage.allCases, id: \.self) { menuImage in
+                        Image(nsImage: menuImage.image ?? NSImage())
+                           .tag( menuImage.rawValue)
                     }
                 }
                 .fixedSize(horizontal: true, vertical: false)
