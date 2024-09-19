@@ -27,7 +27,7 @@ struct Preferences: View {
                 Picker("", selection: $menuImageSelected) {
                     ForEach(MenuImage.allCases, id: \.self) { menuImage in
                         Image(nsImage: menuImage.image ?? NSImage())
-                           .tag( menuImage.rawValue)
+                           .tag(menuImage.rawValue)
                     }
                 }
                 .fixedSize(horizontal: true, vertical: false)
