@@ -100,7 +100,7 @@ class IOSPhysicalDeviceParser: DeviceParser {
         name: jsonObjectDevice.deviceProperties.name,
         version: jsonObjectDevice.deviceProperties.osVersionNumber,
         identifier: jsonObjectDevice.hardwareProperties.udid,
-        booted: jsonObjectDevice.connectionProperties.tunnelState != "unavailable",
+        booted: !["unavailable", "disconnected"].contains(jsonObjectDevice.connectionProperties.tunnelState),
         platform: .ios,
         type: .physical
       )
