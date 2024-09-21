@@ -6,23 +6,26 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>0.8.4</title>
+      <title>0.9.0</title>
       <description>
-      <![CDATA[ <ul>
-      <li>fix: Raycast integration</li>
-      <li>fix: Parse out emulator crash error bug from device list</li>
-      </ul> ]]>
-      </description>
-      <pubDate>2024-07-20</pubDate>
-      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.8.4</releaseNotesLink>
+        <![CDATA[ <ul>
+        <li>NEW: Physical devices are now supported!</li>
+        <li>NEW: add preference option to change MiniSim icon</li>
+        <li>add wezterm support</li>
+        <li>add acknowledgements</li>
+        <li>rewrite internal implementation</li>
+        </ul> ]]>
+        </description>
+      <pubDate>2024-09-21</pubDate>
+      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.9.0</releaseNotesLink>
       <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
       <enclosure
-        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.8.4/MiniSim.app.zip"
-        sparkle:version="17"
-        sparkle:shortVersionString="0.8.4"
+        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.9.0/MiniSim.app.zip"
+        sparkle:version="18"
+        sparkle:shortVersionString="0.9.0"
         length="0"
         type="application/octet-stream"
-      />
-    </item>
-  </channel>
-</rss>
+        />
+      </item>
+    </channel>
+  </rss>
