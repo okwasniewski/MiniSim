@@ -98,10 +98,13 @@ class Menu: NSMenu {
       guard let tag = SubMenuItems.Tags(rawValue: sender.tag) else { return }
       guard let device = getDeviceByName(name: sender.parent?.title ?? "") else { return }
 
+      let skipConfirmation = NSEvent.modifierFlags.contains(.shift)
+
       actionExecutor.execute(
         device: device,
         commandTag: tag,
-        itemName: sender.title
+        itemName: sender.title,
+        skipConfirmation: skipConfirmation
       )
     }
 

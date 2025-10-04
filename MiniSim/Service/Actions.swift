@@ -44,13 +44,16 @@ class CopyNameAction: Action {
 
 class DeleteAction: Action {
   let device: Device
+  let skipConfirmation: Bool
 
-  init(device: Device) {
+  init(device: Device, skipConfirmation: Bool = false) {
     self.device = device
+    self.skipConfirmation = skipConfirmation
   }
 
   func showQuestionDialog() -> Bool {
-    !NSAlert.showQuestionDialog(
+    guard !skipConfirmation else { return false }
+    return !NSAlert.showQuestionDialog(
       title: "Are you sure?",
       message: "Are you sure you want to delete this device?"
     )

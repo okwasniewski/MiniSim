@@ -2,11 +2,11 @@ import AppKit
 import Foundation
 
 protocol ActionFactory {
-  static func createAction(for tag: SubMenuItems.Tags, device: Device, itemName: String) -> Action
+  static func createAction(for tag: SubMenuItems.Tags, device: Device, itemName: String, skipConfirmation: Bool) -> Action
 }
 
 class AndroidActionFactory: ActionFactory {
-  static func createAction(for tag: SubMenuItems.Tags, device: Device, itemName: String) -> any Action {
+  static func createAction(for tag: SubMenuItems.Tags, device: Device, itemName: String, skipConfirmation: Bool = false) -> any Action {
     switch tag {
     case .copyName:
       return CopyNameAction(device: device)
@@ -21,7 +21,7 @@ class AndroidActionFactory: ActionFactory {
     case .paste:
       return PasteClipboardAction(device: device)
     case .delete:
-      return DeleteAction(device: device)
+      return DeleteAction(device: device, skipConfirmation: skipConfirmation)
     case .customCommand:
       return CustomCommandAction(device: device, itemName: itemName)
     case .logcat:
@@ -31,7 +31,7 @@ class AndroidActionFactory: ActionFactory {
 }
 
 class IOSActionFactory: ActionFactory {
-  static func createAction(for tag: SubMenuItems.Tags, device: Device, itemName: String) -> any Action {
+  static func createAction(for tag: SubMenuItems.Tags, device: Device, itemName: String, skipConfirmation: Bool = false) -> any Action {
     switch tag {
     case .copyName:
       return CopyNameAction(device: device)
@@ -42,7 +42,7 @@ class IOSActionFactory: ActionFactory {
     case .coldBoot:
       return ColdBootCommand(device: device)
     case .delete:
-      return DeleteAction(device: device)
+      return DeleteAction(device: device, skipConfirmation: skipConfirmation)
     default:
       fatalError("Unhandled action tag: \(tag)")
     }
