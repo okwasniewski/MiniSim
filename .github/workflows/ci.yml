@@ -25,16 +25,16 @@ jobs:
         uses: norio-nomura/action-swiftlint@3.2.1
 
   build:
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: 15
+          xcode-version: 16
       - name: Cache DerivedData
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ env.DERIVED_DATA_PATH }}
           key: ${{ runner.os }}-deriveddata-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}
@@ -50,16 +50,16 @@ jobs:
 
   test:
     needs: build
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: 15
+          xcode-version: 16
       - name: Cache DerivedData
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ env.DERIVED_DATA_PATH }}
           key: ${{ runner.os }}-deriveddata-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}

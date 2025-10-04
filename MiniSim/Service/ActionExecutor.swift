@@ -11,7 +11,8 @@ class ActionExecutor {
   func execute(
     device: Device,
     commandTag: SubMenuItems.Tags,
-    itemName: String
+    itemName: String,
+    skipConfirmation: Bool = false
   ) {
     let action: Action
 
@@ -20,13 +21,15 @@ class ActionExecutor {
       action = AndroidActionFactory.createAction(
         for: commandTag,
         device: device,
-        itemName: itemName
+        itemName: itemName,
+        skipConfirmation: skipConfirmation
       )
     case .ios:
       action = IOSActionFactory.createAction(
         for: commandTag,
         device: device,
-        itemName: itemName
+        itemName: itemName,
+        skipConfirmation: skipConfirmation
       )
     }
 
