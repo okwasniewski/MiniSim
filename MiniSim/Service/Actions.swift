@@ -76,7 +76,7 @@ class CustomCommandAction: Action {
   }
 
   func execute() throws {
-    if let command = CustomCommandService.getCustomCommand(platform: .android, commandName: itemName) {
+    if let command = CustomCommandService.getCustomCommand(platform: device.platform, commandName: itemName) {
       try CustomCommandService.runCustomCommand(device, command: command)
     }
   }
