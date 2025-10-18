@@ -18,6 +18,7 @@ enum Terminal: String, CaseIterable {
     case terminal = "Terminal"
     case iterm = "iTerm"
     case wezterm = "WezTerm"
+    case ghostty = "Ghostty"
 
     var bundleIdentifier: String {
         switch self {
@@ -27,6 +28,8 @@ enum Terminal: String, CaseIterable {
             return "com.googlecode.iterm2"
         case .wezterm:
             return "com.github.wez.wezterm"
+        case .ghostty:
+            return "com.mitchellh.ghostty"
         }
     }
 
@@ -83,6 +86,18 @@ struct WezTermTerminal: TerminalApp {
         """
             tell application \"wezterm\" to activate
             do shell script \"/Applications/WezTerm.app/Contents/MacOS/wezterm cli spawn \(command)\"
+        """
+    }
+}
+
+struct GhosttyTerminal: TerminalApp {
+    var name: String = "Ghostty"
+    var bundleIdentifier: String = "com.mitchellh.ghostty"
+
+    func getLaunchScript(command: String) -> String {
+        """
+            tell application \"Ghostty\" to activate
+            do shell script \"/Applications/Ghostty.app/Contents/MacOS/ghostty -e \(command)\"
         """
     }
 }

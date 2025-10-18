@@ -22,6 +22,8 @@ class TerminalService: TerminalServiceProtocol {
             return ITermTerminal()
         case .wezterm:
             return WezTermTerminal()
+        case .ghostty:
+            return GhosttyTerminal()
         }
     }
 
