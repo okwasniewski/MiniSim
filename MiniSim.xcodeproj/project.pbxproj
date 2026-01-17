@@ -107,6 +107,7 @@
 		76F2A914299050F9002D4EF6 /* UserDefaults+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */; };
 		76F2A9172991B7B6002D4EF6 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */; };
 		76FCABAB29B390D5003BBF9A /* Collection+get.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FCABAA29B390D5003BBF9A /* Collection+get.swift */; };
+		7D4142B4F3AF1D150D9222BD /* DeviceFamily.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F78DD26087D5448AAB2CC3B /* DeviceFamily.swift */; };
 		9B225A9C2C7E360D002620BA /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B225A9B2C7E360D002620BA /* DeviceType.swift */; };
 /* End PBXBuildFile section */
 
@@ -129,6 +130,7 @@
 		52B363ED2AEC10B3006F515C /* ParametersTableFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersTableFormViewModel.swift; sourceTree = "<group>"; };
 		551B88292B1385E900B8D325 /* Terminal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Terminal.swift; sourceTree = "<group>"; };
 		55CDB0772B1B6D24002418D7 /* TerminalApps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalApps.swift; sourceTree = "<group>"; };
+		5F78DD26087D5448AAB2CC3B /* DeviceFamily.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeviceFamily.swift; sourceTree = "<group>"; };
 		760554A22C085BEA001607FE /* Thread+Asserts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Thread+Asserts.swift"; sourceTree = "<group>"; };
 		76059BF42AD4361C0008D38B /* SetupPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPreferences.swift; sourceTree = "<group>"; };
 		76059BF62AD449DC0008D38B /* OnboardingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHeader.swift; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 				7631218A2A12AFBC00EE7F48 /* Platform.swift */,
 				76F269862A2A39D100424BDA /* Variables.swift */,
 				9B225A9B2C7E360D002620BA /* DeviceType.swift */,
+				5F78DD26087D5448AAB2CC3B /* DeviceFamily.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -721,6 +724,7 @@
 				76BF0AEE2C905C43003BE568 /* IOSDeviceService.swift in Sources */,
 				7645D4BE2982A1B100019227 /* DeviceService.swift in Sources */,
 				765ABF382A8BECD900A063CB /* ExecuteCommand.swift in Sources */,
+				7D4142B4F3AF1D150D9222BD /* DeviceFamily.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -745,7 +749,7 @@
 /* Begin PBXTargetDependency section */
 		4A78928A2AF1A9A3004D3FC8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 4A7892892AF1A9A3004D3FC8 /* SwiftLintPlugin */;
+			productRef = 4A7892892AF1A9A3004D3FC8 /* plugin:SwiftLintPlugin */;
 		};
 		76B70F792B0D359D009D87A4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -754,7 +758,7 @@
 		};
 		76B70F802B0D4F9D009D87A4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 76B70F7F2B0D4F9D009D87A4 /* SwiftLintPlugin */;
+			productRef = 76B70F7F2B0D4F9D009D87A4 /* plugin:SwiftLintPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1106,7 +1110,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4A7892892AF1A9A3004D3FC8 /* SwiftLintPlugin */ = {
+		4A7892892AF1A9A3004D3FC8 /* plugin:SwiftLintPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4A7892862AF1A767004D3FC8 /* XCRemoteSwiftPackageReference "SwiftLint" */;
 			productName = "plugin:SwiftLintPlugin";
@@ -1141,7 +1145,7 @@
 			package = 76AC9AF72A0EB50800864A8B /* XCRemoteSwiftPackageReference "SymbolPicker" */;
 			productName = SymbolPicker;
 		};
-		76B70F7F2B0D4F9D009D87A4 /* SwiftLintPlugin */ = {
+		76B70F7F2B0D4F9D009D87A4 /* plugin:SwiftLintPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4A7892862AF1A767004D3FC8 /* XCRemoteSwiftPackageReference "SwiftLint" */;
 			productName = "plugin:SwiftLintPlugin";

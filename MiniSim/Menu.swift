@@ -225,7 +225,8 @@ class Menu: NSMenu {
             title: device.displayName,
             action: #selector(deviceItemClick),
             keyEquivalent: "",
-            type: device.platform == .ios ? .launchIOS : .launchAndroid
+            type: device.platform == .ios ? .launchIOS : .launchAndroid,
+            deviceFamily: device.deviceFamily
         )
 
         menuItem.target = self

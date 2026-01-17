@@ -13,6 +13,7 @@ extension NSMenuItem {
         action: Selector?,
         keyEquivalent: String,
         type: DeviceMenuItem,
+        deviceFamily: DeviceFamily? = nil,
         image: NSImage? = nil
     ) {
         self.init(title: title, action: action, keyEquivalent: keyEquivalent)
@@ -20,10 +21,15 @@ extension NSMenuItem {
         if let image {
             self.image = image
         } else {
-            if title.contains("Vision") {
+            if let deviceFamily, deviceFamily == .vision {
                 self.image = NSImage(named: "vision_os")
                 self.image?.isTemplate = true
                 self.image?.size = NSSize(width: 15, height: 8.5)
+            } else if let deviceFamily {
+                self.image = NSImage(
+                    systemSymbolName: deviceFamily.iconName,
+                    accessibilityDescription: title
+                )
             } else {
                 let imageName = self.getSystemImageFromName(name: title)
                 self.image = NSImage(systemSymbolName: imageName, accessibilityDescription: title)
@@ -42,7 +48,7 @@ extension NSMenuItem {
             return "ipad.landscape"
         }
 
-        if name.contains("Watch") {
+        if name.contains("Apple Watch") {
             return "applewatch"
         }
 
