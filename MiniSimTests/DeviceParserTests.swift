@@ -51,60 +51,100 @@ class DeviceParserTests: XCTestCase {
     XCTAssertTrue(androidParser is AndroidEmulatorParser)
   }
 
-  func testIOSSimulatorParser() {
+  func testIOSSimulatorParser() throws {
     let parser = IOSSimulatorParser()
     let input = """
-        == Devices ==
-        -- iOS 17.5 --
-            iPhone SE (3rd generation) (957C8A2F-4C12-4732-A4E9-37F8FDD35E3B) (Booted)
-            iPhone 15 (7B8464FF-956F-405B-B357-8ED4689E5177) (Shutdown)
-            iPhone 15 Plus (37A0352D-849D-463B-B513-D23ED0113A87) (Booted)
-            iPhone 15 Pro (9536A75B-5B77-40D8-B96D-925A60E5C0ED) (Shutdown)
-            iPhone 15 Pro Max (7ADF6567-9F08-42A4-A709-2460879038A7) (Shutdown)
-            iPad (10th generation) (D923D804-5E6C-4039-9095-294F7EE2EF3C) (Shutdown)
-            iPad mini (6th generation) (FD14D0FA-7D9A-4107-B73F-B137B7B61515) (Shutdown)
-            iPad Air 11-inch (M2) (67454794-F54F-43DB-868E-7798B32599D9) (Shutdown)
-            iPad Air 13-inch (M2) (2BF9FCDF-EF46-4340-BF90-5DA59AA9F55C) (Shutdown)
-            iPad Pro 11-inch (M4) (7EF89937-90BE-41E5-BD53-03BA6050D63F) (Shutdown)
-            iPad Pro 13-inch (M4) (0F74471B-3D0C-4EDA-9D65-E6A430217294) (Shutdown)
-        -- visionOS 1.2 --
-            Apple Vision Pro (CD50D0C6-D8F6-424E-B1C2-1C288EDBBD79) (Shutdown)
-        -- Unavailable: com.apple.CoreSimulator.SimRuntime.iOS-15-5 --
-        -- Unavailable: com.apple.CoreSimulator.SimRuntime.iOS-16-1 --
-        -- Unavailable: com.apple.CoreSimulator.SimRuntime.iOS-17-0 --
-        -- Unavailable: com.apple.CoreSimulator.SimRuntime.iOS-17-2 --
-        -- Unavailable: com.apple.CoreSimulator.SimRuntime.iOS-17-4 --
-        -- Unavailable: com.apple.CoreSimulator.SimRuntime.tvOS-15-4 --
-        -- Unavailable: com.apple.CoreSimulator.SimRuntime.tvOS-16-1 --
-        -- Unavailable: com.apple.CoreSimulator.SimRuntime.watchOS-8-5 --
-        -- Unavailable: com.apple.CoreSimulator.SimRuntime.xrOS-1-0 --
-        -- Unavailable: com.apple.CoreSimulator.SimRuntime.xrOS-1-1 --
+        {
+          "devices" : {
+            "com.apple.CoreSimulator.SimRuntime.iOS-17-5" : [
+              {
+                "name" : "iPhone SE (3rd generation)",
+                "udid" : "957C8A2F-4C12-4732-A4E9-37F8FDD35E3B",
+                "state" : "Booted",
+                "deviceTypeIdentifier" : "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation",
+                "isAvailable" : true
+              },
+              {
+                "name" : "iPhone 15",
+                "udid" : "7B8464FF-956F-405B-B357-8ED4689E5177",
+                "state" : "Shutdown",
+                "deviceTypeIdentifier" : "com.apple.CoreSimulator.SimDeviceType.iPhone-15",
+                "isAvailable" : true
+              },
+              {
+                "name" : "iPad Pro 11-inch (M4)",
+                "udid" : "7EF89937-90BE-41E5-BD53-03BA6050D63F",
+                "state" : "Shutdown",
+                "deviceTypeIdentifier" : "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M4-8GB",
+                "isAvailable" : true
+              }
+            ],
+            "com.apple.CoreSimulator.SimRuntime.watchOS-26-0" : [
+              {
+                "name" : "Apple Watch Series 11 (46mm)",
+                "udid" : "2E4CC9E0-16C8-4149-9150-B74817AF94A5",
+                "state" : "Shutdown",
+                "deviceTypeIdentifier" : "com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-11-46mm",
+                "isAvailable" : true
+              },
+              {
+                "name" : "iPhone 17 Pro with Apple Watch",
+                "udid" : "B7D730BC-9239-48B3-BA20-6CF5A666B526",
+                "state" : "Shutdown",
+                "deviceTypeIdentifier" : "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
+                "isAvailable" : true
+              }
+            ],
+            "com.apple.CoreSimulator.SimRuntime.visionOS-2-5" : [
+              {
+                "name" : "Apple Vision Pro",
+                "udid" : "CD50D0C6-D8F6-424E-B1C2-1C288EDBBD79",
+                "state" : "Shutdown",
+                "deviceTypeIdentifier" : "com.apple.CoreSimulator.SimDeviceType.Apple-Vision-Pro",
+                "isAvailable" : true
+              }
+            ]
+          }
+        }
         """
 
     let devices = parser.parse(input)
 
-    XCTAssertEqual(devices.count, 12)
+    XCTAssertEqual(devices.count, 6)
 
-    XCTAssertEqual(devices[0].name, "iPhone SE (3rd generation)")
-    XCTAssertEqual(devices[0].version, "iOS 17.5")
-    XCTAssertEqual(devices[0].identifier, "957C8A2F-4C12-4732-A4E9-37F8FDD35E3B")
-    XCTAssertTrue(devices[0].booted)
-    XCTAssertEqual(devices[0].platform, .ios)
-    XCTAssertEqual(devices[0].type, .virtual)
+    let iPhoneSE = try XCTUnwrap(devices.first { $0.identifier == "957C8A2F-4C12-4732-A4E9-37F8FDD35E3B" })
+    XCTAssertEqual(iPhoneSE.name, "iPhone SE (3rd generation)")
+    XCTAssertEqual(iPhoneSE.version, "iOS 17.5")
+    XCTAssertTrue(iPhoneSE.booted)
+    XCTAssertEqual(iPhoneSE.platform, .ios)
+    XCTAssertEqual(iPhoneSE.type, .virtual)
+    XCTAssertEqual(iPhoneSE.deviceFamily, .iPhone)
 
-    XCTAssertEqual(devices[1].name, "iPhone 15")
-    XCTAssertEqual(devices[1].version, "iOS 17.5")
-    XCTAssertEqual(devices[1].identifier, "7B8464FF-956F-405B-B357-8ED4689E5177")
-    XCTAssertFalse(devices[1].booted)
-    XCTAssertEqual(devices[1].platform, .ios)
-    XCTAssertEqual(devices[1].type, .virtual)
+    let iPhone15 = try XCTUnwrap(devices.first { $0.identifier == "7B8464FF-956F-405B-B357-8ED4689E5177" })
+    XCTAssertEqual(iPhone15.name, "iPhone 15")
+    XCTAssertEqual(iPhone15.version, "iOS 17.5")
+    XCTAssertFalse(iPhone15.booted)
+    XCTAssertEqual(iPhone15.platform, .ios)
+    XCTAssertEqual(iPhone15.type, .virtual)
+    XCTAssertEqual(iPhone15.deviceFamily, .iPhone)
 
-    XCTAssertEqual(devices[2].name, "iPhone 15 Plus")
-    XCTAssertEqual(devices[2].version, "iOS 17.5")
-    XCTAssertEqual(devices[2].identifier, "37A0352D-849D-463B-B513-D23ED0113A87")
-    XCTAssertTrue(devices[2].booted)
-    XCTAssertEqual(devices[2].platform, .ios)
-    XCTAssertEqual(devices[2].type, .virtual)
+    let iPadPro = try XCTUnwrap(devices.first { $0.identifier == "7EF89937-90BE-41E5-BD53-03BA6050D63F" })
+    XCTAssertEqual(iPadPro.name, "iPad Pro 11-inch (M4)")
+    XCTAssertEqual(iPadPro.deviceFamily, .iPad)
+
+    let appleWatch = try XCTUnwrap(devices.first { $0.identifier == "2E4CC9E0-16C8-4149-9150-B74817AF94A5" })
+    XCTAssertEqual(appleWatch.name, "Apple Watch Series 11 (46mm)")
+    XCTAssertEqual(appleWatch.version, "watchOS 26.0")
+    XCTAssertEqual(appleWatch.deviceFamily, .watch)
+
+    // iPhone paired with Apple Watch should have iPhone device family
+    let iPhoneWithWatch = try XCTUnwrap(devices.first { $0.identifier == "B7D730BC-9239-48B3-BA20-6CF5A666B526" })
+    XCTAssertEqual(iPhoneWithWatch.name, "iPhone 17 Pro with Apple Watch")
+    XCTAssertEqual(iPhoneWithWatch.deviceFamily, .iPhone)
+
+    let visionPro = try XCTUnwrap(devices.first { $0.identifier == "CD50D0C6-D8F6-424E-B1C2-1C288EDBBD79" })
+    XCTAssertEqual(visionPro.name, "Apple Vision Pro")
+    XCTAssertEqual(visionPro.deviceFamily, .vision)
   }
 
   func testAndroidEmulatorParser() {

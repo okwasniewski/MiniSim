@@ -85,7 +85,7 @@ class IOSDeviceDiscovery: DeviceDiscoveryService {
   func getIOSSimulators() throws -> [Device] {
     let output = try shell.execute(
       command: DeviceConstants.ProcessPaths.xcrun.rawValue,
-      arguments: ["simctl", "list", "devices", "available"]
+      arguments: ["simctl", "list", "devices", "available", "-j"]
     )
     return DeviceParserFactory().getParser(.iosSimulator).parse(output)
   }

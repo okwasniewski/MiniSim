@@ -27,33 +27,60 @@ class DeviceParserFactory {
 }
 
 class IOSSimulatorParser: DeviceParser {
-  func parse(_ input: String) -> [Device] {
-    let lines = input.components(separatedBy: .newlines)
-    var devices: [Device] = []
-    let currentOSIdx = 1
-    let deviceNameIdx = 1
-    let identifierIdx = 4
-    let deviceStateIdx = 5
-    var osVersion = ""
+  struct SimulatorDevice: Codable {
+    let name: String
+    let udid: String
+    let state: String
+    let deviceTypeIdentifier: String
+    let isAvailable: Bool
+  }
 
-    lines.forEach { line in
-      if let currentOs = line.match("-- (.*?) --").first, !currentOs.isEmpty {
-        osVersion = currentOs[currentOSIdx]
-      }
-      if let device = line.match("(.*?) (\\(([0-9.]+)\\) )?\\(([0-9A-F-]+)\\) (\\(.*?)\\)").first {
+  struct SimctlOutput: Codable {
+    let devices: [String: [SimulatorDevice]]
+  }
+
+  func parse(_ input: String) -> [Device] {
+    guard let jsonData = input.data(using: .utf8) else { return [] }
+    guard let simctlOutput = try? JSONDecoder().decode(SimctlOutput.self, from: jsonData) else {
+      return []
+    }
+
+    var devices: [Device] = []
+
+    for (runtimeIdentifier, simulatorDevices) in simctlOutput.devices {
+      let osVersion = parseOSVersion(from: runtimeIdentifier)
+
+      for simulator in simulatorDevices {
+        let deviceFamily = DeviceFamily(fromDeviceTypeIdentifier: simulator.deviceTypeIdentifier)
+
         devices.append(
           Device(
-            name: device[deviceNameIdx].trimmingCharacters(in: .whitespacesAndNewlines),
+            name: simulator.name,
             version: osVersion,
-            identifier: device[identifierIdx],
-            booted: device[deviceStateIdx].contains("Booted"),
+            identifier: simulator.udid,
+            booted: simulator.state == "Booted",
             platform: .ios,
-            type: .virtual
+            type: .virtual,
+            deviceFamily: deviceFamily
           )
         )
       }
     }
+
     return devices
+  }
+
+  /// Parses OS version from runtime identifier.
+  /// Example: `com.apple.CoreSimulator.SimRuntime.iOS-18-5` -> `iOS 18.5`
+  private func parseOSVersion(from runtimeIdentifier: String) -> String {
+    let pattern = "com\\.apple\\.CoreSimulator\\.SimRuntime\\.(\\w+)-(\\d+)-(\\d+)"
+    guard let match = runtimeIdentifier.match(pattern).first, match.count >= 4 else {
+      return runtimeIdentifier
+    }
+    let platform = match[1]
+    let major = match[2]
+    let minor = match[3]
+    return "\(platform) \(major).\(minor)"
   }
 }
 
