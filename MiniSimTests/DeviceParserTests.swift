@@ -51,7 +51,7 @@ class DeviceParserTests: XCTestCase {
     XCTAssertTrue(androidParser is AndroidEmulatorParser)
   }
 
-  func testIOSSimulatorParser() {
+  func testIOSSimulatorParser() throws {
     let parser = IOSSimulatorParser()
     let input = """
         {
@@ -110,13 +110,9 @@ class DeviceParserTests: XCTestCase {
 
     let devices = parser.parse(input)
 
-    XCTAssertEqual(devices.count, 6, "Expected 6 devices, got \(devices.count). Devices: \(devices.map { $0.identifier ?? "nil" })")
+    XCTAssertEqual(devices.count, 6)
 
-    // Find specific devices by identifier for reliable testing (order not guaranteed with dictionary)
-    guard let iPhoneSE = devices.first(where: { $0.identifier == "957C8A2F-4C12-4732-A4E9-37F8FDD35E3B" }) else {
-      XCTFail("Could not find iPhoneSE device")
-      return
-    }
+    let iPhoneSE = try XCTUnwrap(devices.first { $0.identifier == "957C8A2F-4C12-4732-A4E9-37F8FDD35E3B" })
     XCTAssertEqual(iPhoneSE.name, "iPhone SE (3rd generation)")
     XCTAssertEqual(iPhoneSE.version, "iOS 17.5")
     XCTAssertTrue(iPhoneSE.booted)
@@ -124,10 +120,7 @@ class DeviceParserTests: XCTestCase {
     XCTAssertEqual(iPhoneSE.type, .virtual)
     XCTAssertEqual(iPhoneSE.deviceFamily, .iPhone)
 
-    guard let iPhone15 = devices.first(where: { $0.identifier == "7B8464FF-956F-405B-B357-8ED4689E5177" }) else {
-      XCTFail("Could not find iPhone15 device")
-      return
-    }
+    let iPhone15 = try XCTUnwrap(devices.first { $0.identifier == "7B8464FF-956F-405B-B357-8ED4689E5177" })
     XCTAssertEqual(iPhone15.name, "iPhone 15")
     XCTAssertEqual(iPhone15.version, "iOS 17.5")
     XCTAssertFalse(iPhone15.booted)
@@ -135,33 +128,21 @@ class DeviceParserTests: XCTestCase {
     XCTAssertEqual(iPhone15.type, .virtual)
     XCTAssertEqual(iPhone15.deviceFamily, .iPhone)
 
-    guard let iPadPro = devices.first(where: { $0.identifier == "7EF89937-90BE-41E5-BD53-03BA6050D63F" }) else {
-      XCTFail("Could not find iPadPro device")
-      return
-    }
+    let iPadPro = try XCTUnwrap(devices.first { $0.identifier == "7EF89937-90BE-41E5-BD53-03BA6050D63F" })
     XCTAssertEqual(iPadPro.name, "iPad Pro 11-inch (M4)")
     XCTAssertEqual(iPadPro.deviceFamily, .iPad)
 
-    guard let appleWatch = devices.first(where: { $0.identifier == "2E4CC9E0-16C8-4149-9150-B74817AF94A5" }) else {
-      XCTFail("Could not find appleWatch device")
-      return
-    }
+    let appleWatch = try XCTUnwrap(devices.first { $0.identifier == "2E4CC9E0-16C8-4149-9150-B74817AF94A5" })
     XCTAssertEqual(appleWatch.name, "Apple Watch Series 11 (46mm)")
     XCTAssertEqual(appleWatch.version, "watchOS 26.0")
     XCTAssertEqual(appleWatch.deviceFamily, .watch)
 
-    // This is the key test case: iPhone paired with Apple Watch should have iPhone device family
-    guard let iPhoneWithWatch = devices.first(where: { $0.identifier == "B7D730BC-9239-48B3-BA20-6CF5A666B526" }) else {
-      XCTFail("Could not find iPhoneWithWatch device")
-      return
-    }
+    // iPhone paired with Apple Watch should have iPhone device family
+    let iPhoneWithWatch = try XCTUnwrap(devices.first { $0.identifier == "B7D730BC-9239-48B3-BA20-6CF5A666B526" })
     XCTAssertEqual(iPhoneWithWatch.name, "iPhone 17 Pro with Apple Watch")
     XCTAssertEqual(iPhoneWithWatch.deviceFamily, .iPhone)
 
-    guard let visionPro = devices.first(where: { $0.identifier == "CD50D0C6-D8F6-424E-B1C2-1C288EDBBD79" }) else {
-      XCTFail("Could not find visionPro device")
-      return
-    }
+    let visionPro = try XCTUnwrap(devices.first { $0.identifier == "CD50D0C6-D8F6-424E-B1C2-1C288EDBBD79" })
     XCTAssertEqual(visionPro.name, "Apple Vision Pro")
     XCTAssertEqual(visionPro.deviceFamily, .vision)
   }
