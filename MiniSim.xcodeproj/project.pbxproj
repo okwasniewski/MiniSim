@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		162A369BC040E62A74C782D1 /* CollectionGetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912D7A2027F3DDA86839E7AE /* CollectionGetTests.swift */; };
+		16B53AB50DDD40DC4880CCB8 /* DeviceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470EFF3B34FB31AC5A22B024 /* DeviceTests.swift */; };
+		2549AC06811CB09AF7D5A4DF /* CommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E9205F1463934FDB7D92FF /* CommandTests.swift */; };
 		4AFACC742AD730BE00EC369F /* SubMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFACC732AD730BE00EC369F /* SubMenuItem.swift */; };
 		4AFACC762AD73D7900EC369F /* NSMenuItem+ConvenienceInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFACC752AD73D7900EC369F /* NSMenuItem+ConvenienceInit.swift */; };
 		4AFACC782AD74E9000EC369F /* DeviceListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFACC772AD74E9000EC369F /* DeviceListSection.swift */; };
@@ -108,6 +111,7 @@
 		76F2A9172991B7B6002D4EF6 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */; };
 		76FCABAB29B390D5003BBF9A /* Collection+get.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FCABAA29B390D5003BBF9A /* Collection+get.swift */; };
 		7D4142B4F3AF1D150D9222BD /* DeviceFamily.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F78DD26087D5448AAB2CC3B /* DeviceFamily.swift */; };
+		7D850183B2E53A3E4F17994A /* StringMatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9C6AA804E851167EA01B17 /* StringMatchTests.swift */; };
 		9B225A9C2C7E360D002620BA /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B225A9B2C7E360D002620BA /* DeviceType.swift */; };
 /* End PBXBuildFile section */
 
@@ -122,6 +126,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		470EFF3B34FB31AC5A22B024 /* DeviceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeviceTests.swift; sourceTree = "<group>"; };
 		4AFACC732AD730BE00EC369F /* SubMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubMenuItem.swift; sourceTree = "<group>"; };
 		4AFACC752AD73D7900EC369F /* NSMenuItem+ConvenienceInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMenuItem+ConvenienceInit.swift"; sourceTree = "<group>"; };
 		4AFACC772AD74E9000EC369F /* DeviceListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListSection.swift; sourceTree = "<group>"; };
@@ -131,6 +136,8 @@
 		551B88292B1385E900B8D325 /* Terminal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Terminal.swift; sourceTree = "<group>"; };
 		55CDB0772B1B6D24002418D7 /* TerminalApps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalApps.swift; sourceTree = "<group>"; };
 		5F78DD26087D5448AAB2CC3B /* DeviceFamily.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeviceFamily.swift; sourceTree = "<group>"; };
+		63E9205F1463934FDB7D92FF /* CommandTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CommandTests.swift; sourceTree = "<group>"; };
+		6A9C6AA804E851167EA01B17 /* StringMatchTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StringMatchTests.swift; sourceTree = "<group>"; };
 		760554A22C085BEA001607FE /* Thread+Asserts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Thread+Asserts.swift"; sourceTree = "<group>"; };
 		76059BF42AD4361C0008D38B /* SetupPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPreferences.swift; sourceTree = "<group>"; };
 		76059BF62AD449DC0008D38B /* OnboardingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingHeader.swift; sourceTree = "<group>"; };
@@ -219,6 +226,7 @@
 		76F2A913299050F9002D4EF6 /* UserDefaults+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Configuration.swift"; sourceTree = "<group>"; };
 		76F2A9162991B7B6002D4EF6 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		76FCABAA29B390D5003BBF9A /* Collection+get.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+get.swift"; sourceTree = "<group>"; };
+		912D7A2027F3DDA86839E7AE /* CollectionGetTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionGetTests.swift; sourceTree = "<group>"; };
 		9B225A9B2C7E360D002620BA /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -463,6 +471,10 @@
 				76BF0AF32C90A74E003BE568 /* AppleUtilsTests.swift */,
 				76BF0AF52C90AB03003BE568 /* DeviceDiscoveryTests.swift */,
 				76BF0AF72C90ACF2003BE568 /* ActionFactoryTests.swift */,
+				470EFF3B34FB31AC5A22B024 /* DeviceTests.swift */,
+				6A9C6AA804E851167EA01B17 /* StringMatchTests.swift */,
+				912D7A2027F3DDA86839E7AE /* CollectionGetTests.swift */,
+				63E9205F1463934FDB7D92FF /* CommandTests.swift */,
 			);
 			path = MiniSimTests;
 			sourceTree = "<group>";
@@ -741,6 +753,10 @@
 				76B70F7E2B0D361A009D87A4 /* UserDefaultsTests.swift in Sources */,
 				760DEACE2B0DFB6600253576 /* ShellStub.swift in Sources */,
 				76B70F822B0D50FE009D87A4 /* ADBTests.swift in Sources */,
+				16B53AB50DDD40DC4880CCB8 /* DeviceTests.swift in Sources */,
+				7D850183B2E53A3E4F17994A /* StringMatchTests.swift in Sources */,
+				162A369BC040E62A74C782D1 /* CollectionGetTests.swift in Sources */,
+				2549AC06811CB09AF7D5A4DF /* CommandTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
