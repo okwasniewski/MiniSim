@@ -26,7 +26,8 @@ class DeviceDiscoveryTests: XCTestCase {
       if command.hasSuffix("adb") {
         XCTAssertEqual(arguments, ["devices", "-l"])
         return "mock adb output"
-      } else if command.hasSuffix("emulator") {
+      }
+      if command.hasSuffix("emulator") {
         XCTAssertEqual(arguments, ["-list-avds"])
         return "mock emulator output"
       }
@@ -52,14 +53,15 @@ class DeviceDiscoveryTests: XCTestCase {
   // iOS Tests
   func testIOSDeviceDiscoveryCommands() throws {
     throw XCTSkip("TODO: Test is failing on CI")
-    
+
     shellStub.mockedExecute = { command, arguments, _ in
       XCTAssertEqual(command, DeviceConstants.ProcessPaths.xcrun.rawValue)
       if arguments.contains("devicectl") {
         XCTAssertTrue(arguments.contains("list"))
         XCTAssertTrue(arguments.contains("devices"))
         return ""
-      } else if arguments.contains("simctl") {
+      }
+      if arguments.contains("simctl") {
         XCTAssertEqual(arguments, ["simctl", "list", "devices", "available"])
         return "mock simctl output"
       }

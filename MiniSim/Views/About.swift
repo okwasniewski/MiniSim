@@ -58,7 +58,7 @@ struct About: View {
       Link("Created by Oskar Kwaśniewski", destination: URL(string: "https://github.com/okwasniewski")!)
         .font(.caption)
     }
-    .sheet(isPresented: $isAcknowledgementsListPresented, content: {
+    .sheet(isPresented: $isAcknowledgementsListPresented) {
       NavigationView {
         AcknowListSwiftUIView(acknowList: AcknowParser.defaultPackages()!)
           .toolbar {
@@ -70,7 +70,7 @@ struct About: View {
           }
       }
       .frame(minHeight: 450)
-    })
+    }
     .frame(minWidth: minFrameWidth, minHeight: minFrameHeight)
   }
 }
