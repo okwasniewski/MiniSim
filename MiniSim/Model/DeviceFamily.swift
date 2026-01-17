@@ -26,7 +26,9 @@ enum DeviceFamily: String, Codable {
       return "applewatch"
     case .tv:
       return "appletv.fill"
-    case .vision, .unknown:
+    case .vision:
+      return "visionpro"
+    case .unknown:
       return "iphone"
     }
   }

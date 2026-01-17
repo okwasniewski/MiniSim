@@ -20,20 +20,14 @@ extension NSMenuItem {
 
         if let image {
             self.image = image
+        } else if let deviceFamily {
+            self.image = NSImage(
+                systemSymbolName: deviceFamily.iconName,
+                accessibilityDescription: title
+            )
         } else {
-            if let deviceFamily, deviceFamily == .vision {
-                self.image = NSImage(named: "vision_os")
-                self.image?.isTemplate = true
-                self.image?.size = NSSize(width: 15, height: 8.5)
-            } else if let deviceFamily {
-                self.image = NSImage(
-                    systemSymbolName: deviceFamily.iconName,
-                    accessibilityDescription: title
-                )
-            } else {
-                let imageName = self.getSystemImageFromName(name: title)
-                self.image = NSImage(systemSymbolName: imageName, accessibilityDescription: title)
-            }
+            let imageName = self.getSystemImageFromName(name: title)
+            self.image = NSImage(systemSymbolName: imageName, accessibilityDescription: title)
         }
 
         self.tag = type.rawValue
