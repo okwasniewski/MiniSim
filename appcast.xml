@@ -1,10 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<rss version="2.0"
+xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"
+xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>MiniSim</title>
-    <link>https://raw.githubusercontent.com/okwasniewski/MiniSim/main/appcast.xml</link>
-    <description>Most recent changes with links to updates.</description>
+    <link>
+    https://raw.githubusercontent.com/okwasniewski/MiniSim/main/appcast.xml</link>
+    <description>Most recent changes with links to
+    updates.</description>
     <language>en</language>
+    <item>
+      <title>0.9.1</title>
+      <description>
+        <![CDATA[ <ul>
+        <li>Use JSON output for iOS simulator parsing</li>
+        <li>Add option to hold shift when deleting simulators to skip alert</li>
+        <li>Fix hardcoded android as device at CustomCommandAction</li>
+        </ul> ]]>
+</description>
+      <pubDate>2026-01-18</pubDate>
+      <releaseNotesLink>
+      https://github.com/okwasniewski/MiniSim/releases/tag/v0.9.1</releaseNotesLink>
+      <sparkle:minimumSystemVersion>
+      12.0</sparkle:minimumSystemVersion>
+      <enclosure url="https://github.com/okwasniewski/MiniSim/releases/download/v0.9.1/MiniSim.app.zip"
+      sparkle:version="19" sparkle:shortVersionString="0.9.1"
+      length="0" type="application/octet-stream" />
+    </item>
     <item>
       <title>0.9.0</title>
       <description>
@@ -15,17 +37,15 @@
         <li>add acknowledgements</li>
         <li>rewrite internal implementation</li>
         </ul> ]]>
-        </description>
+</description>
       <pubDate>2024-09-21</pubDate>
-      <releaseNotesLink>https://github.com/okwasniewski/MiniSim/releases/tag/v0.9.0</releaseNotesLink>
-      <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-      <enclosure
-        url="https://github.com/okwasniewski/MiniSim/releases/download/v0.9.0/MiniSim.app.zip"
-        sparkle:version="18"
-        sparkle:shortVersionString="0.9.0"
-        length="0"
-        type="application/octet-stream"
-        />
-      </item>
-    </channel>
-  </rss>
+      <releaseNotesLink>
+      https://github.com/okwasniewski/MiniSim/releases/tag/v0.9.0</releaseNotesLink>
+      <sparkle:minimumSystemVersion>
+      12.0</sparkle:minimumSystemVersion>
+      <enclosure url="https://github.com/okwasniewski/MiniSim/releases/download/v0.9.0/MiniSim.app.zip"
+      sparkle:version="18" sparkle:shortVersionString="0.9.0"
+      length="0" type="application/octet-stream" />
+    </item>
+  </channel>
+</rss>
