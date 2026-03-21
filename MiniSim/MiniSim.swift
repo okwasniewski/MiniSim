@@ -7,11 +7,17 @@
 
 import AppKit
 import Settings
+import Sparkle
 import SwiftUI
 import UserNotifications
 
 class MiniSim: NSObject {
     private var menu: Menu!
+    private let updaterController = SPUStandardUpdaterController(
+        startingUpdater: true,
+        updaterDelegate: nil,
+        userDriverDelegate: nil
+    )
 
     @objc let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
@@ -162,6 +168,8 @@ class MiniSim: NSObject {
                 settingsController.window?.orderFrontRegardless()
             case .quit:
                 NSApp.terminate(sender)
+            case .checkForUpdates:
+                updaterController.updater.checkForUpdates()
             case .clearDerrivedData:
                 let shouldDelete = NSAlert.showQuestionDialog(
                     title: "Are you sure?",

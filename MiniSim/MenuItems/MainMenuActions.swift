@@ -9,6 +9,7 @@ import Foundation
 
 enum MainMenuActions: Int, CaseIterable {
     case clearDerrivedData = 200
+    case checkForUpdates
     case preferences
     case quit
 
@@ -31,6 +32,8 @@ enum MainMenuActions: Int, CaseIterable {
             return NSLocalizedString("Preferences", comment: "")
         case .clearDerrivedData:
             return NSLocalizedString("Clear Xcode Derived Data", comment: "")
+        case .checkForUpdates:
+            return NSLocalizedString("Check for Updates…", comment: "")
         }
     }
 }
