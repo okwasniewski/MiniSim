@@ -91,3 +91,6 @@ fastlane/test_output
 iOSInjectionProject/
 
 .DS_Store
+
+# Local build and packaging artifacts
+dist/
