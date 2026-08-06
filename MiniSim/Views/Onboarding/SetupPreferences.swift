@@ -11,6 +11,7 @@ struct SetupPreferences: View {
     var goToNextPage: () -> Void
     @AppStorage(UserDefaults.Keys.enableiOSSimulators, store: .standard) var enableiOSSimulators = true
     @AppStorage(UserDefaults.Keys.enableAndroidEmulators, store: .standard) var enableAndroidEmulators = true
+    @AppStorage(UserDefaults.Keys.enableHarmonySimulators, store: .standard) var enableHarmonySimulators = true
 
     var body: some View {
         VStack {
@@ -19,7 +20,7 @@ struct SetupPreferences: View {
                 title: "Tooling ⚙️",
                 subTitle: """
                           If you want to use Minisim for launching only Android or
-                          only iOS simulators you can tweak it here.
+                          only iOS or HarmonyOS simulators you can tweak it here.
                           """
             )
             Spacer()
@@ -34,9 +35,14 @@ struct SetupPreferences: View {
                         .labelsHidden()
                         .toggleStyle(.switch)
                 }
+                SetupItemView(imageName: "box", title: "DevEco Studio", subTitle: "HarmonyOS Simulators") {
+                    Toggle("", isOn: $enableHarmonySimulators)
+                        .labelsHidden()
+                        .toggleStyle(.switch)
+                }
             }
             Spacer()
-            if enableiOSSimulators || enableAndroidEmulators {
+            if enableiOSSimulators || enableAndroidEmulators || enableHarmonySimulators {
                 OnboardingButton("Continue", action: goToNextPage)
             }
 

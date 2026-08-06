@@ -19,6 +19,12 @@ struct Device: Hashable, Codable {
 
     case .android:
       return name
+
+    case .harmony:
+      if let version {
+        return "\(name) - (\(version))"
+      }
+      return name
     }
   }
 

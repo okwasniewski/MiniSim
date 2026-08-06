@@ -16,7 +16,10 @@ struct About: View {
 
   init() {
     updaterController = SPUStandardUpdaterController(
-      startingUpdater: true,
+      // Do not start Sparkle while the About view is being created. Starting
+      // it schedules automatic checks and can trigger macOS App Management
+      // authorization for the updater installer on every app launch.
+      startingUpdater: false,
       updaterDelegate: nil,
       userDriverDelegate: nil
     )
@@ -37,6 +40,7 @@ struct About: View {
           .padding(.bottom, bottomPadding)
       }
       Button {
+        updaterController.startUpdater()
         updaterController.updater.checkForUpdates()
       } label: {
         Label("Check for updates", systemImage: "gear")

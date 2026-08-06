@@ -101,7 +101,7 @@
 		76C1396A2C849A3F006CD80C /* MenuIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C139692C849A3F006CD80C /* MenuIcons.swift */; };
 		76E4451229D4391000039025 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451129D4391000039025 /* Onboarding.swift */; };
 		76E4451429D4403F00039025 /* NSNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4451329D4403F00039025 /* NSNotificationName.swift */; };
-		76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F04A10298A5AE000BF9CA3 /* ADB.swift */; };
+		76F04A11298A5AE000BF9CA3 /* Adb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F04A10298A5AE000BF9CA3 /* Adb.swift */; };
 		76F04A14298A62CF00BF9CA3 /* ShellOut in Frameworks */ = {isa = PBXBuildFile; productRef = 76F04A13298A62CF00BF9CA3 /* ShellOut */; };
 		76F269852A2A376A00424BDA /* CustomCommandError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F269842A2A376A00424BDA /* CustomCommandError.swift */; };
 		76F269872A2A39D100424BDA /* Variables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F269862A2A39D100424BDA /* Variables.swift */; };
@@ -221,7 +221,7 @@
 		76C139692C849A3F006CD80C /* MenuIcons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuIcons.swift; sourceTree = "<group>"; };
 		76E4451129D4391000039025 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		76E4451329D4403F00039025 /* NSNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotificationName.swift; sourceTree = "<group>"; };
-		76F04A10298A5AE000BF9CA3 /* ADB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADB.swift; sourceTree = "<group>"; };
+		76F04A10298A5AE000BF9CA3 /* Adb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Adb.swift; sourceTree = "<group>"; };
 		76F269842A2A376A00424BDA /* CustomCommandError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCommandError.swift; sourceTree = "<group>"; };
 		76F269862A2A39D100424BDA /* Variables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Variables.swift; sourceTree = "<group>"; };
 		76F269892A2A40F700424BDA /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
@@ -360,7 +360,7 @@
 				76BF0AED2C905C43003BE568 /* IOSDeviceService.swift */,
 				76BF0AE92C905A94003BE568 /* AppleUtils.swift */,
 				7699511C2C845B1900462287 /* DeviceParser.swift */,
-				76F04A10298A5AE000BF9CA3 /* ADB.swift */,
+				76F04A10298A5AE000BF9CA3 /* Adb.swift */,
 				76B70F832B0D5AB4009D87A4 /* Shell.swift */,
 				76BF0ADE2C8E01B3003BE568 /* CustomCommandService.swift */,
 				76BF0AE02C8E027D003BE568 /* DeviceConstants.swift */,
@@ -670,7 +670,7 @@
 				76489D5A29BFC60C0070EF03 /* WelcomeView.swift in Sources */,
 				76F2698A2A2A40F700424BDA /* SectionHeader.swift in Sources */,
 				7645D4C22982CA9600019227 /* AppDelegate.swift in Sources */,
-				76F04A11298A5AE000BF9CA3 /* ADB.swift in Sources */,
+				76F04A11298A5AE000BF9CA3 /* Adb.swift in Sources */,
 				76730BB9298C1DF80019C680 /* DeviceMenuItem.swift in Sources */,
 				551B882A2B1385E900B8D325 /* Terminal.swift in Sources */,
 				767A9CC929C320ED00554193 /* OnboardingButton.swift in Sources */,

@@ -35,6 +35,7 @@ class Menu: NSMenu {
     }
 
     func populateDefaultMenu() {
+        let mainMenuItems = items.filter { $0.target is MiniSim }
         var sections: [DeviceListSection] = []
 
         sections.append(.iOSPhysical)
@@ -47,7 +48,12 @@ class Menu: NSMenu {
             sections.append(.androidVirtual)
         }
 
+        if UserDefaults.standard.enableHarmonySimulators {
+            sections.append(.harmonyVirtual)
+        }
+
         if sections.isEmpty {
+            self.items = mainMenuItems
             return
         }
 
@@ -67,14 +73,15 @@ class Menu: NSMenu {
             menuItems.append(menuItem)
             menuItems.append(NSMenuItem.separator())
         }
-        self.items = menuItems
+        self.items = menuItems + mainMenuItems
     }
 
     func updateDevicesList() {
         let userDefaults = UserDefaults.standard
         DeviceServiceFactory.getAllDevices(
             android: userDefaults.enableAndroidEmulators && userDefaults.androidHome != nil,
-            iOS: userDefaults.enableiOSSimulators
+            iOS: userDefaults.enableiOSSimulators,
+            harmony: userDefaults.enableHarmonySimulators
         ) { devices, error in
             if let error {
                 NSAlert.showError(message: error.localizedDescription)
@@ -118,6 +125,13 @@ class Menu: NSMenu {
             }
             do {
                 try device.launch()
+                if device.platform == .harmony {
+                    // DevEco boots asynchronously. Refresh the state after its
+                    // window/process has had time to initialize.
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                        self.updateDevicesList()
+                    }
+                }
             } catch {
                 NSAlert.showError(message: error.localizedDescription)
             }
@@ -133,12 +147,14 @@ class Menu: NSMenu {
         let deviceItems = items.filter { !sections.contains($0.title) }
         let iosDeviceNames = devices.filter { $0.platform == Platform.ios }.map { $0.displayName }
         let androidDeviceNames = devices.filter { $0.platform == Platform.android }.map { $0.displayName }
+        let harmonyDeviceNames = devices.filter { $0.platform == Platform.harmony }.map { $0.displayName }
 
         let iosDevices = deviceItems.filter { iosDeviceNames.contains($0.title) }
         let androidDevices = deviceItems.filter { androidDeviceNames.contains($0.title) }
 
         assignKeyEquivalent(devices: iosDevices)
         assignKeyEquivalent(devices: androidDevices)
+        assignKeyEquivalent(devices: deviceItems.filter { harmonyDeviceNames.contains($0.title) })
     }
 
     private func assignKeyEquivalent(devices: [NSMenuItem]) {
@@ -183,6 +199,10 @@ class Menu: NSMenu {
             sections.append(.iOSVirtual)
         }
         sections.append(.iOSPhysical)
+
+        if UserDefaults.standard.enableHarmonySimulators {
+            sections.append(.harmonyVirtual)
+        }
         return sections
     }
 
@@ -197,6 +217,8 @@ class Menu: NSMenu {
           return device.platform == .android && device.type == .physical
         case .androidVirtual:
           return device.platform == .android && device.type == .virtual
+        case .harmonyVirtual:
+          return device.platform == .harmony && device.type == .virtual
         }
       }
     }
@@ -225,15 +247,37 @@ class Menu: NSMenu {
             title: device.displayName,
             action: #selector(deviceItemClick),
             keyEquivalent: "",
-            type: device.platform == .ios ? .launchIOS : .launchAndroid,
+            type: menuItemType(for: device.platform),
             deviceFamily: device.deviceFamily
         )
 
         menuItem.target = self
-        menuItem.keyEquivalentModifierMask = device.platform == .android ? [.option] : [.command]
+        menuItem.keyEquivalentModifierMask = keyEquivalentModifierMask(for: device.platform)
         menuItem.submenu = buildSubMenu(for: device)
         menuItem.state = device.booted ? .on : .off
         return menuItem
+    }
+
+    private func menuItemType(for platform: Platform) -> DeviceMenuItem {
+        switch platform {
+        case .ios:
+            return .launchIOS
+        case .android:
+            return .launchAndroid
+        case .harmony:
+            return .launchHarmony
+        }
+    }
+
+    private func keyEquivalentModifierMask(for platform: Platform) -> NSEvent.ModifierFlags {
+        switch platform {
+        case .ios:
+            return [.command]
+        case .android:
+            return [.option]
+        case .harmony:
+            return [.control]
+        }
     }
 
     private func replaceMenuItem(at index: Int, with newItem: NSMenuItem) {
@@ -359,6 +403,8 @@ class Menu: NSMenu {
 extension Menu: NSMenuDelegate {
     func menuWillOpen(_ menu: NSMenu) {
         NotificationCenter.default.post(name: .menuWillOpen, object: nil)
+        // Rebuild section headers so preference changes take effect immediately.
+        self.populateDefaultMenu()
         self.updateDevicesList()
         KeyboardShortcuts.disable(.toggleMiniSim)
     }

@@ -28,21 +28,31 @@ class CustomCommandService {
 
     let deviceID = device.identifier ?? ""
 
-    if command.platform == .android {
+    switch command.platform {
+    case .android:
       commandToExecute = try commandToExecute
         .replacingOccurrences(of: Variables.adbPath.rawValue, with: adb.getAdbPath())
         .replacingOccurrences(of: Variables.adbId.rawValue, with: deviceID)
         .replacingOccurrences(of: Variables.androidHomePath.rawValue, with: adb.getAndroidHome())
-    } else {
+    case .ios:
       commandToExecute = commandToExecute
         .replacingOccurrences(of: Variables.uuid.rawValue, with: deviceID)
         .replacingOccurrences(of: Variables.xcrunPath.rawValue, with: DeviceConstants.ProcessPaths.xcrun.rawValue)
+    case .harmony:
+      commandToExecute = try commandToExecute.replacingOccurrences(
+        of: Variables.harmonyEmulatorPath.rawValue,
+        with: HarmonyDeviceTool.getEmulatorPath()
+      )
     }
 
     do {
       try shell.execute(command: commandToExecute)
-      if command.bootsDevice ?? false && command.platform == .ios {
-        try? AppleUtils.launchSimulatorApp(uuid: deviceID)
+      if command.bootsDevice ?? false {
+        if command.platform == .ios {
+          try? AppleUtils.launchSimulatorApp(uuid: deviceID)
+        } else if command.platform == .harmony {
+          try? device.launch()
+        }
       }
       NotificationCenter.default.post(name: .commandDidSucceed, object: nil)
     } catch {

@@ -19,6 +19,7 @@ class LaunchDeviceCommand: NSScriptCommand {
             var devices: [Device] = []
             try devices.append(contentsOf: DeviceServiceFactory.getDeviceDiscoveryService(platform: .ios).getDevices())
             try devices.append(contentsOf: DeviceServiceFactory.getDeviceDiscoveryService(platform: .android).getDevices())
+            try devices.append(contentsOf: DeviceServiceFactory.getDeviceDiscoveryService(platform: .harmony).getDevices())
 
             guard let device = devices.first(where: { $0.name == deviceName }) else {
                 scriptErrorNumber = NSInternalScriptError

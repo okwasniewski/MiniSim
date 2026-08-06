@@ -13,4 +13,7 @@ enum DeviceMenuItem: Int {
 
     // iOS
     case launchIOS = 300
+
+    // HarmonyOS
+    case launchHarmony = 400
 }

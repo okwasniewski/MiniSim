@@ -121,8 +121,20 @@ class MiniSim: NSObject {
         UserDefaults.standard.register(defaults: [
             UserDefaults.Keys.enableAndroidEmulators: true,
             UserDefaults.Keys.enableiOSSimulators: true,
+            UserDefaults.Keys.enableHarmonySimulators: true,
             UserDefaults.Keys.preferedTerminal: "Terminal"
         ])
+
+        // Older builds initialized this new option to false. Migrate that value
+        // once so existing installations can discover HarmonyOS automatically;
+        // subsequent user changes are preserved.
+        if UserDefaults.standard.object(forKey: UserDefaults.Keys.didMigrateHarmonySimulators) == nil {
+            UserDefaults.standard.enableHarmonySimulators = true
+            UserDefaults.standard.set(
+                true,
+                forKey: UserDefaults.Keys.didMigrateHarmonySimulators
+            )
+        }
     }
 
     private func setMenuImage() {

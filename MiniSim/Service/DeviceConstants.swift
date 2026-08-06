@@ -7,6 +7,7 @@ enum DeviceConstants {
   enum ProcessPaths: String {
     case xcrun = "/usr/bin/xcrun"
     case xcodeSelect = "/usr/bin/xcode-select"
+    case harmonyEmulator = "/Applications/DevEco-Studio.app/Contents/tools/emulator/Emulator"
   }
 
   enum BundleURL: String {

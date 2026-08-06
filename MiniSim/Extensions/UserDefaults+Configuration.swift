@@ -15,6 +15,8 @@ extension UserDefaults {
         static let isOnboardingFinished = "isOnboardingFinished"
         static let enableiOSSimulators = "enableiOSSimulators"
         static let enableAndroidEmulators = "enableAndroidEmulators"
+        static let enableHarmonySimulators = "enableHarmonySimulators"
+        static let didMigrateHarmonySimulators = "didMigrateHarmonySimulators"
         static let preferedTerminal = "preferedTerminal"
         static let menuImage = "menuImage"
     }
@@ -52,6 +54,11 @@ extension UserDefaults {
     public var enableAndroidEmulators: Bool {
         get { bool(forKey: Keys.enableAndroidEmulators) }
         set { set(newValue, forKey: Keys.enableAndroidEmulators) }
+    }
+
+    public var enableHarmonySimulators: Bool {
+        get { bool(forKey: Keys.enableHarmonySimulators) }
+        set { set(newValue, forKey: Keys.enableHarmonySimulators) }
     }
 
     @objc public dynamic var preferedTerminal: String? {

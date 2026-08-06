@@ -5,6 +5,7 @@ enum DeviceParserType {
   case iosPhysical
   case androidEmulator
   case androidPhysical
+  case harmonySimulator
 }
 
 protocol DeviceParser {
@@ -22,6 +23,8 @@ class DeviceParserFactory {
       return AndroidEmulatorParser()
     case .androidPhysical:
       return AndroidPhysicalDeviceParser()
+    case .harmonySimulator:
+      return HarmonySimulatorParser()
     }
   }
 }
@@ -179,4 +182,48 @@ class AndroidPhysicalDeviceParser: DeviceParser {
       )
     }
 }
+}
+
+final class HarmonySimulatorParser: DeviceParser {
+  func parse(_ input: String) -> [Device] {
+    guard let data = input.data(using: .utf8),
+          let values = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
+      return []
+    }
+
+    return values.compactMap { value in
+      guard let name = value["name"] as? String, !name.isEmpty else {
+        return nil
+      }
+
+      let identifier = value["uuid"] as? String
+      let version = value["os.osVersion"] as? String ?? value["os.softwareVersion"] as? String
+      let booted = parseRunningValue(value["isRunning"])
+
+      return Device(
+        name: name,
+        version: version,
+        identifier: identifier,
+        booted: booted,
+        platform: .harmony,
+        type: .virtual
+      )
+    }
+  }
+
+  private func parseRunningValue(_ value: Any?) -> Bool {
+    if let boolValue = value as? Bool {
+      return boolValue
+    }
+
+    if let stringValue = value as? String {
+      return stringValue.lowercased() == "true"
+    }
+
+    if let numberValue = value as? NSNumber {
+      return numberValue.boolValue
+    }
+
+    return false
+  }
 }

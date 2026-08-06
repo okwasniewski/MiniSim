@@ -10,6 +10,7 @@ import Foundation
 enum Platform: String, Codable {
     case ios
     case android
+    case harmony
 }
 
 // TODO: Remove this type during migration to CoreData.
