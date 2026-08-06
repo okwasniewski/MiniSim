@@ -20,6 +20,7 @@ struct CustomCommands: View {
             Picker("", selection: $viewModel.selectedPlatform) {
                 Text("iOS").tag(Platform.ios)
                 Text("Android").tag(Platform.android)
+                Text("HarmonyOS").tag(Platform.harmony)
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding(.vertical, 3)

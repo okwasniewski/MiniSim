@@ -12,6 +12,7 @@ enum DeviceListSection: Int, CaseIterable {
     case iOSVirtual
     case androidPhysical
     case androidVirtual
+    case harmonyVirtual
 
     var title: String {
         switch self {
@@ -23,6 +24,8 @@ enum DeviceListSection: Int, CaseIterable {
             return NSLocalizedString("Android Emulators", comment: "")
         case .androidPhysical:
             return NSLocalizedString("Android Devices", comment: "")
+        case .harmonyVirtual:
+            return NSLocalizedString("HarmonyOS Simulators", comment: "")
         }
     }
 }

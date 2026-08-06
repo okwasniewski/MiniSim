@@ -271,6 +271,20 @@ extension SubMenuItems {
 
         DeleteEmulator()
       ]
+    case (.harmony, .virtual):
+      return [
+        CopyName(),
+        CopyID(),
+
+        Separator(),
+
+        DeleteEmulator()
+      ]
+    case (.harmony, .physical):
+      return [
+        CopyName(),
+        CopyID()
+      ]
     }
   }
 }

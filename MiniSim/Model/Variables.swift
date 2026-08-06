@@ -19,6 +19,9 @@ enum Variables: String {
     case uuid = "$uuid"
     case xcrunPath = "$xcrun_path"
 
+    // HarmonyOS Specific
+    case harmonyEmulatorPath = "$harmony_emulator_path"
+
     static var common: [Variables] {
         [deviceName]
     }
@@ -29,6 +32,10 @@ enum Variables: String {
 
     static var ios: [Variables] {
         [uuid, xcrunPath]
+    }
+
+    static var harmony: [Variables] {
+        [harmonyEmulatorPath]
     }
 
     var description: String {
@@ -45,6 +52,8 @@ enum Variables: String {
             return NSLocalizedString("Unique identifier of iOS simulator", comment: "")
         case .xcrunPath:
             return NSLocalizedString("Path to xcrun utility", comment: "")
+        case .harmonyEmulatorPath:
+            return NSLocalizedString("Path to the DevEco Studio emulator utility", comment: "")
         }
     }
 }

@@ -6,8 +6,16 @@
 	<string>MiniSim.sdef</string>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>MiniSim uses the camera to provide camera input to the HarmonyOS simulator.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>MiniSim uses the microphone to provide audio input to the HarmonyOS simulator.</string>
 	<key>SUFeedURL</key>
 	<string>https://raw.githubusercontent.com/okwasniewski/MiniSim/main/appcast.xml</string>
+	<key>SUEnableAutomaticChecks</key>
+	<false/>
+	<key>SUAutomaticallyUpdate</key>
+	<false/>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleShortVersionString</key>

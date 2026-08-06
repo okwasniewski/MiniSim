@@ -16,6 +16,11 @@ enum DeviceError: Error, Equatable {
     // Throw when there was an error with Android command / configuration
     case androidStudioError
 
+    // Throw when there was an error with DevEco Studio command / configuration
+    case harmonyStudioError
+
+    case harmonyEmulatorLaunchFailed
+
     // Throw in all other cases
     case unexpected(code: Int)
 }
@@ -45,6 +50,16 @@ extension DeviceError: LocalizedError {
                     environment variable is in PATH.
                     """,
                     comment: "Android Studio error"
+                )
+            case .harmonyStudioError:
+                return NSLocalizedString(
+                    "DevEco Studio emulator was not found. Install DevEco Studio or disable HarmonyOS simulators in Preferences.",
+                    comment: "DevEco Studio error"
+                )
+            case .harmonyEmulatorLaunchFailed:
+                return NSLocalizedString(
+                    "The HarmonyOS simulator could not be started. MiniSim could not prepare its direct-launch helper bundle.",
+                    comment: "HarmonyOS emulator launch error"
                 )
             case .unexpected:
                 return NSLocalizedString(

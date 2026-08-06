@@ -52,3 +52,57 @@ class AndroidDeviceService: DeviceServiceCommon {
       .map { $0.command }
   }
 }
+
+final class HarmonyDeviceService: DeviceServiceCommon {
+  var shell: ShellProtocol = Shell()
+  var device: Device
+
+  init(device: Device) {
+    self.device = device
+  }
+
+  func deleteDevice() throws {
+    Thread.assertBackgroundThread()
+    let emulatorPath = try HarmonyDeviceTool.getEmulatorPath()
+    try shell.execute(command: emulatorPath, arguments: ["-delete", device.name])
+  }
+
+  func launchDevice(additionalArgs: [String]) throws {
+    Thread.assertBackgroundThread()
+    let emulatorPath = try HarmonyDeviceTool.getEmulatorPath()
+
+    // The menu can contain a slightly stale snapshot of the device state.
+    // Check DevEco again before starting to avoid launching a second instance.
+    if let output = try? shell.execute(command: emulatorPath, arguments: ["-list", "-details"]),
+       HarmonySimulatorParser().parse(output).contains(where: { $0.name == device.name && $0.booted }) {
+      return
+    }
+
+    do {
+      let launchPath = try HarmonyDeviceTool.getLaunchEmulatorPath(sourcePath: emulatorPath)
+      try HarmonyDeviceTool.launch(
+        path: launchPath,
+        arguments: HarmonyDeviceTool.launchArguments(
+          for: device.name,
+          additionalArgs: additionalArgs
+        ),
+        deviceName: device.name
+      )
+    } catch {
+      throw DeviceError.harmonyEmulatorLaunchFailed
+    }
+  }
+
+  func focusDevice() {
+    Thread.assertBackgroundThread()
+
+    let runningApplications = NSWorkspace.shared.runningApplications
+    let emulatorApplication = runningApplications.first { application in
+      guard let bundlePath = application.bundleURL?.path else { return false }
+      return bundlePath.contains("DevEco-Studio.app")
+        || bundlePath.contains("/HarmonyEmulator.app")
+        || bundlePath.hasSuffix("/Emulator")
+    }
+    emulatorApplication?.activate(options: [.activateIgnoringOtherApps])
+  }
+}

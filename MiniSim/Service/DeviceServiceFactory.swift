@@ -13,6 +13,8 @@ class DeviceServiceFactory {
       return IOSDeviceService(device: device)
     case .android:
       return AndroidDeviceService(device: device)
+    case .harmony:
+      return HarmonyDeviceService(device: device)
     }
   }
 
@@ -22,12 +24,15 @@ class DeviceServiceFactory {
       return IOSDeviceDiscovery()
     case .android:
       return AndroidDeviceDiscovery()
+    case .harmony:
+      return HarmonyDeviceDiscovery()
     }
   }
 
   static func getAllDevices(
     android: Bool,
     iOS: Bool,
+    harmony: Bool = false,
     completionQueue: DispatchQueue = .main,
     completion: @escaping ([Device], Error?) -> Void
   ) {
@@ -41,6 +46,12 @@ class DeviceServiceFactory {
 
         if iOS {
           try devicesArray.append(contentsOf: IOSDeviceDiscovery().getDevices())
+        }
+
+        if harmony {
+          // HarmonyOS support is optional; an unavailable DevEco installation
+          // should not hide otherwise usable iOS or Android devices.
+          try? devicesArray.append(contentsOf: HarmonyDeviceDiscovery().getDevices())
         }
 
         completionQueue.async {

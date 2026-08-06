@@ -12,14 +12,17 @@ struct SetupView: View {
     @State private var isLoading = true
     @State private var isXcodeSetupCorrect = true
     @State private var isAndroidSetupCorrect = true
+    @State private var isHarmonySetupCorrect = true
 
     @AppStorage(UserDefaults.Keys.enableiOSSimulators, store: .standard) var enableiOSSimulators = true
     @AppStorage(UserDefaults.Keys.enableAndroidEmulators, store: .standard) var enableAndroidEmulators = true
+    @AppStorage(UserDefaults.Keys.enableHarmonySimulators, store: .standard) var enableHarmonySimulators = true
 
     var canContinue: Bool {
         let enableiOS = enableiOSSimulators ? isXcodeSetupCorrect : true
         let enableAndroid = enableAndroidEmulators ? isAndroidSetupCorrect : true
-        return enableiOS && enableAndroid
+        let enableHarmony = enableHarmonySimulators ? isHarmonySetupCorrect : true
+        return enableiOS && enableAndroid && enableHarmony
     }
 
     func checkXcode() {
@@ -39,10 +42,18 @@ struct SetupView: View {
         }
     }
 
+    func checkDevEcoStudio() {
+        if !enableHarmonySimulators {
+            return
+        }
+        isHarmonySetupCorrect = (try? HarmonyDeviceDiscovery().checkSetup()) != nil
+    }
+
     func checkSetup() {
         isLoading = true
         checkAndroidStudio()
         checkXcode()
+        checkDevEcoStudio()
         isLoading = false
     }
 
@@ -82,6 +93,18 @@ struct SetupView: View {
                     if !isAndroidSetupCorrect {
                         AndroidPathInput { isAndroidSetupCorrect = $0 }
                     }
+                }
+                .redacted(reason: isLoading ? .placeholder : [])
+            }
+
+            if enableHarmonySimulators {
+                SetupItemView(
+                    imageName: "box",
+                    title: "DevEco Studio",
+                    subTitle: isHarmonySetupCorrect ?
+                    "Everything is running correctly." :
+                        "DevEco Studio emulator command was not found."
+                ) {
                 }
                 .redacted(reason: isLoading ? .placeholder : [])
             }

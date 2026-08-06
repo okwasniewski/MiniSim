@@ -11,6 +11,9 @@ import SwiftUI
 struct Preferences: View {
     @State var menuImageSelected: String = "iphone"
     @State private var preferedTerminal: Terminal
+    @AppStorage(UserDefaults.Keys.enableiOSSimulators, store: .standard) var enableiOSSimulators = true
+    @AppStorage(UserDefaults.Keys.enableAndroidEmulators, store: .standard) var enableAndroidEmulators = true
+    @AppStorage(UserDefaults.Keys.enableHarmonySimulators, store: .standard) var enableHarmonySimulators = true
 
     init() {
         let userPrefered = UserDefaults.standard.preferedTerminal
@@ -55,6 +58,13 @@ struct Preferences: View {
                   }
                   Text("Users can choose their preferred terminal from the above supported terminal list")
                       .descriptionText()
+            }
+            Settings.Section(title: "Simulator Sources:") {
+                Toggle("iOS Simulators", isOn: $enableiOSSimulators)
+                Toggle("Android Emulators", isOn: $enableAndroidEmulators)
+                Toggle("HarmonyOS Simulators", isOn: $enableHarmonySimulators)
+                Text("HarmonyOS simulators require DevEco Studio to be installed.")
+                    .descriptionText()
             }
             Settings.Section(title: "Hotkey:") {
                 KeyboardShortcuts.Recorder("", name: .toggleMiniSim)

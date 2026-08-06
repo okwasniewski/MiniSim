@@ -78,6 +78,7 @@ struct CustomCommandForm: View {
             Picker("Platform", selection: $viewModel.platform) {
                 Text("iOS").tag(Platform.ios)
                 Text("Android").tag(Platform.android)
+                Text("HarmonyOS").tag(Platform.harmony)
             }
 
             Toggle(isOn: $viewModel.needsBootedDevice) {

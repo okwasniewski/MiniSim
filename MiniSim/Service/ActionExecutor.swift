@@ -31,6 +31,13 @@ class ActionExecutor {
         itemName: itemName,
         skipConfirmation: skipConfirmation
       )
+    case .harmony:
+      action = HarmonyActionFactory.createAction(
+        for: commandTag,
+        device: device,
+        itemName: itemName,
+        skipConfirmation: skipConfirmation
+      )
     }
 
     if action.showQuestionDialog() {

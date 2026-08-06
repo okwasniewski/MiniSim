@@ -59,6 +59,50 @@ class DeviceParserTests: XCTestCase {
 
     let androidParser = DeviceParserFactory().getParser(.androidEmulator)
     XCTAssertTrue(androidParser is AndroidEmulatorParser)
+
+    let harmonyParser = DeviceParserFactory().getParser(.harmonySimulator)
+    XCTAssertTrue(harmonyParser is HarmonySimulatorParser)
+  }
+
+  func testHarmonyLaunchArgumentsUseColdBootWithoutSavingSnapshot() {
+    XCTAssertEqual(
+      HarmonyDeviceTool.launchArguments(for: "Pura X Max"),
+      ["-start", "Pura X Max", "-bootmode", "coldboot_no_save"]
+    )
+  }
+
+  func testHarmonyDirectLaunchBundleContainsPrivacyUsageDescriptions() throws {
+    let fileManager = FileManager.default
+    let temporaryDirectory = fileManager.temporaryDirectory
+      .appendingPathComponent("MiniSim-HarmonyBundle-\(UUID().uuidString)", isDirectory: true)
+    let sourceDirectory = temporaryDirectory.appendingPathComponent("emulator", isDirectory: true)
+    let sourceExecutable = sourceDirectory.appendingPathComponent("Emulator")
+    defer { try? fileManager.removeItem(at: temporaryDirectory) }
+
+    try fileManager.createDirectory(at: sourceDirectory, withIntermediateDirectories: true)
+    XCTAssertTrue(fileManager.createFile(atPath: sourceExecutable.path, contents: Data()))
+    try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: sourceExecutable.path)
+
+    let launchPath = try HarmonyDeviceTool.getLaunchEmulatorPath(
+      sourcePath: sourceExecutable.path,
+      fileManager: fileManager,
+      homeDirectory: temporaryDirectory.path
+    )
+    let infoURL = URL(fileURLWithPath: launchPath)
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .appendingPathComponent("Info.plist")
+    let info = try XCTUnwrap(
+      PropertyListSerialization.propertyList(
+        from: Data(contentsOf: infoURL),
+        options: [],
+        format: nil
+      ) as? [String: String]
+    )
+
+    XCTAssertEqual(info["CFBundlePackageType"], "APPL")
+    XCTAssertFalse(info["NSCameraUsageDescription"]?.isEmpty ?? true)
+    XCTAssertFalse(info["NSMicrophoneUsageDescription"]?.isEmpty ?? true)
   }
 
   func testIOSSimulatorParser() throws {
@@ -237,6 +281,40 @@ class DeviceParserTests: XCTestCase {
     XCTAssertTrue(devices[0].booted)
     XCTAssertEqual(devices[0].platform, .android)
     XCTAssertEqual(devices[0].type, .physical)
+  }
+
+  func testHarmonySimulatorParser() throws {
+    let parser = HarmonySimulatorParser()
+    let input = """
+    [
+      {
+        "name": "Pura X Max",
+        "isRunning": "true",
+        "os.osVersion": "HarmonyOS 6.1.0(23)",
+        "uuid": "b3040788-893d-473c-b983-8f960fc512ec"
+      },
+      {
+        "name": "Harmony Tablet",
+        "isRunning": false,
+        "os.softwareVersion": "6.1.0.115",
+        "uuid": "tablet-uuid"
+      }
+    ]
+    """
+
+    let devices = parser.parse(input)
+
+    XCTAssertEqual(devices.count, 2)
+    let phone = try XCTUnwrap(devices.first { $0.name == "Pura X Max" })
+    XCTAssertTrue(phone.booted)
+    XCTAssertEqual(phone.version, "HarmonyOS 6.1.0(23)")
+    XCTAssertEqual(phone.identifier, "b3040788-893d-473c-b983-8f960fc512ec")
+    XCTAssertEqual(phone.platform, .harmony)
+    XCTAssertEqual(phone.type, .virtual)
+
+    let tablet = try XCTUnwrap(devices.first { $0.name == "Harmony Tablet" })
+    XCTAssertFalse(tablet.booted)
+    XCTAssertEqual(tablet.version, "6.1.0.115")
   }
 
   func testIOSPhysicalDeviceParser() {

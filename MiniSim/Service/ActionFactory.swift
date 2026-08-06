@@ -56,3 +56,25 @@ class IOSActionFactory: ActionFactory {
     }
   }
 }
+
+final class HarmonyActionFactory: ActionFactory {
+  static func createAction(
+    for tag: SubMenuItems.Tags,
+    device: Device,
+    itemName: String,
+    skipConfirmation: Bool = false
+  ) -> any Action {
+    switch tag {
+    case .copyName:
+      return CopyNameAction(device: device)
+    case .copyID:
+      return CopyIDAction(device: device)
+    case .delete:
+      return DeleteAction(device: device, skipConfirmation: skipConfirmation)
+    case .customCommand:
+      return CustomCommandAction(device: device, itemName: itemName)
+    default:
+      return UnsupportedAction(message: "This action is not available for HarmonyOS simulators.")
+    }
+  }
+}

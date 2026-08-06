@@ -4,7 +4,7 @@
 
 ## About
 
-MiniSim is a small utility menu bar app for launching Android 🤖 and iOS  emulators (and more!).
+MiniSim is a small utility menu bar app for launching Android 🤖, iOS , and HarmonyOS emulators (and more!).
 
 Written in Swift and AppKit.
 
@@ -38,6 +38,9 @@ You can use Minisim together with a [Raycast](https://www.raycast.com) extension
   - Toggle a11y on selected emulator
   - Copy device name
   - Copy device ADB id
+- Launch HarmonyOS simulators
+  - Start and delete DevEco Studio emulators
+  - Copy simulator ID
 - Focus devices using accessibility API
 - Set default launch flags
 - Indicate running devices
@@ -51,7 +54,7 @@ https://user-images.githubusercontent.com/52801365/224473566-a6248f20-8fc9-4b8e-
 ## Usage
 
 > **important**
-> This utility uses `xcrun` and `sdk/emulator` to fetch available devices on your machine.
+> This utility uses `xcrun`, Android `sdk/emulator`, and DevEco Studio's `Emulator` command to fetch available devices on your machine.
 > It might not work if you don't have a proper XCode and Android Studio setup.
 
 There is a global shortcut for invoking the menu: <kbd>⌥ + ⇧ + e</kbd>.

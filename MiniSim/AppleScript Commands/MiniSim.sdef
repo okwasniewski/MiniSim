@@ -11,7 +11,7 @@
         <command name="getDevices" code="MinSDevi">
             <cocoa class="MiniSim.GetDevicesCommand"/>
             <access-group identifier="*"/>
-            <parameter code="plat" name="platform" description="Platform to get. Can be either android | ios." type="text">
+            <parameter code="plat" name="platform" description="Platform to get. Can be android | ios | harmony." type="text">
                 <cocoa key="platform"/>
             </parameter>
             <parameter code="devT" name="deviceType" description="DeviceType to get. Can be either physical | virtual" type="text">
@@ -32,7 +32,7 @@
         <command name="getCommands" code="MinSGetc">
             <cocoa class="MiniSim.GetCommands"/>
             <access-group identifier="*"/>
-            <parameter code="plat" name="platform" description="Platform to get. Can be either android | ios." type="text">
+            <parameter code="plat" name="platform" description="Platform to get. Can be android | ios | harmony." type="text">
                 <cocoa key="platform"/>
             </parameter>
             <parameter code="devT" name="deviceType" description="DeviceType to get. Can be either physical | virtual" type="text">
@@ -44,7 +44,7 @@
         <command name="executeCommand" code="MinExecu">
             <cocoa class="MiniSim.ExecuteCommand"/>
             <access-group identifier="*"/>
-            <parameter code="plat" name="platform" description="Platform to get. Can be either android | ios." type="text">
+            <parameter code="plat" name="platform" description="Platform to get. Can be android | ios | harmony." type="text">
                 <cocoa key="platform"/>
             </parameter>
             <parameter code="comm" name="commandName" description="Name of the command." type="text">
