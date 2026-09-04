@@ -57,6 +57,22 @@ final class ADB: ADBProtocol {
     return path + Paths.home.rawValue
   }
 
+  /**
+   Persists the default Android SDK path when a valid SDK exists and no path was saved during onboarding.
+   */
+  @discardableResult static func configureDefaultAndroidHomeIfNeeded(
+    fileManager: FileManager = .default
+  ) throws -> Bool {
+    guard UserDefaults.standard.androidHome == nil else {
+      return false
+    }
+
+    let androidHome = try getAndroidHome()
+    try checkAndroidHome(path: androidHome, fileManager: fileManager)
+    UserDefaults.standard.androidHome = androidHome
+    return true
+  }
+
   static func getAdbPath() throws -> String {
     try getAndroidHome() + Paths.adb.rawValue
   }
