@@ -48,6 +48,31 @@ final class ADBTests: XCTestCase {
     )
   }
 
+  func testConfigureDefaultAndroidHomeIfNeeded() throws {
+    XCTAssertTrue(
+      try ADB.configureDefaultAndroidHomeIfNeeded(fileManager: FileManagerStub())
+    )
+    XCTAssertEqual(UserDefaults.standard.androidHome, defaultHomePath)
+    XCTAssertEqual(shellStub.lastExecutedCommand, defaultHomePath + "/emulator/emulator")
+    XCTAssertEqual(shellStub.lastPassedArguments, ["-list-avds"])
+  }
+
+  func testConfigureDefaultAndroidHomeIfNeededDoesNotOverrideSavedPath() throws {
+    UserDefaults.standard.androidHome = "customAndroidHome"
+
+    XCTAssertFalse(
+      try ADB.configureDefaultAndroidHomeIfNeeded(fileManager: FileManagerStub())
+    )
+    XCTAssertEqual(UserDefaults.standard.androidHome, "customAndroidHome")
+  }
+
+  func testConfigureDefaultAndroidHomeIfNeededRequiresValidSDK() {
+    XCTAssertThrowsError(
+      try ADB.configureDefaultAndroidHomeIfNeeded(fileManager: FileManagerEmptyStub())
+    )
+    XCTAssertNil(UserDefaults.standard.androidHome)
+  }
+
   func testCheckAndroidHome() throws {
     let output = try ADB.checkAndroidHome(
       path: defaultHomePath,

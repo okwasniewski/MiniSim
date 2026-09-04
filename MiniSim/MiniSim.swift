@@ -80,6 +80,11 @@ class MiniSim: NSObject {
             onboarding.show()
             return
         }
+
+        if UserDefaults.standard.enableAndroidEmulators {
+            _ = try? ADB.configureDefaultAndroidHomeIfNeeded()
+        }
+
         menu = Menu()
         statusItem.menu = menu
         setMenuImage()
