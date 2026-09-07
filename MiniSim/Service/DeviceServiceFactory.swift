@@ -36,11 +36,19 @@ class DeviceServiceFactory {
         var devicesArray: [Device] = []
 
         if android {
-          try devicesArray.append(contentsOf: AndroidDeviceDiscovery().getDevices())
+          do {
+            try devicesArray.append(contentsOf: AndroidDeviceDiscovery().getDevices())
+          } catch {
+            // A broken Android installation must not prevent the iOS menu from opening.
+          }
         }
 
         if iOS {
-          try devicesArray.append(contentsOf: IOSDeviceDiscovery().getDevices())
+          do {
+            try devicesArray.append(contentsOf: IOSDeviceDiscovery().getDevices())
+          } catch {
+            // xcrun/simctl may be unavailable while the rest of MiniSim is usable.
+          }
         }
 
         completionQueue.async {

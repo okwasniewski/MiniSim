@@ -91,6 +91,14 @@ class IOSDeviceDiscovery: DeviceDiscoveryService {
   }
 
   func checkSetup() throws -> Bool {
-    FileManager.default.fileExists(atPath: DeviceConstants.ProcessPaths.xcrun.rawValue)
+    guard FileManager.default.fileExists(atPath: DeviceConstants.ProcessPaths.xcrun.rawValue) else {
+      return false
+    }
+
+    _ = try shell.execute(
+      command: DeviceConstants.ProcessPaths.xcrun.rawValue,
+      arguments: ["simctl", "list", "devices", "available", "-j"]
+    )
+    return true
   }
 }
