@@ -33,11 +33,15 @@ extension DeviceServiceCommon {
   func focusDevice() {
     Thread.assertBackgroundThread()
 
-    let runningApps = NSWorkspace.shared.runningApplications.filter { $0.activationPolicy == .regular }
-
     if let uuid = device.identifier, device.platform == .ios {
-      try? AppleUtils.launchSimulatorApp(uuid: uuid)
+      // On Xcode 27+ the devices:// deep link opens and raises that device's own
+      // Device Hub window, so the accessibility pass below has nothing left to do.
+      if (try? AppleUtils.launchSimulatorApp(uuid: uuid)) == true {
+        return
+      }
     }
+
+    let runningApps = NSWorkspace.shared.runningApplications.filter { $0.activationPolicy == .regular }
 
     for app in runningApps {
       guard
