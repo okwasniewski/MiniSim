@@ -77,23 +77,31 @@ class AppleUtilsTests: XCTestCase {
 
     waitForExpectations(timeout: 5, handler: nil)
   }
+func testLaunchDeviceHubWhenSimulatorAppIsMissing() {
+  let uuid = "test-uuid"
+  mockWorkspace.mockRunningApplications = [] // Simulator not running
 
-  func testLaunchSimulatorAppWhenNotRunning() {
-    let uuid = "test-uuid"
-    mockWorkspace.mockRunningApplications = [] // Simulator not running
-
-    shellStub.mockedExecute = { command, _, _ in
-      if command == DeviceConstants.ProcessPaths.xcodeSelect.rawValue {
-        return "/Applications/Xcode.app/Contents/Developer"
-      }
-      return ""
+  shellStub.mockedExecute = { command, _, _ in
+    if command == DeviceConstants.ProcessPaths.xcodeSelect.rawValue {
+      return "/Applications/Xcode.app/Contents/Developer"
     }
-
-    XCTAssertNoThrow(try AppleUtils.launchSimulatorApp(uuid: uuid))
-
-    XCTAssertEqual(shellStub.lastExecutedCommand, "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/Contents/MacOS/Simulator")
-    XCTAssertEqual(shellStub.lastPassedArguments, ["--args", "-CurrentDeviceUDID", uuid])
+    return ""
   }
+
+  XCTAssertNoThrow(try AppleUtils.launchSimulatorApp(uuid: uuid))
+
+  XCTAssertEqual(
+    shellStub.lastExecutedCommand,
+    DeviceConstants.ProcessPaths.open.rawValue
+  )
+  XCTAssertEqual(
+    shellStub.lastPassedArguments,
+    [
+      "-a",
+      "/Applications/Xcode.app/Contents/Applications/DeviceHub.app"
+    ]
+  )
+}
 
   func testLaunchSimulatorAppWhenAlreadyRunning() {
     let uuid = "test-uuid"

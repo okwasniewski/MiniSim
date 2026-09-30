@@ -29,45 +29,55 @@ extension Device {
   }
 }
 
-extension DeviceServiceCommon {
-  func focusDevice() {
-    Thread.assertBackgroundThread()
-
-    let runningApps = NSWorkspace.shared.runningApplications.filter { $0.activationPolicy == .regular }
-
-    if let uuid = device.identifier, device.platform == .ios {
-      try? AppleUtils.launchSimulatorApp(uuid: uuid)
+    extension DeviceServiceCommon {
+        func focusDevice() {
+            Thread.assertBackgroundThread()
+            
+            if let uuid = device.identifier, device.platform == .ios {
+                try? AppleUtils.launchSimulatorApp(uuid: uuid)
+            }
+            
+            let runningApps = NSWorkspace.shared.runningApplications
+                .filter { $0.activationPolicy == .regular }
+            
+            for app in runningApps {
+                guard let bundleURL = app.bundleURL?.absoluteString else {
+                    continue
+                }
+                
+                let isAndroid = bundleURL.contains(
+                    DeviceConstants.BundleURL.emulator.rawValue
+                )
+                let isAppleSimulator = bundleURL.contains(
+                    DeviceConstants.BundleURL.simulator.rawValue
+                )
+                let isDeviceHub = bundleURL.contains(
+                    DeviceConstants.BundleURL.deviceHub.rawValue
+                )
+                
+                guard isAndroid || isAppleSimulator || isDeviceHub else {
+                    continue
+                }
+                
+                for window in AccessibilityElement.allWindowsForPID(app.processIdentifier) {
+                    guard
+                        let windowTitle = window.attribute(key: .title, type: String.self),
+                        !windowTitle.isEmpty,
+                        matchDeviceTitle(windowTitle: windowTitle, device: device)
+                            else {
+                        continue
+                    }
+                    
+                    if isAndroid {
+                        AccessibilityElement.forceFocus(pid: app.processIdentifier)
+                    } else {
+                        window.performAction(key: kAXRaiseAction)
+                        app.activate(options: [.activateIgnoringOtherApps])
+                    }
+                }
+            }
+        
     }
-
-    for app in runningApps {
-      guard
-        let bundleURL = app.bundleURL?.absoluteString,
-        bundleURL.contains(DeviceConstants.BundleURL.simulator.rawValue) ||
-          bundleURL.contains(DeviceConstants.BundleURL.emulator.rawValue) else {
-        continue
-      }
-      let isAndroid = bundleURL.contains(DeviceConstants.BundleURL.emulator.rawValue)
-
-      for window in AccessibilityElement.allWindowsForPID(app.processIdentifier) {
-        guard let windowTitle = window.attribute(key: .title, type: String.self),
-              !windowTitle.isEmpty else {
-          continue
-        }
-
-        if !matchDeviceTitle(windowTitle: windowTitle, device: device) {
-          continue
-        }
-
-        if isAndroid {
-          AccessibilityElement.forceFocus(pid: app.processIdentifier)
-        } else {
-          window.performAction(key: kAXRaiseAction)
-          app.activate(options: [.activateIgnoringOtherApps])
-        }
-      }
-    }
-  }
-
   private func matchDeviceTitle(windowTitle: String, device: Device) -> Bool {
     if device.platform == .android {
       let deviceName = windowTitle.match(#"(?<=- ).*?(?=:)"#).first?.first
